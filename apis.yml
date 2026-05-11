@@ -1,0 +1,56 @@
+aid: lemlist
+name: lemlist
+description: >-
+  lemlist is a cold email outreach and sales engagement platform that helps
+  sales teams build prospect lists, personalize multichannel campaigns across
+  email and LinkedIn, and automate follow-ups to book more meetings. It
+  includes a built-in B2B lead database, AI-generated personalization, and
+  warm-up tools to keep deliverability healthy. The lemlist API enables
+  developers to integrate lemlist with other tools and automate outreach
+  workflows using API key authentication.
+type: Index
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+tags:
+  - Email Outreach
+  - Sales Engagement
+  - Cold Email
+  - Sales Automation
+  - LinkedIn Outreach
+  - Lead Generation
+url: >-
+  https://raw.githubusercontent.com/api-evangelist/lemlist/refs/heads/main/apis.yml
+created: '2026-05-11'
+modified: '2026-05-11'
+specificationVersion: '0.19'
+apis:
+  - aid: lemlist:rest-api
+    name: lemlist REST API
+    description: >-
+      REST API for managing campaigns, leads, sequences, teams, and outreach
+      activities in lemlist. Authentication is via API key passed using HTTP
+      Basic auth. The API supports integrating lemlist with CRMs and other
+      tools and automating multichannel outreach workflows.
+    humanURL: https://developer.lemlist.com
+    baseURL: https://api.lemlist.com/api
+    tags:
+      - Email Outreach
+      - Sales Engagement
+      - Cold Email
+      - Sales Automation
+    properties:
+      - type: Documentation
+        url: https://developer.lemlist.com
+      - type: Getting Started
+        url: https://developer.lemlist.com/api-reference/overview
+common:
+  - type: Website
+    url: https://www.lemlist.com
+  - type: Documentation
+    url: https://developer.lemlist.com
+  - type: Pricing
+    url: https://www.lemlist.com/pricing
+  - type: Sign Up
+    url: https://app.lemlist.com/signup
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
