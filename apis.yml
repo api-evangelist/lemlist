@@ -43,6 +43,8 @@ apis:
       - type: GettingStarted
         url: https://developer.lemlist.com/api-reference/overview
 common:
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/lemlist
   - type: Website
     url: https://www.lemlist.com
   - type: Documentation
