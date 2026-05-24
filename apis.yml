@@ -53,6 +53,8 @@ common:
     url: https://www.lemlist.com/pricing
   - type: SignUp
     url: https://app.lemlist.com/signup
+  - type: LLMsTxt
+    url: https://api.lemlist.com/llms.txt
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
