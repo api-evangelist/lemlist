@@ -1,0 +1,862 @@
+"""
+lemlist GraphQL Schema
+Sales engagement and email outreach automation platform.
+Source: https://developer.lemlist.com/
+"""
+
+# ─── Enumerations ────────────────────────────────────────────────────────────
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  STOPPED
+  ARCHIVED
+}
+
+enum CampaignType {
+  EMAIL
+  LINKEDIN
+  MULTICHANNEL
+  API
+}
+
+enum CampaignStepType {
+  EMAIL
+  LINKEDIN_VISIT
+  LINKEDIN_CONNECT
+  LINKEDIN_MESSAGE
+  MANUAL_CALL
+  MANUAL_TASK
+  API
+}
+
+enum LeadStatus {
+  NOT_CONTACTED
+  IN_PROGRESS
+  CONTACTED
+  INTERESTED
+  NOT_INTERESTED
+  BOUNCED
+  UNSUBSCRIBED
+  OPT_OUT
+}
+
+enum ActivityType {
+  EMAIL_SENT
+  EMAIL_OPENED
+  EMAIL_CLICKED
+  EMAIL_REPLIED
+  EMAIL_BOUNCED
+  EMAIL_UNSUBSCRIBED
+  LINKEDIN_VISIT
+  LINKEDIN_CONNECT_SENT
+  LINKEDIN_CONNECTED
+  LINKEDIN_MESSAGE_SENT
+  LINKEDIN_REPLIED
+  CALL_DONE
+  TASK_DONE
+  API_HOOK_TRIGGERED
+  LEAD_CREATED
+  LEAD_UPDATED
+  LEAD_PAUSED
+  LEAD_RESUMED
+}
+
+enum EmailStatus {
+  PENDING
+  SENT
+  DELIVERED
+  OPENED
+  CLICKED
+  REPLIED
+  BOUNCED
+  FAILED
+}
+
+enum WebhookEvent {
+  EMAIL_SENT
+  EMAIL_OPENED
+  EMAIL_CLICKED
+  EMAIL_REPLIED
+  EMAIL_BOUNCED
+  UNSUBSCRIBED
+  LEAD_INTERESTED
+  LEAD_NOT_INTERESTED
+  LEAD_HOOK_TRIGGERED
+}
+
+enum ABTestStatus {
+  RUNNING
+  WINNER_PICKED
+  COMPLETED
+}
+
+enum IntegrationType {
+  SALESFORCE
+  HUBSPOT
+  PIPEDRIVE
+  ZOHO
+  SLACK
+  ZAPIER
+  MAKE
+  PHANTOMBUSTER
+  CUSTOM
+}
+
+# ─── Campaign Types ──────────────────────────────────────────────────────────
+
+type Campaign {
+  id: ID!
+  name: String!
+  status: CampaignStatus!
+  type: CampaignType!
+  createdAt: String!
+  updatedAt: String!
+  sendingSchedule: Schedule
+  sender: Sender
+  steps: [CampaignStep!]
+  leads: [Lead!]
+  report: Report
+  abTests: [ABTest!]
+  teamId: String
+}
+
+type CampaignDetails {
+  id: ID!
+  name: String!
+  status: CampaignStatus!
+  type: CampaignType!
+  createdAt: String!
+  updatedAt: String!
+  sendingSchedule: Schedule
+  sender: Sender
+  steps: [CampaignStep!]!
+  leads: [Lead!]
+  report: Report
+  abTests: [ABTest!]
+  sequences: [Sequence!]
+  webhooks: [Webhook!]
+  teamId: String
+  settings: CampaignSettings
+}
+
+type CampaignSettings {
+  stopOnReply: Boolean
+  stopOnClick: Boolean
+  trackOpens: Boolean
+  trackClicks: Boolean
+  dailyLimit: Int
+  timezone: String
+}
+
+type CampaignStep {
+  id: ID!
+  campaignId: ID!
+  type: CampaignStepType!
+  order: Int!
+  delay: StepDelay
+  details: StepDetails
+  enabled: Boolean!
+}
+
+type StepDetails {
+  subject: String
+  body: String
+  linkedinMessage: String
+  callInstructions: String
+  taskInstructions: String
+  apiUrl: String
+  apiMethod: String
+  apiBody: String
+  personalizationTags: [PersonalizationTag!]
+}
+
+type StepDelay {
+  amount: Int!
+  unit: String!
+}
+
+type Step {
+  id: ID!
+  type: CampaignStepType!
+  order: Int!
+  delay: StepDelay
+}
+
+type EmailStep {
+  id: ID!
+  campaignId: ID!
+  order: Int!
+  delay: StepDelay
+  subject: String!
+  body: String!
+  isReply: Boolean
+  trackOpens: Boolean
+  trackClicks: Boolean
+  personalizationTags: [PersonalizationTag!]
+  smartLiquid: [SmartLiquid!]
+}
+
+type LinkedinStep {
+  id: ID!
+  campaignId: ID!
+  order: Int!
+  delay: StepDelay
+  actionType: String!
+  message: String
+  connectionNote: String
+}
+
+type CallStep {
+  id: ID!
+  campaignId: ID!
+  order: Int!
+  delay: StepDelay
+  instructions: String
+}
+
+type ApiStep {
+  id: ID!
+  campaignId: ID!
+  order: Int!
+  delay: StepDelay
+  url: String!
+  method: String!
+  headers: String
+  body: String
+}
+
+type Hook {
+  id: ID!
+  campaignId: ID!
+  stepId: ID
+  event: WebhookEvent!
+  url: String!
+  active: Boolean!
+  createdAt: String!
+}
+
+# ─── Sequence Types ──────────────────────────────────────────────────────────
+
+type Sequence {
+  id: ID!
+  name: String!
+  campaignId: ID!
+  steps: [SequenceStep!]!
+  createdAt: String!
+}
+
+type SequenceDetails {
+  id: ID!
+  name: String!
+  campaignId: ID!
+  steps: [SequenceStep!]!
+  createdAt: String!
+  updatedAt: String!
+  leadCount: Int
+}
+
+type SequenceStep {
+  id: ID!
+  sequenceId: ID!
+  type: CampaignStepType!
+  order: Int!
+  delay: StepDelay
+  details: StepDetails
+}
+
+# ─── Lead Types ──────────────────────────────────────────────────────────────
+
+type Lead {
+  id: ID!
+  email: String!
+  firstName: String
+  lastName: String
+  companyName: String
+  status: LeadStatus!
+  campaignId: ID
+  createdAt: String!
+  updatedAt: String!
+  contact: LeadContact
+  activities: [Activity!]
+  variables: [Variable!]
+}
+
+type LeadDetails {
+  id: ID!
+  email: String!
+  firstName: String
+  lastName: String
+  companyName: String
+  companyDomain: String
+  linkedinUrl: String
+  phone: String
+  status: LeadStatus!
+  campaignId: ID
+  campaignName: String
+  createdAt: String!
+  updatedAt: String!
+  contact: LeadContact
+  activities: [Activity!]
+  variables: [Variable!]
+  enrichment: LeadEnrichment
+  icebreaker: String
+  customFields: String
+}
+
+type LeadContact {
+  email: String!
+  firstName: String
+  lastName: String
+  phone: String
+  linkedinUrl: String
+  twitterUrl: String
+  companyName: String
+  companyDomain: String
+  companySize: String
+  jobTitle: String
+  location: String
+}
+
+type LeadActivity {
+  id: ID!
+  leadId: ID!
+  leadEmail: String!
+  type: ActivityType!
+  campaignId: ID
+  stepId: ID
+  timestamp: String!
+  metadata: String
+}
+
+type LeadEnrichment {
+  leadId: ID!
+  enrichedAt: String
+  linkedinData: String
+  companyData: String
+  enrichmentSource: String
+  status: String
+}
+
+# ─── Activity & Email Event Types ────────────────────────────────────────────
+
+type Activity {
+  id: ID!
+  type: ActivityType!
+  campaignId: ID
+  leadId: ID
+  leadEmail: String
+  stepId: ID
+  timestamp: String!
+  metadata: String
+}
+
+type Email {
+  id: ID!
+  leadId: ID!
+  campaignId: ID!
+  stepId: ID!
+  subject: String!
+  body: String!
+  status: EmailStatus!
+  sentAt: String
+  openedAt: String
+  clickedAt: String
+  repliedAt: String
+}
+
+type EmailDetails {
+  id: ID!
+  leadId: ID!
+  leadEmail: String!
+  campaignId: ID!
+  campaignName: String
+  stepId: ID!
+  subject: String!
+  body: String!
+  status: EmailStatus!
+  sentAt: String
+  openedAt: String
+  clickedAt: String
+  repliedAt: String
+  bouncedAt: String
+  unsubscribedAt: String
+  events: [EmailEvent!]
+}
+
+type EmailEvent {
+  id: ID!
+  emailId: ID!
+  type: ActivityType!
+  timestamp: String!
+  ipAddress: String
+  userAgent: String
+  link: String
+}
+
+type Opened {
+  emailId: ID!
+  leadId: ID!
+  campaignId: ID!
+  openedAt: String!
+  ipAddress: String
+  userAgent: String
+  openCount: Int!
+}
+
+type Clicked {
+  emailId: ID!
+  leadId: ID!
+  campaignId: ID!
+  clickedAt: String!
+  link: String!
+  clickCount: Int!
+}
+
+type Replied {
+  emailId: ID!
+  leadId: ID!
+  campaignId: ID!
+  repliedAt: String!
+  replyBody: String
+  subject: String
+}
+
+type Bounce {
+  emailId: ID!
+  leadId: ID!
+  leadEmail: String!
+  campaignId: ID!
+  bouncedAt: String!
+  bounceType: String
+  bounceReason: String
+}
+
+type Unsubscribe {
+  leadId: ID!
+  leadEmail: String!
+  campaignId: ID
+  unsubscribedAt: String!
+  reason: String
+  source: String
+}
+
+type Interest {
+  leadId: ID!
+  leadEmail: String!
+  campaignId: ID!
+  markedAt: String!
+  interestedBy: String
+  notes: String
+}
+
+# ─── Team & Sender Types ──────────────────────────────────────────────────────
+
+type Team {
+  id: ID!
+  name: String!
+  members: [Sender!]
+  createdAt: String!
+}
+
+type TeamDetails {
+  id: ID!
+  name: String!
+  members: [Sender!]!
+  createdAt: String!
+  updatedAt: String!
+  plan: String
+  campaignCount: Int
+  leadCount: Int
+}
+
+type Sender {
+  id: ID!
+  email: String!
+  firstName: String
+  lastName: String
+  teamId: ID
+}
+
+type SenderDetails {
+  id: ID!
+  email: String!
+  firstName: String
+  lastName: String
+  teamId: ID
+  linkedinConnected: Boolean
+  dailyEmailLimit: Int
+  warmupEnabled: Boolean
+  inbox: Inbox
+  schedules: [Schedule!]
+}
+
+# ─── Schedule & Inbox Types ──────────────────────────────────────────────────
+
+type Schedule {
+  id: ID!
+  name: String!
+  timezone: String!
+  days: [String!]!
+  startHour: String!
+  endHour: String!
+}
+
+type Inbox {
+  id: ID!
+  senderId: ID!
+  email: String!
+  provider: String
+  connected: Boolean!
+  warmupEnabled: Boolean
+  dailyLimit: Int
+  sentToday: Int
+}
+
+# ─── List & Blacklist Types ──────────────────────────────────────────────────
+
+type Blacklist {
+  id: ID!
+  teamId: ID!
+  entries: [BlacklistEntry!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type BlacklistEntry {
+  id: ID!
+  value: String!
+  type: String!
+  addedAt: String!
+  addedBy: String
+}
+
+type List {
+  id: ID!
+  name: String!
+  teamId: ID!
+  memberCount: Int!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type ListDetails {
+  id: ID!
+  name: String!
+  teamId: ID!
+  memberCount: Int!
+  members: [ListMember!]
+  createdAt: String!
+  updatedAt: String!
+  tags: [String!]
+}
+
+type ListMember {
+  id: ID!
+  listId: ID!
+  leadId: ID!
+  email: String!
+  addedAt: String!
+}
+
+# ─── Personalization & Template Types ───────────────────────────────────────
+
+type Variable {
+  name: String!
+  value: String
+  type: String
+}
+
+type PersonalizationTag {
+  tag: String!
+  description: String
+  fallback: String
+  example: String
+}
+
+type SmartLiquid {
+  tag: String!
+  condition: String!
+  trueValue: String!
+  falseValue: String!
+}
+
+type Template {
+  id: ID!
+  name: String!
+  subject: String
+  body: String!
+  type: String!
+  teamId: ID
+  createdAt: String!
+  updatedAt: String!
+}
+
+type TemplateDetails {
+  id: ID!
+  name: String!
+  subject: String
+  body: String!
+  type: String!
+  teamId: ID
+  personalizationTags: [PersonalizationTag!]
+  smartLiquid: [SmartLiquid!]
+  createdAt: String!
+  updatedAt: String!
+  usedInCampaigns: Int
+}
+
+# ─── Integration Types ────────────────────────────────────────────────────────
+
+type Integration {
+  id: ID!
+  type: IntegrationType!
+  name: String!
+  connected: Boolean!
+  connectedAt: String
+  teamId: ID!
+}
+
+type CRM {
+  id: ID!
+  type: String!
+  name: String!
+  connected: Boolean!
+  syncEnabled: Boolean
+  lastSyncAt: String
+}
+
+type CRMIntegration {
+  id: ID!
+  crmType: IntegrationType!
+  teamId: ID!
+  connected: Boolean!
+  syncLeads: Boolean
+  syncActivities: Boolean
+  fieldMappings: String
+  createdAt: String!
+}
+
+type SalesforceIntegration {
+  id: ID!
+  teamId: ID!
+  connected: Boolean!
+  instanceUrl: String
+  syncLeads: Boolean
+  syncContacts: Boolean
+  syncActivities: Boolean
+  syncOpportunities: Boolean
+  fieldMappings: String
+  lastSyncAt: String
+}
+
+type HubSpotIntegration {
+  id: ID!
+  teamId: ID!
+  connected: Boolean!
+  portalId: String
+  syncContacts: Boolean
+  syncDeals: Boolean
+  syncActivities: Boolean
+  fieldMappings: String
+  lastSyncAt: String
+}
+
+# ─── Analytics & Reporting Types ────────────────────────────────────────────
+
+type Report {
+  campaignId: ID!
+  campaignName: String
+  totalLeads: Int!
+  contacted: Int!
+  opened: Int!
+  clicked: Int!
+  replied: Int!
+  bounced: Int!
+  unsubscribed: Int!
+  interested: Int!
+  openRate: Float
+  clickRate: Float
+  replyRate: Float
+  bounceRate: Float
+}
+
+type Metric {
+  name: String!
+  value: Float!
+  unit: String
+  period: String
+}
+
+type Stat {
+  campaignId: ID
+  date: String!
+  sent: Int!
+  opened: Int!
+  clicked: Int!
+  replied: Int!
+  bounced: Int!
+  unsubscribed: Int!
+}
+
+type ABTest {
+  id: ID!
+  campaignId: ID!
+  stepId: ID!
+  status: ABTestStatus!
+  variants: [ABTestVariant!]!
+  winnerVariantId: ID
+  startedAt: String
+  endedAt: String
+}
+
+type ABTestVariant {
+  id: ID!
+  abTestId: ID!
+  name: String!
+  subject: String
+  body: String
+  sentCount: Int!
+  openCount: Int!
+  clickCount: Int!
+  replyCount: Int!
+  openRate: Float
+  replyRate: Float
+  isWinner: Boolean
+}
+
+# ─── Webhook & API Key Types ─────────────────────────────────────────────────
+
+type Webhook {
+  id: ID!
+  teamId: ID!
+  campaignId: ID
+  url: String!
+  events: [WebhookEvent!]!
+  active: Boolean!
+  secret: String
+  createdAt: String!
+  updatedAt: String!
+}
+
+type APIKey {
+  id: ID!
+  teamId: ID!
+  name: String!
+  keyPrefix: String!
+  createdAt: String!
+  lastUsedAt: String
+  permissions: [String!]
+}
+
+type Token {
+  token: String!
+  teamId: ID!
+  expiresAt: String
+  scopes: [String!]
+}
+
+# ─── Root Operations ──────────────────────────────────────────────────────────
+
+type Query {
+  campaign(id: ID!): CampaignDetails
+  campaigns(status: CampaignStatus, type: CampaignType, limit: Int, offset: Int): [Campaign!]!
+  campaignReport(id: ID!): Report
+  campaignStats(id: ID!, startDate: String, endDate: String): [Stat!]!
+  campaignLeads(campaignId: ID!, status: LeadStatus, limit: Int, offset: Int): [Lead!]!
+
+  lead(id: ID!): LeadDetails
+  leadByEmail(email: String!): LeadDetails
+  leads(campaignId: ID, status: LeadStatus, limit: Int, offset: Int): [Lead!]!
+  leadActivities(leadId: ID!, limit: Int, offset: Int): [LeadActivity!]!
+
+  sequence(id: ID!): SequenceDetails
+  sequences(campaignId: ID!): [Sequence!]!
+
+  team: TeamDetails
+  sender(id: ID!): SenderDetails
+  senders: [Sender!]!
+
+  schedule(id: ID!): Schedule
+  schedules: [Schedule!]!
+
+  inbox(senderId: ID!): Inbox
+
+  blacklist: Blacklist
+
+  list(id: ID!): ListDetails
+  lists(limit: Int, offset: Int): [List!]!
+
+  template(id: ID!): TemplateDetails
+  templates(type: String, limit: Int, offset: Int): [Template!]!
+
+  webhooks(campaignId: ID): [Webhook!]!
+
+  integrations: [Integration!]!
+  salesforceIntegration: SalesforceIntegration
+  hubspotIntegration: HubSpotIntegration
+
+  abTest(id: ID!): ABTest
+  abTests(campaignId: ID!): [ABTest!]!
+
+  apiKeys: [APIKey!]!
+}
+
+type Mutation {
+  createCampaign(name: String!, type: CampaignType!, senderId: ID): Campaign!
+  updateCampaign(id: ID!, name: String, status: CampaignStatus, senderId: ID): Campaign!
+  deleteCampaign(id: ID!): Boolean!
+  pauseCampaign(id: ID!): Campaign!
+  resumeCampaign(id: ID!): Campaign!
+
+  addEmailStep(campaignId: ID!, order: Int!, subject: String!, body: String!, delay: Int): CampaignStep!
+  addLinkedinStep(campaignId: ID!, order: Int!, actionType: String!, message: String, delay: Int): CampaignStep!
+  addCallStep(campaignId: ID!, order: Int!, instructions: String, delay: Int): CampaignStep!
+  updateStep(id: ID!, subject: String, body: String, delay: Int): CampaignStep!
+  deleteStep(id: ID!): Boolean!
+
+  addLead(campaignId: ID!, email: String!, firstName: String, lastName: String, companyName: String, variables: String): Lead!
+  updateLead(id: ID!, status: LeadStatus, variables: String): Lead!
+  deleteLead(id: ID!): Boolean!
+  pauseLead(campaignId: ID!, leadId: ID!): Lead!
+  resumeLead(campaignId: ID!, leadId: ID!): Lead!
+  markLeadInterested(campaignId: ID!, leadId: ID!, notes: String): Lead!
+  markLeadNotInterested(campaignId: ID!, leadId: ID!): Lead!
+  unsubscribeLead(email: String!, campaignId: ID): Unsubscribe!
+
+  addToBlacklist(value: String!, type: String!): BlacklistEntry!
+  removeFromBlacklist(id: ID!): Boolean!
+
+  createList(name: String!): List!
+  updateList(id: ID!, name: String): List!
+  deleteList(id: ID!): Boolean!
+  addLeadToList(listId: ID!, email: String!): ListMember!
+  removeLeadFromList(listId: ID!, leadId: ID!): Boolean!
+
+  createWebhook(url: String!, events: [WebhookEvent!]!, campaignId: ID, secret: String): Webhook!
+  updateWebhook(id: ID!, url: String, events: [WebhookEvent!], active: Boolean): Webhook!
+  deleteWebhook(id: ID!): Boolean!
+
+  createTemplate(name: String!, body: String!, subject: String, type: String!): Template!
+  updateTemplate(id: ID!, name: String, body: String, subject: String): Template!
+  deleteTemplate(id: ID!): Boolean!
+
+  createSchedule(name: String!, timezone: String!, days: [String!]!, startHour: String!, endHour: String!): Schedule!
+  updateSchedule(id: ID!, name: String, timezone: String, days: [String!], startHour: String, endHour: String): Schedule!
+  deleteSchedule(id: ID!): Boolean!
+
+  createAPIKey(name: String!): APIKey!
+  deleteAPIKey(id: ID!): Boolean!
+}
+
+type Subscription {
+  emailSent(campaignId: ID): Email!
+  emailOpened(campaignId: ID): Opened!
+  emailClicked(campaignId: ID): Clicked!
+  emailReplied(campaignId: ID): Replied!
+  emailBounced(campaignId: ID): Bounce!
+  leadUnsubscribed(campaignId: ID): Unsubscribe!
+  leadInterested(campaignId: ID): Interest!
+  activityLogged(campaignId: ID): Activity!
+}
