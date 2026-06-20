@@ -7,7 +7,7 @@ description: lemlist is a cold email outreach and sales engagement platform that
   healthy. The lemlist API enables developers to integrate lemlist with other tools
   and automate outreach workflows using API key authentication.
 type: Index
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
 - Email Outreach
 - Sales Engagement
