@@ -49,9 +49,9 @@ common:
   url: https://developer.lemlist.com
 - type: Pricing
   url: https://www.lemlist.com/pricing
-- type: SignUp
+- type: Signup
   url: https://app.lemlist.com/signup
-- type: LLMsTxt
+- type: LlmsText
   url: https://api.lemlist.com/llms.txt
 maintainers:
 - FN: Kin Lane
