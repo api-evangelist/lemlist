@@ -41,6 +41,10 @@ apis:
   - url: graphql/lemlist-graphql.md
     type: GraphQL
 common:
+- type: DomainSecurity
+  url: security/lemlist-domain-security.yml
+- type: Authentication
+  url: authentication/lemlist-authentication.yml
 - type: LinkedIn
   url: https://www.linkedin.com/company/lemlist
 - type: Website
@@ -53,6 +57,8 @@ common:
   url: https://app.lemlist.com/signup
 - type: LlmsText
   url: https://api.lemlist.com/llms.txt
+- url: https://www.lemlist.com/blog
+  type: Blog
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

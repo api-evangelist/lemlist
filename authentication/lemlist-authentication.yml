@@ -1,0 +1,17 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/lemlist-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: BasicAuth
+  type: http
+  scheme: basic
+  description: |-
+    HTTP Basic Authentication. The login is always empty and the
+    password is your lemlist API key. Send the header as
+    `Authorization: Basic ` followed by the base64 encoding of
+    `:YOUR_API_KEY`.
+  sources:
+  - openapi/lemlist-openapi.yml
