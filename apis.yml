@@ -41,6 +41,8 @@ apis:
   - url: graphql/lemlist-graphql.md
     type: GraphQL
 common:
+- type: AgenticAccess
+  url: agentic-access/lemlist-agentic-access.yml
 - type: DomainSecurity
   url: security/lemlist-domain-security.yml
 - type: Authentication
