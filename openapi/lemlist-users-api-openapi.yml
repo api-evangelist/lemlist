@@ -1,0 +1,67 @@
+openapi: 3.1.0
+info:
+  title: lemlist Campaigns Users API
+  version: '2.0'
+  description: 'REST API for lemlist''s cold email outreach and sales engagement
+
+    platform. All routes live at https://api.lemlist.com/api/. The full
+
+    URL pattern is https://api.lemlist.com/api/{endpoint}.
+
+
+    Authentication uses HTTP Basic with an empty username and the API
+
+    key as the password (`:YOUR_API_KEY` base64-encoded into the
+
+    Authorization header).
+
+
+    Source: https://developer.lemlist.com and the published
+
+    OpenAPI v2 spec at
+
+    https://developer.lemlist.com/api-reference/openapi/v2.json
+
+    '
+servers:
+- url: https://api.lemlist.com/api
+  description: lemlist production API
+security:
+- BasicAuth: []
+tags:
+- name: Users
+  description: User endpoints
+paths:
+  /users/{userId}:
+    get:
+      operationId: getUser
+      summary: Get user details
+      tags:
+      - Users
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User object
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: 'HTTP Basic Authentication. The login is always empty and the
+
+        password is your lemlist API key. Send the header as
+
+        `Authorization: Basic ` followed by the base64 encoding of
+
+        `:YOUR_API_KEY`.
+
+        '
