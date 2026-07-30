@@ -7,7 +7,19 @@ description: lemlist is a cold email outreach and sales engagement platform that
   healthy. The lemlist API enables developers to integrate lemlist with other tools
   and automate outreach workflows using API key authentication.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/lemlist.png
 tags:
 - Email Outreach
 - Sales Engagement
@@ -22,10 +34,10 @@ specificationVersion: '0.19'
 apis:
 - aid: lemlist:rest-api
   name: lemlist REST API
-  description: REST API for managing campaigns, leads, sequences, teams, and outreach
-    activities in lemlist. Authentication is via API key passed using HTTP Basic auth.
-    The API supports integrating lemlist with CRMs and other tools and automating
-    multichannel outreach workflows.
+  description: >-
+    REST API for managing campaigns, leads, sequences, teams, and outreach activities in lemlist. Authentication
+    is via API key passed using HTTP Basic auth. The API supports integrating lemlist with CRMs and other
+    tools and automating multichannel outreach workflows.
   humanURL: https://developer.lemlist.com
   baseURL: https://api.lemlist.com/api
   tags:
@@ -40,6 +52,36 @@ apis:
     url: https://developer.lemlist.com/api-reference/overview
   - url: graphql/lemlist-graphql.md
     type: GraphQL
+- aid: lemlist:lemlist-campaigns-api
+  name: lemlist Campaigns API
+  description: Campaign CRUD and lifecycle
+  humanURL: https://developer.lemlist.com
+  baseURL: https://api.lemlist.com/api
+  tags:
+  - Campaigns
+  properties:
+  - type: OpenAPI
+    url: openapi/lemlist-campaigns-api-openapi.yml
+- aid: lemlist:lemlist-team-api
+  name: lemlist Team API
+  description: Team-level endpoints (info, senders, credits)
+  humanURL: https://developer.lemlist.com
+  baseURL: https://api.lemlist.com/api
+  tags:
+  - Team
+  properties:
+  - type: OpenAPI
+    url: openapi/lemlist-team-api-openapi.yml
+- aid: lemlist:lemlist-users-api
+  name: lemlist Users API
+  description: User endpoints
+  humanURL: https://developer.lemlist.com
+  baseURL: https://api.lemlist.com/api
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/lemlist-users-api-openapi.yml
 common:
 - type: AgenticAccess
   url: agentic-access/lemlist-agentic-access.yml
