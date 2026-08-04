@@ -1,0 +1,18 @@
+{
+  "provider": "lemlist",
+  "sources": [
+    "lemlist-campaigns-api-openapi.yml",
+    "lemlist-team-api-openapi.yml",
+    "lemlist-users-api-openapi.yml"
+  ],
+  "outputs": [
+    "lemlist-campaigns-api-openapi.yml",
+    "lemlist-team-api-openapi.yml",
+    "lemlist-users-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
