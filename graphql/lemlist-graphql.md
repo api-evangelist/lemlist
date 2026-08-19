@@ -1,5 +1,15 @@
 # lemlist GraphQL Schema
 
+> **Not a lemlist product. Not published by lemlist.**
+> lemlist ships **no** GraphQL API. Probed 2026-08-13: `POST /graphql` returned
+> HTTP 405 Method Not Allowed on `api.lemlist.com`, `app.lemlist.com` and
+> `api.lemlist.com/api`, and no GraphQL endpoint appears anywhere in lemlist's
+> documentation, its `llms.txt`, or its published OpenAPI.
+> The schema in this directory is an API Evangelist **modelling exercise** derived
+> from the REST surface, retained for reference only. The `type: GraphQL` pointer
+> was removed from `apis.yml` on 2026-08-13 because it asserted a surface the
+> provider does not serve.
+
 Conceptual GraphQL schema for the [lemlist](https://www.lemlist.com) sales engagement and email outreach automation platform. lemlist enables sales teams to build prospect lists, run personalized multichannel outreach across email and LinkedIn, and automate follow-up sequences. The REST API is documented at [developer.lemlist.com](https://developer.lemlist.com).
 
 This schema is derived from the lemlist REST API surface and models the core domain objects and operations available to developers.

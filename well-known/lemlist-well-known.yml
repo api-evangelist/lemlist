@@ -1,0 +1,121 @@
+generated: '2026-08-13'
+method: probed
+source: live GET of /.well-known/* on every lemlist host in apis.yml + OpenAPI servers[]
+note: >-
+  api.lemlist.com and app.lemlist.com answer HTTP 200 with the lemlist single-page
+  application shell for any unknown /.well-known/ path, so a 200 alone is not evidence
+  there. Only paths whose body parsed as a real JSON document are recorded as hits;
+  every SPA-shell 200 is recorded as soft-200 and treated as a miss.
+hosts:
+- host: https://app.lemlist.com
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    hit: true
+    spec: RFC 8414
+    file: lemlist-app-oauth-authorization-server.json
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    hit: true
+    spec: RFC 9728
+    file: lemlist-app-oauth-protected-resource.json
+    note: also served at /.well-known/oauth-protected-resource/mcp, the resource_metadata
+      URL advertised in the WWW-Authenticate challenge from the MCP endpoint
+  - path: /.well-known/openid-configuration
+    status: 200
+    hit: true
+    spec: OpenID Connect Discovery 1.0
+    file: lemlist-app-openid-configuration.json
+  - path: /.well-known/security.txt
+    status: 200
+    hit: false
+    note: soft-200 — SPA HTML shell, not an RFC 9116 document
+  - path: /.well-known/api-catalog
+    status: 200
+    hit: false
+    note: soft-200 — SPA HTML shell
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    hit: false
+    note: soft-200 — SPA HTML shell
+- host: https://api.lemlist.com
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    hit: true
+    spec: RFC 8414
+    file: lemlist-api-oauth-authorization-server.json
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    hit: true
+    spec: RFC 9728
+    file: lemlist-api-oauth-protected-resource.json
+  - path: /.well-known/openid-configuration
+    status: 200
+    hit: true
+    spec: OpenID Connect Discovery 1.0
+    file: lemlist-api-openid-configuration.json
+  - path: /.well-known/security.txt
+    status: 200
+    hit: false
+    note: soft-200 — SPA HTML shell, not an RFC 9116 document
+  - path: /.well-known/api-catalog
+    status: 200
+    hit: false
+    note: soft-200 — SPA HTML shell
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    hit: false
+    note: soft-200 — SPA HTML shell
+- host: https://developer.lemlist.com
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 200
+    hit: true
+    spec: A2A Agent Card
+    file: ../a2a/lemlist-agent-card.json
+    note: captured and graded in a2a/lemlist-a2a.yml
+  - path: /.well-known/agent-skills/default/skill.md
+    status: 200
+    hit: true
+    spec: Agent Skill (markdown)
+    file: ../skills/lemlist-outreach-agent.md
+    note: identical body to https://developer.lemlist.com/skill.md
+  - path: /.well-known/security.txt
+    status: 404
+    hit: false
+  - path: /.well-known/openid-configuration
+    status: 404
+    hit: false
+  - path: /.well-known/api-catalog
+    status: 404
+    hit: false
+  - path: /.well-known/agent.json
+    status: 404
+    hit: false
+- host: https://www.lemlist.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    hit: false
+  - path: /.well-known/openid-configuration
+    status: 404
+    hit: false
+  - path: /.well-known/api-catalog
+    status: 404
+    hit: false
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    hit: false
+  - path: /.well-known/agent-card.json
+    status: 404
+    hit: false
+  - path: /.well-known/agent.json
+    status: 404
+    hit: false
+summary:
+  documents_served: 8
+  security_txt: false
+  api_catalog: false
+  oauth_metadata: true
+  oidc_discovery: true

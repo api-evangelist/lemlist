@@ -1,0 +1,242 @@
+openapi: 3.0.0
+info:
+  title: lemlist Email Accounts API
+  version: 1.0.0
+  description: The Email Accounts operations of the lemlist API, split by tag from the OpenAPI lemlist
+    publishes at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content is carried
+    verbatim from the provider spec.
+servers:
+- url: https://api.lemlist.com/api
+security:
+- basicAuth: []
+tags:
+- name: Email Accounts
+paths:
+  /user/email-accounts:
+    post:
+      summary: Connect Email Account
+      tags:
+      - Email Accounts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - sender_name
+              - sender_email
+              - smtp_host
+              - smtp_port
+              - smtp_login
+              - smtp_password
+              - imap_host
+              - imap_port
+              - imap_login
+              - imap_password
+              properties:
+                sender_name:
+                  type: string
+                  description: Display name for the sender.
+                  example: John Doe
+                sender_email:
+                  type: string
+                  format: email
+                  description: Email address used as the sender.
+                  example: john@company.com
+                smtp_host:
+                  type: string
+                  description: SMTP server hostname.
+                  example: smtp.company.com
+                smtp_port:
+                  type: integer
+                  description: SMTP server port.
+                  example: 587
+                smtp_login:
+                  type: string
+                  description: SMTP authentication login.
+                  example: john@company.com
+                smtp_password:
+                  type: string
+                  description: SMTP authentication password.
+                  example: password123
+                smtp_secure:
+                  type: boolean
+                  description: Use SSL/TLS for SMTP connection.
+                  default: false
+                imap_host:
+                  type: string
+                  description: IMAP server hostname.
+                  example: imap.company.com
+                imap_port:
+                  type: integer
+                  description: IMAP server port.
+                  example: 993
+                imap_login:
+                  type: string
+                  description: IMAP authentication login.
+                  example: john@company.com
+                imap_password:
+                  type: string
+                  description: IMAP authentication password.
+                  example: password123
+                imap_secure:
+                  type: boolean
+                  description: Use SSL/TLS for IMAP connection.
+                  default: false
+                userId:
+                  type: string
+                  description: Assign the email account to a specific team member. Must be a member of
+                    the team. Defaults to the API key creator or team owner.
+      responses:
+        '201':
+          description: Email account connected successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier of the created email account.
+                  email:
+                    type: string
+                    format: email
+                    description: The sender email address.
+                  provider:
+                    type: string
+                    description: Always `custom` for SMTP/IMAP accounts.
+                    example: custom
+              example:
+                id: umx_A1B2C3D4E5F6G7H8I9
+                email: john@company.com
+                provider: custom
+        '400':
+          description: 'Possible errors: Bad team / Missing required fields / Invalid host / This SMTP
+            mailbox already exists'
+          content:
+            text/plain:
+              example: Missing required fields
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '403':
+          description: User is not a member of this team
+          content:
+            text/plain:
+              example: User is not a member of this team
+        '405':
+          description: Method not allowed
+  /user/email-accounts/{emailAccountId}:
+    delete:
+      summary: Disconnect Email Account
+      tags:
+      - Email Accounts
+      parameters:
+      - name: emailAccountId
+        in: path
+        required: true
+        description: The ID of the email account to disconnect.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Email account disconnected successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+              example:
+                ok: true
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '403':
+          description: You are not allowed to modify this mailbox
+          content:
+            text/plain:
+              example: You are not allowed to modify this mailbox
+        '404':
+          description: Email account not found
+          content:
+            text/plain:
+              example: Email account not found
+        '405':
+          description: Method not allowed
+  /user/email-accounts/{emailAccountId}/test:
+    post:
+      summary: Test Email Account
+      tags:
+      - Email Accounts
+      parameters:
+      - name: emailAccountId
+        in: path
+        required: true
+        description: The ID of the email account to test.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Test results for SMTP and IMAP connections
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  smtp:
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+                        description: Whether the SMTP connection test passed.
+                      error:
+                        type: string
+                        description: Error message if the test failed.
+                  imap:
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+                        description: Whether the IMAP connection test passed.
+                      error:
+                        type: string
+                        description: Error message if the test failed.
+              example:
+                smtp:
+                  success: true
+                imap:
+                  success: true
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '404':
+          description: Email account not found
+          content:
+            text/plain:
+              example: Email account not found
+        '405':
+          description: Method not allowed
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

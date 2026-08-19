@@ -1,0 +1,115 @@
+generated: '2026-08-13'
+method: searched
+source: https://www.lemlist.com/pricing
+currency: USD
+billing_periods:
+- monthly
+- quarterly
+- yearly
+discounts:
+- period: quarterly
+  saving: 10%
+- period: yearly
+  saving: 20%
+note: >-
+  Prices below are the yearly-billed per-month figures shown on the pricing page as
+  of 2026-08-13 (the strike-through figure is the monthly-billed price). API access
+  is not sold separately — every paid tier includes "CRM integrations & API", and the
+  CLI and MCP server are free with any account.
+plan_count: 3
+plans:
+- name: Email
+  price: 55
+  price_undiscounted: 69
+  currency: USD
+  period: month
+  unit: per account
+  trial: 14-day free trial
+  included:
+    users: unlimited
+    emails_per_month: 50000
+  features:
+  - Unlimited Users & Email Senders
+  - Email & Phone Number Finder
+  - 650M+ Leads Database
+  - Unlimited Contacts
+  - lemAgent
+  - AI Agents
+  - lemlist MCP
+  - Unified Inbox
+  - Deliverability Hub & Warm-up
+  - CRM integrations & API
+- name: Multichannel
+  price: 87
+  price_undiscounted: 109
+  currency: USD
+  period: month
+  unit: per user
+  trial: 14-day free trial
+  popular: true
+  included:
+    senders_per_user: 5
+    emails_per_month: unlimited
+    messages_per_month: unlimited
+  features:
+  - Everything in Email
+  - Unlimited Emails & Messages
+  - LinkedIn Automation
+  - SMS Automation
+  - WhatsApp Automation Add-on
+  - Built-in Call Dialer & VoIP Integrations
+  - Task Management
+  - Use lemlist from Gmail & LinkedIn
+- name: Enterprise
+  price: null
+  price_model: custom
+  currency: USD
+  period: month
+  contact: https://www.lemlist.com/contact-sales
+  included:
+    senders_per_user: 5 or more
+    users: 5 or more
+  features:
+  - Everything in Multichannel
+  - Use lemlist from your CRM
+  - Custom User Roles & Permissions
+  - Dedicated Account Manager
+  - Custom Terms of Use
+  - Advanced Login Security (SSO/SAML)
+  - 1:1 Onboarding Sessions
+  - Priority Support
+usage_credits:
+  model: rechargeable prepaid credits, pay-per-success
+  rate: 1 credit = $0.01 USD
+  starter_pack: 1,000 credits for $10 (about 200 verified emails or 50 phone numbers)
+  meters:
+  - item: Verified email
+    credits: 5
+    unit: per email
+  - item: Phone number
+    credits: 20
+    unit: per number
+  - item: Company visited web signal
+    credits: 20
+    unit: per signal
+  - item: Hiring & job-change signal
+    credits: 100
+    unit: per signal
+    note: 'documented as "From 100 credits"'
+  - item: Company fundraised signal
+    credits: 100
+    unit: per signal
+  - item: LinkedIn engagement signal
+    credits: 400
+    unit: per signal
+    note: 'documented as "From 400 credits"'
+  api_relevance: >-
+    The enrichment and Signal Agent operations in the API (POST /enrich,
+    POST /v2/enrichments/bulk, POST /leads/{leadId}/enrich, the /watchlist surface,
+    and lead creation with findEmail/findPhone/linkedinEnrichment set) draw on these
+    credits. GET /team/credits returns the remaining balance.
+free_tier: false
+free_trial:
+  length_days: 14
+  card_required: unknown
+  signup: https://app.lemlist.com/create-account

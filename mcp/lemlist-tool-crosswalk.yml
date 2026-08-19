@@ -1,0 +1,274 @@
+generated: '2026-08-13'
+method: derived
+source: mcp/lemlist-mcp.yml + openapi/_original/lemlist-openapi-v2.json
+note: >-
+  The lemlist OpenAPI declares operationId on only 5 of its 143 operations, so REST
+  bindings below are expressed as `METHOD path` — the only stable identifier the
+  provider's own spec offers. Where an operationId does exist it is given. The live
+  MCP tools/list is auth-gated, so tools are mapped by the names lemlist publishes in
+  its Agent Skill and /lemlist-agent prompt, matched to REST operations by semantics;
+  confidence is set accordingly. lemlist's Agent Skill lists "API equivalent" paths
+  that do NOT all match the published OpenAPI (it shows POST /people-database/search
+  where the spec has POST /database/people, and POST /campaigns/{id}/sequences where
+  the spec has POST /sequences/{sequenceId}/steps) — the spec paths are used here and
+  the divergence is recorded per row.
+surfaces:
+  openapi:
+    file: openapi/_original/lemlist-openapi-v2.json
+    source: https://developer.lemlist.com/api-reference/openapi/v2.json
+    operations: 143
+    gated: false
+  mcp:
+    url: https://app.lemlist.com/mcp
+    gated: true
+    gate: HTTP 401, requires OAuth bearer or X-API-Key
+  graphql:
+    present: false
+    note: POST to /graphql on api.lemlist.com, app.lemlist.com and api.lemlist.com/api
+      all returned 405 Method Not Allowed — lemlist ships no GraphQL surface.
+crosswalk:
+- tool: lemleads_search
+  category: lead-sourcing
+  rest:
+  - searchPeopleDatabase
+  binding: rest
+  confidence: high
+  note: operationId present in the spec (POST /database/people). The Agent Skill calls
+    this POST /people-database/search, which the spec does not declare.
+- tool: get_campaigns
+  category: campaigns
+  rest:
+  - GET /campaigns
+  binding: rest
+  confidence: high
+- tool: create_campaign_with_sequence
+  category: campaigns
+  rest:
+  - POST /campaigns
+  binding: rest
+  confidence: medium
+  note: The spec documents POST /campaigns as creating a campaign "with auto-generated
+    sequence and schedule", so one tool call fans out to one REST operation plus the
+    sequence-step operations below.
+- tool: set_campaign_state
+  category: campaigns
+  rest:
+  - POST /campaigns/{campaignId}/start
+  - POST /campaigns/{campaignId}/pause
+  binding: rest
+  confidence: high
+  note: one tool over two REST operations
+- tool: get_campaign_stats
+  category: analytics
+  rest:
+  - GET /v2/campaigns/{campaignId}/stats
+  - POST /v2/campaigns/stats/batch
+  binding: rest
+  confidence: high
+- tool: get_campaigns_reports
+  category: analytics
+  rest:
+  - GET /campaigns/reports
+  binding: rest
+  confidence: high
+- tool: get_campaign_sequences
+  category: sequences
+  rest:
+  - GET /campaigns/{campaignId}/sequences
+  binding: rest
+  confidence: high
+- tool: add_sequence_step
+  category: sequences
+  rest:
+  - POST /sequences/{sequenceId}/steps
+  binding: rest
+  confidence: high
+- tool: update_sequence_step
+  category: sequences
+  rest:
+  - PATCH /sequences/{sequenceId}/steps/{stepId}
+  binding: rest
+  confidence: high
+- tool: add_lead_to_campaign
+  category: leads
+  rest:
+  - POST /campaigns/{campaignId}/leads/
+  binding: rest
+  confidence: high
+  note: credit-bearing when the findEmail / findPhone / linkedinEnrichment query flags
+    are set
+- tool: search_campaign_leads
+  category: leads
+  rest:
+  - GET /campaigns/{campaignId}/leads/
+  - GET /leads
+  binding: rest
+  confidence: high
+- tool: update_lead_variables
+  category: leads
+  rest:
+  - PATCH /leads/{leadId}/variables
+  - POST /leads/{leadId}/variables
+  binding: rest
+  confidence: high
+- tool: enrich_data
+  category: enrichment
+  rest:
+  - POST /enrich
+  binding: rest
+  confidence: high
+  note: credit-bearing, asynchronous
+- tool: bulk_enrich_data
+  category: enrichment
+  rest:
+  - POST /v2/enrichments/bulk
+  binding: rest
+  confidence: high
+  note: credit-bearing, max 500 per request
+- tool: get_enrichment_result
+  category: enrichment
+  rest:
+  - GET /enrich/{enrichId}
+  binding: rest
+  confidence: high
+- tool: get_inbox_conversations
+  category: inbox
+  rest:
+  - GET /inbox
+  binding: rest
+  confidence: medium
+  note: the Agent Skill names this GET /inbox/conversations; the spec declares GET
+    /inbox
+- tool: get_inbox_conversation
+  category: inbox
+  rest:
+  - GET /inbox/{contactId}
+  binding: rest
+  confidence: medium
+- tool: send_inbox_email
+  category: inbox
+  rest:
+  - POST /inbox/email
+  binding: rest
+  confidence: high
+- tool: send_inbox_linkedin
+  category: inbox
+  rest:
+  - POST /inbox/linkedin
+  binding: rest
+  confidence: high
+- tool: send_whatsapp_message
+  category: inbox
+  rest:
+  - POST /inbox/whatsapp
+  binding: rest
+  confidence: high
+- tool: get_contact_lists
+  category: crm
+  rest:
+  - GET /contacts/lists
+  binding: rest
+  confidence: high
+- tool: push_leads_to_contacts
+  category: crm
+  rest:
+  - POST /contacts
+  - POST /contacts/lists/{listId}/entities
+  binding: rest
+  confidence: low
+  note: the Agent Skill names POST /contacts/push, which the spec does not declare;
+    the closest published operations are the contact create/list-membership ones
+- tool: get_team_info
+  category: team
+  rest:
+  - GET /team
+  - GET /team/credits
+  binding: rest
+  confidence: high
+- tool: connect_email_account
+  category: deliverability
+  rest:
+  - POST /user/email-accounts
+  binding: rest
+  confidence: high
+- tool: test_email_account
+  category: deliverability
+  rest:
+  - POST /user/email-accounts/{emailAccountId}/test
+  binding: rest
+  confidence: high
+- tool: get_webhooks
+  category: webhooks
+  rest:
+  - GET /hooks
+  binding: rest
+  confidence: high
+- tool: create_webhook
+  category: webhooks
+  rest:
+  - POST /hooks
+  binding: rest
+  confidence: high
+mcp_only:
+- tool: compose_messages
+  reason: Message-copy generation is a server-side AI composite; no public REST operation
+    in the OpenAPI produces sequence copy.
+- tool: check_domain_health
+  reason: Sending-domain DNS/blacklist health is documented for the MCP surface and
+    the Deliverability Hub but has no published REST operation; the spec's nearest
+    surface is the Deliverability alerts CRUD, which is a different capability.
+- tool: send_inbox_sms
+  reason: The Agent Skill lists an SMS send tool, and SMS activity events exist in
+    the webhook catalog, but the published OpenAPI declares only email, LinkedIn and
+    WhatsApp inbox send operations.
+rest_only:
+- capability: Signal Agents (watch lists)
+  operations: 10
+  detail: GET/POST/PATCH/DELETE /watchlist, /watchlist/signals, /watchlist/history,
+    /watchlist/library, /watchlist/filters, /watchlist/filter-values, POST /watchlist/{watchListId}/external-signals
+- capability: Unsubscribes
+  operations: 15
+  detail: variable- and contact-level unsubscribe/re-subscribe, exports, legacy email-domain
+    unsubscribes
+- capability: Schedules
+  operations: 7
+  detail: schedule CRUD and campaign association
+- capability: lemwarm
+  operations: 4
+  detail: start/pause lemwarm and read/update its settings per mailbox
+- capability: Companies
+  operations: 5
+  detail: company CRUD plus company notes
+- capability: Tasks
+  operations: 4
+  detail: task list/create/update/ignore
+- capability: Activities
+  operations: 2
+  detail: activity feed and recording/transcript deletion
+- capability: Deliverability alerts
+  operations: 5
+  detail: alert CRUD
+- capability: A/B testing on sequence steps
+  operations: 5
+  detail: variant create/read/update/delete and winner selection
+- capability: Campaign and lead exports
+  operations: 6
+  detail: asynchronous stats exports, lead exports, export status and notification
+    email
+- capability: Inbox labels and drafts
+  operations: 10
+  detail: label CRUD, conversation label attach/remove, draft CRUD
+- capability: Fields and CRM filters
+  operations: 3
+  detail: GET /fields, GET /crm/filters, GET /database/filters
+- capability: Personas
+  operations: 3
+  detail: listPersonas, createPersona, deletePersona (operationIds present in the spec)
+coverage:
+  tools_named: 30
+  tools_bound_to_rest: 27
+  mcp_only: 3
+  rest_operations_total: 143
+  rest_operations_with_a_tool: 38
+  rest_operations_without_a_tool: 105
+  operationids_declared_in_spec: 5

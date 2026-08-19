@@ -1,0 +1,1092 @@
+openapi: 3.0.0
+info:
+  title: lemlist Sequences API
+  version: 1.0.0
+  description: The Sequences operations of the lemlist API, split by tag from the OpenAPI lemlist publishes
+    at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content is carried verbatim
+    from the provider spec.
+servers:
+- url: https://api.lemlist.com/api
+security:
+- basicAuth: []
+tags:
+- name: Sequences
+paths:
+  /campaigns/{campaignId}/sequences:
+    get:
+      summary: Get Campaign Sequences
+      tags:
+      - Sequences
+      parameters: []
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Object where each key is a sequence ID and each value is a sequence object
+                additionalProperties:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                      description: The unique identifier of the sequence
+                    steps:
+                      type: array
+                      description: Array of steps in the sequence
+                      items:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                            description: The unique identifier of the step
+                          delay:
+                            type: integer
+                            description: The delay in days before executing this step
+                          emailTemplateId:
+                            type: string
+                            description: The unique identifier of the email template used for this step
+                          type:
+                            type: string
+                            description: The type of step (e.g., email, linkedinSend, linkedinInvite,
+                              conditional)
+                          index:
+                            type: integer
+                            description: The position of the step in the sequence
+                          sequenceId:
+                            type: string
+                            description: The unique identifier of the parent sequence
+                          sequenceStep:
+                            type: integer
+                            description: The step number in the sequence
+                          message:
+                            type: string
+                            description: The message content for the step (plain text for LinkedIn, HTML
+                              for email)
+                          subject:
+                            type: string
+                            description: The email subject line (only for email steps)
+                    level:
+                      type: integer
+                      description: The nesting level of the sequence (0 for main sequence, 1+ for nested
+                        conditional sequences)
+                    parentId:
+                      type: string
+                      description: The unique identifier of the parent sequence (only for conditional
+                        sequences)
+                    conditionalStepIndex:
+                      type: integer
+                      description: The index of the conditional step that triggers this sequence (only
+                        for conditional sequences)
+              example:
+                seq_rH5RD3fMkkt2gM3YC:
+                  _id: seq_rH5RD3fMkkt2gM3YC
+                  steps:
+                  - _id: stp_sFUj6keaSz9wr049M
+                    delay: 0
+                    emailTemplateId: etp_ahlbc2yafFyu728H8
+                    type: linkedinSend
+                    index: 1
+                    sequenceId: seq_rH5RD3fMkkt2gM3YC
+                    sequenceStep: 0
+                    message: "Hey {{firstName}}, \n\nwe're launching an event, a place where people can\
+                      \ regularly meet, network, and learn from each other. We would love it if you could\
+                      \ join us for a drink & chat next week. What do you say? \U0001F60A"
+                  - _id: stp_qsTl0LO6zkQQJQqsP
+                    delay: 1
+                    emailTemplateId: etp_HFjUGtyDxIOxgZYcG
+                    index: 2
+                    sequenceId: seq_rH5RD3fMkkt2gM3YC
+                    sequenceStep: 1
+                    subject: '{{firstName}}, do we count on you for the event?'
+                    message: '<p style="margin: 0px; box-sizing: border-box;">Hey {{firstName}},<br style="box-sizing:
+                      border-box;"><br style="box-sizing: border-box;"></p>
+
+                      <p style="margin: 0px; box-sizing: border-box;">Do you have any plans for Thursday,
+                      7pm?<br style="box-sizing: border-box;"><br style="box-sizing: border-box;"></p>
+
+                      <p style="margin: 0px; box-sizing: border-box;">What about spending the evening
+                      with cool people by our office?<br style="box-sizing: border-box;"><br style="box-sizing:
+                      border-box;"></p>
+
+                      <p style="margin: 0px; box-sizing: border-box;">We''re launching an event, a place
+                      where people can regularly meet, network, and build connections that help them grow
+                      further 😊<br style="box-sizing: border-box;"><br style="box-sizing: border-box;"></p>
+
+                      <p style="margin: 0px; box-sizing: border-box;">It would be really nice if we could
+                      count on you for the event-&nbsp;<a target="_blank" style="color: rgb(0, 123, 255);
+                      text-decoration: none; background-color: transparent; user-select: auto; box-sizing:
+                      border-box;" rel="noopener noreferrer" href="{{event_link_to_send}}">here''s your
+                      invite</a>&nbsp;🔥</p><p style="margin: 0px; box-sizing: border-box;"><br style="box-sizing:
+                      border-box;"></p>
+
+                      <p style="margin: 0px; box-sizing: border-box;">Can you make it?<br style="box-sizing:
+                      border-box;"><br style="box-sizing: border-box;"></p>
+
+                      <p style="margin: 0px; box-sizing: border-box;">Sarah,</p><p style="margin: 0px;
+                      box-sizing: border-box;">Head of Marketing</p>'
+                    type: email
+                  - _id: stp_pRcXzJDmOrBkFtNc3
+                    delay: 1
+                    emailTemplateId: etp_3tjFTgdOMS6JL8U1g
+                    index: 3
+                    sequenceId: seq_rH5RD3fMkkt2gM3YC
+                    sequenceStep: 2
+                    subject: '{{firstName}}, do we count on you for the event?'
+                    message: '<p style="margin: 0px; box-sizing: border-box;">So, should I add you to
+                      the list of attendees?<br style="box-sizing: border-box;"><br style="box-sizing:
+                      border-box;"></p>
+
+                      <p style="margin: 0px; box-sizing: border-box;">We''ll meet around 7pm, have a drink
+                      and exchange with entrepreneurs, marketers, and salespeople.<br style="box-sizing:
+                      border-box;"><br style="box-sizing: border-box;"></p>
+
+                      <p style="margin: 0px; box-sizing: border-box;"><a target="_blank" style="color:
+                      rgb(0, 123, 255); text-decoration: none; background-color: transparent; user-select:
+                      auto; box-sizing: border-box;" rel="noopener noreferrer" href="{{event_link_to_send}}">Here''s
+                      the link</a> if you want to join!<br style="box-sizing: border-box;"><br style="box-sizing:
+                      border-box;"></p>
+
+                      <p style="margin: 0px; box-sizing: border-box;">We would love to have you with us
+                      for this event!<br style="box-sizing: border-box;"><br style="box-sizing: border-box;">Sarah</p><p
+                      style="margin: 0px; box-sizing: border-box;">Head of Marketing</p>'
+                    type: email
+                  level: 0
+        '400':
+          description: 'Possible errors: Bad team / Campaign has no sequence'
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '404':
+          description: Campaign not found
+          content:
+            text/plain:
+              example: Campaign not found
+        '405':
+          description: Method not allowed
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
+  /sequences/{sequenceId}/steps:
+    post:
+      summary: Add Step to Sequence
+      tags:
+      - Sequences
+      parameters: []
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  type:
+                    type: string
+                  delay:
+                    type: integer
+                  emailTemplateId:
+                    type: string
+                  message:
+                    type: string
+              example:
+                _id: stp_V0JHmSpWiO0rxHUkz
+                type: linkedinInvite
+                delay: 2
+                emailTemplateId: etp_sw6csWaZNwnfdwGZ6
+                message: Hello, I would like...
+        '400':
+          description: 'Possible errors: Bad team / Error from createStep'
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '405':
+          description: Method not allowed
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: The type of step to create
+                  enum:
+                  - email
+                  - manual
+                  - phone
+                  - api
+                  - linkedinVisit
+                  - linkedinInvite
+                  - linkedinSend
+                  - linkedinVoiceNote
+                  - linkedinFollow
+                  - linkedinLikeLastPost
+                  - linkedinCommentLastPost
+                  - linkedinEndorse
+                  - linkedinWithdrawInvitation
+                  - sendToAnotherCampaign
+                  - conditional
+                  - whatsappMessage
+                  - sms
+                index:
+                  type: integer
+                  description: The position within the sequence to insert the new step (≥ -1). If omitted
+                    or greater than the number of steps, the new step is added to the end
+                delay:
+                  type: integer
+                  description: Delay in days before executing this step. Defaults to 0 for the first step
+                    and 1 for subsequent steps
+                subject:
+                  type: string
+                  description: Email subject line (required for email steps)
+                message:
+                  type: string
+                  description: Content of the email or message (used for email, linkedinInvite, linkedinSend,
+                    manual, phone, whatsappMessage, sms steps). Required for linkedinSend, whatsappMessage,
+                    and sms
+                altMessage:
+                  type: string
+                  description: Alternate message for linkedinSend steps
+                title:
+                  type: string
+                  description: Title or label for manual steps
+                method:
+                  type: string
+                  description: HTTP method for API steps
+                  enum:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - PATCH
+                url:
+                  type: string
+                  description: URL of the API endpoint to call (required for api steps). Must start with
+                    http:// or https://
+                conditionKey:
+                  type: string
+                  description: Condition key for conditional steps
+                  enum:
+                  - hasEmailAddress
+                  - hasLinkedinUrl
+                  - hasPhoneNumber
+                  - hasScore
+                  - emailsOpened
+                  - emailsClicked
+                  - emailsUnsubscribed
+                  - meetingBooked
+                  - linkedinInviteAccepted
+                  - linkedinOpened
+                  - aircallDone
+                  - linkedinNetworkCheck
+                  - hasWhatsappAccount
+                delayType:
+                  type: string
+                  description: Delay type for conditional steps
+                  enum:
+                  - within
+                  - waitUntil
+                campaignId:
+                  type: string
+                  description: Target campaign ID for sendToAnotherCampaign steps. The campaign must exist
+                    and not be archived
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                  description: 'Public HTTPS URLs of images to attach to a `linkedinInvite` or `linkedinSend`
+                    step. lemlist downloads each file and re-hosts it. Allowed MIME types: `image/png`,
+                    `image/jpeg`, `image/gif`. Up to 20 MB per file, and up to 6 items total combined
+                    with `videos`.'
+                videos:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                  description: 'Public HTTPS URLs of videos to attach to a `linkedinInvite` or `linkedinSend`
+                    step. lemlist downloads each file and re-hosts it. Allowed MIME types: `video/mp4`,
+                    `video/quicktime`. Up to 20 MB per file, and up to 6 items total combined with `images`.'
+                skillName:
+                  type: string
+                  description: Name of the LinkedIn skill to endorse on the lead's profile. Applies to
+                    `linkedinEndorse` steps only.
+                endorseAnyFallback:
+                  type: boolean
+                  description: Applies to `linkedinEndorse` steps only. When `true` and the named skill
+                    is not on the lead's profile, lemlist falls back to endorsing any available skill.
+                recordMode:
+                  type: string
+                  description: Applies to `linkedinVoiceNote` steps only. Determines how the audio is
+                    sourced. `manual` (default) means the user records the audio themselves from the lemlist
+                    UI after step creation; `ai` means lemlist generates the audio from a text template
+                    provided in the lemlist UI.
+                  enum:
+                  - manual
+                  - ai
+            examples:
+              Email Step:
+                value:
+                  type: email
+                  subject: '{{firstName}}, quick question about {{companyName}}'
+                  message: <p>Hi {{firstName}},</p><p>I noticed {{companyName}} is working on improving
+                    customer engagement. Would you be interested in discussing how we can help?</p><p>Best
+                    regards,<br>{{senderName}}</p>
+                  delay: 1
+                  index: 2
+              LinkedIn Invite:
+                value:
+                  type: linkedinInvite
+                  message: Hi {{firstName}}, I'd love to connect and learn more about your work at {{companyName}}!
+                  delay: 0
+              LinkedIn Send:
+                value:
+                  type: linkedinSend
+                  message: Hey {{firstName}}, thanks for connecting! I wanted to reach out about...
+                  delay: 2
+              LinkedIn Send with Media:
+                value:
+                  type: linkedinSend
+                  message: Hey {{firstName}}, sharing a quick overview of what we're building.
+                  images:
+                  - https://example.com/assets/overview.png
+                  videos:
+                  - https://example.com/assets/demo.mp4
+                  delay: 2
+              Manual Task:
+                value:
+                  type: manual
+                  title: Call prospect
+                  message: Discuss their pain points and schedule a demo
+                  delay: 1
+              Phone Call:
+                value:
+                  type: phone
+                  message: Follow up on the email sent yesterday
+                  delay: 1
+              API Call:
+                value:
+                  type: api
+                  method: POST
+                  url: https://api.example.com/webhook
+                  delay: 0
+              LinkedIn Visit:
+                value:
+                  type: linkedinVisit
+                  delay: 0
+              Conditional Step:
+                value:
+                  type: conditional
+                  conditionKey: linkedinInviteAccepted
+                  delayType: waitUntil
+                  delay: 1
+              Send to Another Campaign:
+                value:
+                  type: sendToAnotherCampaign
+                  campaignId: cam_ABC123XYZ456
+                  delay: 0
+              WhatsApp Message:
+                value:
+                  type: whatsappMessage
+                  message: Hi {{firstName}}, following up on our conversation...
+                  delay: 1
+    parameters:
+    - name: sequenceId
+      in: path
+      required: true
+      description: The unique identifier of the sequence
+      example: seq_lkCSKd32qSZZTe5Ru
+      schema:
+        type: string
+  /sequences/{sequenceId}/steps/{stepId}:
+    patch:
+      summary: Update Sequence Step
+      tags:
+      - Sequences
+      parameters: []
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  type:
+                    type: string
+                  delay:
+                    type: integer
+                  emailTemplateId:
+                    type: string
+                  message:
+                    type: string
+              example:
+                _id: stp_V0JHmSpWiO0rxHUkz
+                type: linkedinInvite
+                delay: 0
+                emailTemplateId: etp_HZvLoLNEwdJ8Vu0w7
+                message: Hello, I want to...
+        '400':
+          description: 'Possible errors: Bad team / Error from updateStep'
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '405':
+          description: Method not allowed
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - type
+              properties:
+                type:
+                  type: string
+                  description: The type of step (required but cannot be changed - must match the existing
+                    step type)
+                  enum:
+                  - email
+                  - manual
+                  - phone
+                  - api
+                  - linkedinVisit
+                  - linkedinInvite
+                  - linkedinSend
+                  - linkedinVoiceNote
+                  - linkedinFollow
+                  - linkedinLikeLastPost
+                  - linkedinCommentLastPost
+                  - linkedinEndorse
+                  - linkedinWithdrawInvitation
+                  - sendToAnotherCampaign
+                  - conditional
+                  - whatsappMessage
+                  - sms
+                delay:
+                  type: integer
+                  description: Delay in days before executing this step
+                subject:
+                  type: string
+                  description: Email subject line (for email steps)
+                message:
+                  type: string
+                  description: Content of the email or message (for email, linkedinInvite, linkedinSend,
+                    manual, phone, whatsappMessage, sms steps)
+                altMessage:
+                  type: string
+                  description: Alternate message for linkedinSend steps
+                title:
+                  type: string
+                  description: Title or label for manual steps
+                method:
+                  type: string
+                  description: HTTP method for API steps
+                  enum:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - PATCH
+                url:
+                  type: string
+                  description: URL of the API endpoint to call (for api steps). Must start with http://
+                    or https://
+                conditionKey:
+                  type: string
+                  description: Condition key for conditional steps
+                  enum:
+                  - hasEmailAddress
+                  - hasLinkedinUrl
+                  - hasPhoneNumber
+                  - hasScore
+                  - emailsOpened
+                  - emailsClicked
+                  - emailsUnsubscribed
+                  - meetingBooked
+                  - linkedinInviteAccepted
+                  - linkedinOpened
+                  - aircallDone
+                  - linkedinNetworkCheck
+                  - hasWhatsappAccount
+                delayType:
+                  type: string
+                  description: Delay type for conditional steps
+                  enum:
+                  - within
+                  - waitUntil
+                campaignId:
+                  type: string
+                  description: Target campaign ID for sendToAnotherCampaign steps. The campaign must exist
+                    and not be archived
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                  description: 'Public HTTPS URLs of images to attach to a `linkedinInvite` or `linkedinSend`
+                    step. Replaces the step''s current images — pass an empty array to clear them. Allowed
+                    MIME types: `image/png`, `image/jpeg`, `image/gif`. Up to 20 MB per file, and up to
+                    6 items total combined with `videos`.'
+                videos:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                  description: 'Public HTTPS URLs of videos to attach to a `linkedinInvite` or `linkedinSend`
+                    step. Replaces the step''s current videos — pass an empty array to clear them. Allowed
+                    MIME types: `video/mp4`, `video/quicktime`. Up to 20 MB per file, and up to 6 items
+                    total combined with `images`.'
+                skillName:
+                  type: string
+                  description: Name of the LinkedIn skill to endorse on the lead's profile. Applies to
+                    `linkedinEndorse` steps only.
+                endorseAnyFallback:
+                  type: boolean
+                  description: Applies to `linkedinEndorse` steps only. When `true` and the named skill
+                    is not on the lead's profile, lemlist falls back to endorsing any available skill.
+                recordMode:
+                  type: string
+                  description: Applies to `linkedinVoiceNote` steps only. Determines how the audio is
+                    sourced. `manual` (default) means the user records the audio themselves from the lemlist
+                    UI after step creation; `ai` means lemlist generates the audio from a text template
+                    provided in the lemlist UI.
+                  enum:
+                  - manual
+                  - ai
+            examples:
+              Update Email Step:
+                value:
+                  type: email
+                  subject: '{{firstName}}, following up on our conversation'
+                  message: <p>Hi {{firstName}},</p><p>Just wanted to circle back on our previous email.
+                    Have you had a chance to review it?</p><p>Best,<br>{{senderName}}</p>
+                  delay: 2
+              Update LinkedIn Invite:
+                value:
+                  type: linkedinInvite
+                  message: Hi {{firstName}}, I'd love to connect with you to discuss potential collaboration
+                    opportunities!
+                  delay: 0
+              Update LinkedIn Send:
+                value:
+                  type: linkedinSend
+                  message: Thanks for accepting my invite, {{firstName}}! I wanted to reach out about...
+                  altMessage: Alternative message if the main one fails
+                  delay: 3
+              Update LinkedIn Send Media:
+                value:
+                  type: linkedinSend
+                  images:
+                  - https://example.com/assets/overview.png
+                  videos: []
+              Update Manual Task:
+                value:
+                  type: manual
+                  title: Schedule follow-up call
+                  message: Discuss pain points and propose next steps
+                  delay: 2
+              Update Phone Call:
+                value:
+                  type: phone
+                  message: Call to discuss the proposal sent via email
+                  delay: 1
+              Update API Call:
+                value:
+                  type: api
+                  method: PUT
+                  url: https://api.example.com/webhook/update
+                  delay: 0
+              Update LinkedIn Visit:
+                value:
+                  type: linkedinVisit
+                  delay: 1
+              Update Conditional Step:
+                value:
+                  type: conditional
+                  conditionKey: emailsOpened
+                  delayType: within
+                  delay: 3
+              Update Send to Another Campaign:
+                value:
+                  type: sendToAnotherCampaign
+                  campaignId: cam_XYZ789ABC123
+              Update WhatsApp Message:
+                value:
+                  type: whatsappMessage
+                  message: Hi {{firstName}}, just checking in to see if you received my previous messages.
+                  delay: 2
+    parameters:
+    - name: sequenceId
+      in: path
+      required: true
+      description: The unique identifier of the sequence
+      example: seq_lkCSKd32qSZZTe5Ru
+      schema:
+        type: string
+    - name: stepId
+      in: path
+      required: true
+      description: The unique identifier of the step
+      example: stp_V0JHmSpWiO0rxHUkz
+      schema:
+        type: string
+    delete:
+      summary: Delete Sequence Step
+      tags:
+      - Sequences
+      parameters: []
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+              example:
+                ok: true
+        '400':
+          description: 'Possible errors: Bad team / You cannot delete this step because the campaign is
+            running'
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '404':
+          description: 'Possible errors: Sequence not found / Step not found'
+          content:
+            text/plain:
+              example: Sequence not found
+        '405':
+          description: Method not allowed
+  /sequences/{sequenceId}/steps/{stepId}/ab-test:
+    post:
+      summary: Create A/B Test Variant
+      tags:
+      - Sequences
+      description: Creates variant B of an A/B test on an email step, prefilled from variant A, and starts
+        the test (leads are split between A and B). Requires the Email Pro plan.
+      parameters: []
+      responses:
+        '200':
+          description: Variant B created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stepId:
+                    type: string
+                  abTest:
+                    oneOf:
+                    - type: boolean
+                    - type: string
+                      enum:
+                      - A
+                      - B
+                  emailTemplateBId:
+                    type: string
+                    description: Email template ID of variant B
+                  subject:
+                    type: string
+                    description: Variant B email subject
+                  message:
+                    type: string
+                    description: Variant B email body (HTML)
+                  altMessage:
+                    type: string
+                  cc:
+                    type: array
+                    items:
+                      type: string
+                  plainText:
+                    type: boolean
+              example:
+                stepId: stp_V0JHmSpWiO0rxHUkz
+                abTest: true
+                emailTemplateBId: etp_9aZ2k1QwErTyUiOp3
+                subject: Quick question, {{firstName}}
+                message: <div>Hi {{firstName}}, ...</div>
+        '400':
+          description: Bad request (e.g. step is not an email step, has no template, already runs an A/B
+            test, or the campaign is running)
+          content:
+            text/plain:
+              example: A/B test already exists on this step
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '402':
+          description: A/B testing requires at least the Email Pro plan
+          content:
+            text/plain:
+              example: route is available starting emailPro plan
+        '404':
+          description: Sequence, step, or A/B test variant not found
+          content:
+            text/plain:
+              example: No A/B test variant on this step
+        '405':
+          description: Method not allowed
+    parameters:
+    - name: sequenceId
+      in: path
+      required: true
+      description: The unique identifier of the sequence
+      example: seq_lkCSKd32qSZZTe5Ru
+      schema:
+        type: string
+    - name: stepId
+      in: path
+      required: true
+      description: The unique identifier of the step
+      example: stp_V0JHmSpWiO0rxHUkz
+      schema:
+        type: string
+    get:
+      summary: Get A/B Test Variant
+      tags:
+      - Sequences
+      description: Returns variant B (subject, message, config) of the A/B test on an email step. Requires
+        the Email Pro plan.
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stepId:
+                    type: string
+                  abTest:
+                    oneOf:
+                    - type: boolean
+                    - type: string
+                      enum:
+                      - A
+                      - B
+                  emailTemplateBId:
+                    type: string
+                    description: Email template ID of variant B
+                  subject:
+                    type: string
+                    description: Variant B email subject
+                  message:
+                    type: string
+                    description: Variant B email body (HTML)
+                  altMessage:
+                    type: string
+                  cc:
+                    type: array
+                    items:
+                      type: string
+                  plainText:
+                    type: boolean
+              example:
+                stepId: stp_V0JHmSpWiO0rxHUkz
+                abTest: true
+                emailTemplateBId: etp_9aZ2k1QwErTyUiOp3
+                subject: Quick question, {{firstName}}
+                message: <div>Hi {{firstName}}, ...</div>
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '402':
+          description: A/B testing requires at least the Email Pro plan
+          content:
+            text/plain:
+              example: route is available starting emailPro plan
+        '404':
+          description: Sequence, step, or A/B test variant not found
+          content:
+            text/plain:
+              example: No A/B test variant on this step
+        '405':
+          description: Method not allowed
+    patch:
+      summary: Update A/B Test Variant
+      tags:
+      - Sequences
+      description: Edits variant B content/config of the A/B test on an email step. Only the provided
+        fields are updated. Requires the Email Pro plan.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subject:
+                  type: string
+                  description: Variant B email subject. Maximum 400 characters
+                message:
+                  type: string
+                  description: Variant B email body (HTML)
+                altMessage:
+                  type: string
+                cc:
+                  type: array
+                  items:
+                    type: string
+                plainText:
+                  type: boolean
+            example:
+              subject: New subject B
+              message: <div>New body B</div>
+      responses:
+        '200':
+          description: Variant B updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stepId:
+                    type: string
+                  abTest:
+                    oneOf:
+                    - type: boolean
+                    - type: string
+                      enum:
+                      - A
+                      - B
+                  emailTemplateBId:
+                    type: string
+                    description: Email template ID of variant B
+                  subject:
+                    type: string
+                    description: Variant B email subject
+                  message:
+                    type: string
+                    description: Variant B email body (HTML)
+                  altMessage:
+                    type: string
+                  cc:
+                    type: array
+                    items:
+                      type: string
+                  plainText:
+                    type: boolean
+              example:
+                stepId: stp_V0JHmSpWiO0rxHUkz
+                abTest: true
+                emailTemplateBId: etp_9aZ2k1QwErTyUiOp3
+                subject: Quick question, {{firstName}}
+                message: <div>Hi {{firstName}}, ...</div>
+        '400':
+          description: Bad request (invalid request body)
+          content:
+            text/plain:
+              example: 'Match error: Expected string, got number'
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '402':
+          description: A/B testing requires at least the Email Pro plan
+          content:
+            text/plain:
+              example: route is available starting emailPro plan
+        '404':
+          description: Sequence, step, or A/B test variant not found
+          content:
+            text/plain:
+              example: No A/B test variant on this step
+        '405':
+          description: Method not allowed
+    delete:
+      summary: Delete A/B Test Variant
+      tags:
+      - Sequences
+      description: Deletes a variant of the A/B test and ends the test. Deleting `B` (default) drops variant
+        B; deleting `A` promotes variant B to A. Requires the Email Pro plan.
+      parameters:
+      - name: variant
+        in: query
+        required: false
+        description: Which variant to delete. Defaults to `B`.
+        schema:
+          type: string
+          enum:
+          - A
+          - B
+          default: B
+      responses:
+        '200':
+          description: Variant deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+              example:
+                ok: true
+        '400':
+          description: You cannot edit this step because the campaign is running
+          content:
+            text/plain:
+              example: You cannot edit this step because the campaign is running
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '402':
+          description: A/B testing requires at least the Email Pro plan
+          content:
+            text/plain:
+              example: route is available starting emailPro plan
+        '404':
+          description: Sequence, step, or A/B test variant not found
+          content:
+            text/plain:
+              example: No A/B test variant on this step
+        '405':
+          description: Method not allowed
+  /sequences/{sequenceId}/steps/{stepId}/ab-test/winner:
+    post:
+      summary: Select A/B Test Winner
+      tags:
+      - Sequences
+      description: Selects the winning variant of the A/B test. The winning template is then sent to all
+        remaining leads going through the campaign. Requires the Email Pro plan.
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - variant
+              properties:
+                variant:
+                  type: string
+                  enum:
+                  - A
+                  - B
+                  description: The winning variant
+            example:
+              variant: B
+      responses:
+        '200':
+          description: Winner selected
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stepId:
+                    type: string
+                  abTest:
+                    type: string
+                    enum:
+                    - A
+                    - B
+              example:
+                stepId: stp_V0JHmSpWiO0rxHUkz
+                abTest: B
+        '400':
+          description: A winning variant has already been selected, or the variant is invalid
+          content:
+            text/plain:
+              example: A winning variant has already been selected for this step
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '402':
+          description: A/B testing requires at least the Email Pro plan
+          content:
+            text/plain:
+              example: route is available starting emailPro plan
+        '404':
+          description: Sequence, step, or A/B test variant not found
+          content:
+            text/plain:
+              example: No A/B test variant on this step
+        '405':
+          description: Method not allowed
+    parameters:
+    - name: sequenceId
+      in: path
+      required: true
+      description: The unique identifier of the sequence
+      example: seq_lkCSKd32qSZZTe5Ru
+      schema:
+        type: string
+    - name: stepId
+      in: path
+      required: true
+      description: The unique identifier of the step
+      example: stp_V0JHmSpWiO0rxHUkz
+      schema:
+        type: string
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

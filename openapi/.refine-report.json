@@ -1,18 +1,46 @@
 {
   "provider": "lemlist",
+  "date": "2026-08-13",
+  "source": "https://developer.lemlist.com/api-reference/openapi/v2.json",
   "sources": [
-    "lemlist-campaigns-api-openapi.yml",
-    "lemlist-team-api-openapi.yml",
-    "lemlist-users-api-openapi.yml"
+    "_original/lemlist-openapi-v2.json"
   ],
   "outputs": [
+    "lemlist-activities-api-openapi.yml",
     "lemlist-campaigns-api-openapi.yml",
+    "lemlist-companies-api-openapi.yml",
+    "lemlist-contacts-api-openapi.yml",
+    "lemlist-deliverability-alerts-api-openapi.yml",
+    "lemlist-email-accounts-api-openapi.yml",
+    "lemlist-enrich-api-openapi.yml",
+    "lemlist-fields-api-openapi.yml",
+    "lemlist-inbox-api-openapi.yml",
+    "lemlist-leads-api-openapi.yml",
+    "lemlist-lemwarm-api-openapi.yml",
+    "lemlist-people-database-api-openapi.yml",
+    "lemlist-schedules-api-openapi.yml",
+    "lemlist-sequences-api-openapi.yml",
+    "lemlist-signal-agents-api-openapi.yml",
+    "lemlist-tasks-api-openapi.yml",
     "lemlist-team-api-openapi.yml",
-    "lemlist-users-api-openapi.yml"
+    "lemlist-unsubscribes-api-openapi.yml",
+    "lemlist-users-api-openapi.yml",
+    "lemlist-webhooks-api-openapi.yml"
   ],
-  "archived": [],
+  "archived": [
+    "_original/lemlist-openapi.yml (prior 7-operation scaffold, replaced by the harvested 143-operation spec)"
+  ],
+  "operations": 143,
+  "paths": 101,
+  "schemas": 58,
   "errors": [],
-  "warnings": [],
-  "notes": [],
+  "warnings": [
+    "138 of 143 operations in the provider spec declare no operationId; none were minted",
+    "the provider spec declares no root-level tags[] block; tags are used on operations only"
+  ],
+  "notes": [
+    "Split by tag from the OpenAPI lemlist publishes. Operation content carried verbatim; only the component schemas each tag references are carried into its document.",
+    "_original/lemlist-openapi-v1-legacy.json is the older doc-set spec still served at https://developer.lemlist.com/api-reference/openapi.json (82 operations). v1 is deprecated per https://developer.lemlist.com/api-reference/getting-started/version and is retained for reference only; it is not split or wired."
+  ],
   "skipped": []
 }

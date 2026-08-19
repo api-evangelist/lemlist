@@ -1,97 +1,570 @@
-openapi: 3.1.0
+openapi: 3.0.0
 info:
-  title: lemlist Campaigns Team API
-  version: '2.0'
-  description: 'REST API for lemlist''s cold email outreach and sales engagement
-
-    platform. All routes live at https://api.lemlist.com/api/. The full
-
-    URL pattern is https://api.lemlist.com/api/{endpoint}.
-
-
-    Authentication uses HTTP Basic with an empty username and the API
-
-    key as the password (`:YOUR_API_KEY` base64-encoded into the
-
-    Authorization header).
-
-
-    Source: https://developer.lemlist.com and the published
-
-    OpenAPI v2 spec at
-
-    https://developer.lemlist.com/api-reference/openapi/v2.json
-
-    '
+  title: lemlist Team API
+  version: 1.0.0
+  description: The Team operations of the lemlist API, split by tag from the OpenAPI lemlist publishes
+    at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content is carried verbatim
+    from the provider spec.
 servers:
 - url: https://api.lemlist.com/api
-  description: lemlist production API
 security:
-- BasicAuth: []
+- basicAuth: []
 tags:
 - name: Team
-  description: Team-level endpoints (info, senders, credits)
 paths:
   /team:
     get:
-      operationId: getTeam
-      summary: Get team information
+      summary: Get Team
       tags:
       - Team
+      parameters:
+      - name: version
+        in: query
+        required: false
+        description: Set to `v2` to include the `users` array, listing each team member's `userId`, `name`,
+          `email`, and `role`. This lets you retrieve the team and its members in a single request.
+        schema:
+          type: string
+          enum:
+          - v2
       responses:
         '200':
-          description: Team object
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Team'
+              example:
+                _id: tea_b4rMsi2trBhahaha
+                name: lemlist
+                userIds:
+                - usr_4YGm9ez7gMdyhahaha
+                - usr_5GdFEgSLCN4hahaha
+                - usr_F7iPChEQ3phahaha
+                createdBy: usr_4YGm9ez7gMdyhahaha
+                createdAt: '2018-02-22T08:52:30.926Z'
+                hooks:
+                - _id: hoo_Ib5jfViX9hn3FzNqr
+                  targetUrl: https://hooks.zapier.com/hooks/standard/946357/*some-id*/
+                  createdAt: '2018-06-05T09:07:07.761Z'
+                  zapId: 123456789
+                  type: emailsReplied
+                  campaignId: cam_TgyErJghahaha
+                  isFirst: true
+                - _id: hoo_SDRr2w4JigZDL7OB2
+                  targetUrl: https://hooks.zapier.com/hooks/standard/5078320/*some-other-id*/
+                  createdAt: '2019-06-05T14:38:56.535Z'
+                  zapId: 987654321
+                  type: emailsReplied
+                  campaignId: cam_J2M3P9Z8whahaha
+                - _id: hoo_IYAPP4HnSyU7UTH3E
+                  targetUrl: https://hooks.zapier.com/hooks/standard/5078320/*some-id*/
+                  createdAt: '2019-06-05T15:49:36.624Z'
+                  zapId: 59831776
+                  type: emailsReplied
+                  campaignId: cam_qBNYaIFXA77eXM1Ey
+                  isFirst: true
+                - _id: hoo_UAtwcPAd0tK9U6hKG
+                  targetUrl: https://subdomain.pipedream.net
+                  createdAt: '2022-02-10T16:45:28.216Z'
+                  campaignId: cam_7BE8IZRaqahU44Wp6
+                slackWebhook:
+                  url: https://hooks.slack.com/services/REDACTED*some-id*
+                  failCounter: 1
+                beta:
+                - outreachQueue
+                - crmSyncApiSalesforce
+                - voipWhitelist
+                - lemrich_postLemrichKafka
+                - computedFieldActiveCampaigns
+                pictureId: fil_vRhMy09kT1Rv4Kq4O.png
+                invitedUsers:
+                - email: support@lemlist.com
+                  role: member
+                  invitedBy: usr_w7XoMXW37hahaha
+                  invitedAt: '2023-03-04T20:06:29.585Z'
+                - email: taylor@example.com
+                  role: admin
+                  invitedBy: usr_Hq4uzGvFP5q6homd
+                  invitedAt: '2024-09-13T12:39:55.984Z'
+                agency: usr_4YGm9ez7gMd2123456
+                customDomain: custom.domain.com
+                users:
+                - userId: usr_4YGm9ez7gMdyhahaha
+                  name: John Doe
+                  email: john@lemlist.com
+                  role: admin
+                - userId: usr_5GdFEgSLCN4hahaha
+                  name: Jane Doe
+                  email: jane@lemlist.com
+                  role: member
+        '400':
+          description: 'Possible errors: No API key provided / Bad team'
+          content:
+            text/plain:
+              example: No API key provided
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '403':
+          description: User linked to this API key is blocked
+          content:
+            text/plain:
+              example: User linked to this API key is blocked
+        '404':
+          description: No user found for this API key
+          content:
+            text/plain:
+              example: No user found for this API key
   /team/senders:
     get:
-      operationId: listTeamSenders
-      summary: List team senders across campaigns
+      summary: Get Team Senders
       tags:
       - Team
+      parameters:
+      - name: state
+        in: query
+        required: false
+        description: Filter by campaign's state (running, paused, draft, ended, archived, errors)
+        example: running
+        schema:
+          type: string
+          enum:
+          - running
+          - paused
+          - draft
+          - ended
+          - archived
+          - errors
       responses:
         '200':
-          description: Array of sender objects
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
           content:
             application/json:
               schema:
                 type: array
                 items:
                   type: object
+                  properties:
+                    userId:
+                      type: string
+                    campaigns:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                          name:
+                            type: string
+                          status:
+                            type: string
+                          sendingChannels:
+                            type: array
+                            items:
+                              type: string
+              example:
+              - userId: usr_QB6kKK1wv68DujOET
+                campaigns:
+                - _id: cam_tBpHORyt3WhTQoi5A
+                  name: Onboarding
+                  status: paused
+                  sendingChannels:
+                  - email
+                  - manual
+                  - linkedinVisit
+                - _id: cam_O3BQOaXuyUuyqEHug
+                  name: Community Launch
+                  status: running
+                  sendingChannels:
+                  - email
+                  - manual
+                  - linkedinVisit
+                - _id: cam_NTJ1rituEQ61jVl6p
+                  name: Email Warmup Test
+                  status: ended
+                  sendingChannels:
+                  - email
+                  - manual
+                  - linkedinVisit
+                - _id: cam_1kESsVXFMzfrJImNc
+                  name: Product Launch Campaign
+                  status: draft
+                  sendingChannels:
+                  - email
+                  - manual
+                  - linkedinVisit
+              - userId: usr_v5xz8De4nsLeNWAfv
+                campaigns:
+                - _id: cam_fDwCRnYtL1cfwcA7k
+                  name: WhatsApp Outreach
+                  status: draft
+                  sendingChannels:
+                  - email
+                  - whatsappMessage
+                - _id: cam_WBCWNrsoMKkCWWLqw
+                  name: WhatsApp Test Campaign
+                  status: ended
+                  sendingChannels:
+                  - email
+                  - whatsappMessage
+              - userId: usr_rhhX1KT0qgOGCOrgE
+                campaigns:
+                - _id: cam_pCi08vhGoho2oK3YR
+                  name: Networking
+                  status: running
+                  sendingChannels:
+                  - email
+                  - linkedinSend
+                  - linkedinVisit
+                  - linkedinInvite
+                - _id: cam_zhcBovstiHVaV1abf
+                  name: Product Tools Campaign
+                  status: paused
+                  sendingChannels:
+                  - email
+                  - linkedinSend
+                  - linkedinVisit
+                  - linkedinInvite
+        '400':
+          description: Bad params (invalid state parameter)
+          content:
+            text/plain:
+              example: Bad params (invalid state parameter)
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '405':
+          description: Method not allowed
   /team/credits:
     get:
-      operationId: getTeamCredits
-      summary: Get team credit balance
+      summary: Get Team Credits
       tags:
       - Team
+      parameters: []
       responses:
         '200':
-          description: Credit balance object
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/Credits'
+              example:
+                credits: 100
+                details:
+                  remaining:
+                    total: 100
+                    freemium: 0
+                    subscription: 80
+                    gifted: 10
+                    paid: 10
+        '400':
+          description: No API key provided
+          content:
+            text/plain:
+              example: No API key provided
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '403':
+          description: User linked to this API key is blocked
+          content:
+            text/plain:
+              example: User linked to this API key is blocked
+        '404':
+          description: No user found for this API key
+          content:
+            text/plain:
+              example: No user found for this API key
+        '405':
+          description: Method not allowed
+  /team/crmUsers:
+    get:
+      summary: Get Team CRM Users
+      tags:
+      - Team
+      parameters: []
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    userId:
+                      type: string
+                      description: The lemlist ID of the user whose CRM account is integrated with lemlist
+                    crm:
+                      type: string
+                      description: The CRM integrated with lemlist (e.g., salesforce, hubspot, pipedrive)
+              example:
+              - userId: usr_FU6yAd3UdBFel0UDy
+                crm: salesforce
+              - userId: usr_FU6yAd3UdBFel0UDy
+                crm: hubspot
+              - userId: usr_FU6yAd3UdBFel0UDy
+                crm: pipedrive
+        '400':
+          description: 'Possible errors: Bad team / Endpoint not available'
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
 components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
   schemas:
+    Credits:
+      type: object
+      description: Credits are the coins a team uses to enrich emails, LinkedIn URLs, etc. Each enrichment
+        feature needs a certain amount of credits to run.
+      properties:
+        credits:
+          type: integer
+          description: Total credits remaining
+        details:
+          type: object
+          properties:
+            remaining:
+              type: object
+              properties:
+                total:
+                  type: integer
+                  description: Total credits remaining
+                freemium:
+                  type: integer
+                  description: Freemium credits remaining
+                subscription:
+                  type: integer
+                  description: Subscription credits remaining
+                gifted:
+                  type: integer
+                  description: Gifted credits remaining
+                paid:
+                  type: integer
+                  description: Paid credits remaining
     Team:
       type: object
+      description: The organization account that manages users and billing.
       properties:
         _id:
           type: string
+          description: Unique team identifier
         name:
           type: string
-  securitySchemes:
-    BasicAuth:
-      type: http
-      scheme: basic
-      description: 'HTTP Basic Authentication. The login is always empty and the
-
-        password is your lemlist API key. Send the header as
-
-        `Authorization: Basic ` followed by the base64 encoding of
-
-        `:YOUR_API_KEY`.
-
-        '
+          description: Team name
+        userIds:
+          type: array
+          description: User IDs in this team
+          items:
+            type: string
+        createdBy:
+          type: string
+          description: User ID who created the team
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the team was created
+        hooks:
+          type: array
+          description: Webhooks configured for the team
+          items:
+            $ref: '#/components/schemas/Webhook'
+        beta:
+          type: array
+          description: Beta features enabled for the team
+          items:
+            type: string
+        slackWebhook:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
+              description: Slack webhook URL for notifications
+            failCounter:
+              type: integer
+              description: Number of consecutive failed notifications
+          description: Slack webhooks configured for the team
+        invitedUsers:
+          type: array
+          description: Pending user invitations
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+              role:
+                type: string
+              invitedBy:
+                type: string
+              invitedAt:
+                type: string
+                format: date-time
+        agency:
+          type: string
+          description: Agency identifier if team is part of an agency
+        pictureId:
+          type: string
+          description: Team profile picture file ID
+        customDomain:
+          type: string
+          description: Custom domain for the team
+        users:
+          type: array
+          description: Team members with their basic details. Only returned when the request includes
+            the `version=v2` query parameter.
+          items:
+            type: object
+            properties:
+              userId:
+                type: string
+                description: Unique user identifier
+              name:
+                type: string
+                description: User's full name
+              email:
+                type: string
+                format: email
+                description: User's primary email address
+              role:
+                type: string
+                description: User's role in the team
+    Webhook:
+      type: object
+      description: Webhooks send real-time HTTP notifications upon campaign events (opens, clicks, replies,
+        etc.).
+      properties:
+        _id:
+          type: string
+          description: Unique webhook identifier
+        targetUrl:
+          type: string
+          format: uri
+          description: Destination URL for event notifications
+        type:
+          type: string
+          description: Event type to listen for. Events are grouped by category — see the endpoint docs
+            for a full breakdown.
+          enum:
+          - contacted
+          - hooked
+          - attracted
+          - warmed
+          - interested
+          - notInterested
+          - emailsSent
+          - emailsOpened
+          - emailsClicked
+          - emailsReplied
+          - emailsBounced
+          - emailsFailed
+          - emailsInterested
+          - emailsNotInterested
+          - emailsUnsubscribed
+          - linkedinSent
+          - linkedinOpened
+          - linkedinReplied
+          - linkedinInterested
+          - linkedinNotInterested
+          - linkedinSendFailed
+          - linkedinVisitDone
+          - linkedinVisitFailed
+          - linkedinFollowDone
+          - linkedinFollowFailed
+          - linkedinFollowSkipped
+          - linkedinInviteDone
+          - linkedinInviteFailed
+          - linkedinInviteAccepted
+          - linkedinEndorseDone
+          - linkedinEndorseFailed
+          - linkedinEndorseSkipped
+          - linkedinVoiceNoteDone
+          - linkedinVoiceNoteFailed
+          - linkedinLikeLastPostDone
+          - linkedinLikeLastPostNoPost
+          - linkedinLikeLastPostFailed
+          - linkedinWithdrawInvitationDone
+          - linkedinWithdrawInvitationFailed
+          - whatsappMessageSent
+          - whatsappMessageDelivered
+          - whatsappMessageOpened
+          - whatsappReplied
+          - whatsappMessageFailed
+          - smsSent
+          - smsDelivered
+          - smsReplied
+          - smsFailed
+          - aircallCreated
+          - aircallEnded
+          - aircallDone
+          - aircallInterested
+          - aircallNotInterested
+          - apiDone
+          - apiInterested
+          - apiNotInterested
+          - apiFailed
+          - manualInterested
+          - manualNotInterested
+          - paused
+          - resumed
+          - stopped
+          - campaignComplete
+          - customDomainErrors
+          - connectionIssue
+          - sendLimitReached
+          - lemwarmPaused
+          - annotated
+          - enrichmentDone
+          - enrichmentError
+          - callRecordingDone
+          - callTranscriptDone
+          - inboxLabelUpdated
+          - signalRegistered
+          - deliverabilityAlertTriggered
+        campaignId:
+          type: string
+          description: The ID of the campaign the webhook is associated with (if any)
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        zapId:
+          type: integer
+          description: Zapier integration ID (if the destination is a Zapier webhook)

@@ -1,0 +1,277 @@
+generated: '2026-08-13'
+method: searched
+source: https://developer.lemlist.com/api-reference/endpoints/webhooks/add-webhook
+also:
+- https://developer.lemlist.com/api-reference/objects-definitions/webhook
+spec_type: Webhooks
+asyncapi_published: false
+asyncapi_note: >-
+  lemlist publishes no AsyncAPI document — /asyncapi.yaml and /asyncapi.json 404 on
+  developer.lemlist.com, and api.lemlist.com returns the SPA shell. What lemlist does
+  publish is a fully categorized webhook event catalog with a documented payload
+  envelope, captured verbatim below. No AsyncAPI is fabricated from it.
+transport:
+  style: http-webhook
+  method: POST
+  content_type: application/json
+  target: the subscriber's targetUrl
+management:
+  list: GET /hooks
+  create: POST /hooks
+  delete: DELETE /hooks/{hookId}
+  spec: openapi/lemlist-webhooks-api-openapi.yml
+  scoping: a webhook may be team-wide or bound to a specific campaign
+verification:
+  mechanism: shared secret echoed in the payload
+  detail: >-
+    An optional `secret` may be supplied in the create-webhook body. It is stored
+    encrypted at rest, never returned by GET /hooks or any other endpoint, and is
+    immutable — rotating it means deleting and recreating the webhook. It is sent back
+    as a `secret` field in the JSON body of every callback so the receiver can verify
+    the request came from lemlist.
+  signature_header: false
+  note: >-
+    This is a shared-secret-in-body scheme, not an HMAC signature over the payload.
+    There is no timestamp or replay protection, so a receiver cannot distinguish a
+    replayed delivery from a fresh one.
+payload:
+  common_fields:
+  - field: _id
+    type: string
+    description: Unique activity identifier (act_…)
+  - field: type
+    type: string
+    description: Event type, e.g. emailsSent, emailsReplied
+  - field: teamId
+    type: string
+    description: Team the activity belongs to
+  - field: createdAt
+    type: ISO date
+    description: When the activity happened
+  - field: campaignId
+    type: string
+    description: Source campaign; absent for non-campaign events
+  - field: campaignName
+    type: string
+  - field: sequenceId
+    type: string
+  - field: sequenceStep
+    type: number
+    description: 0-based step index; shifts when steps are reordered
+  - field: stepId
+    type: string
+    description: Stable step identifier that survives a reorder — prefer this when
+      storing a reference
+  - field: leadId
+    type: string
+  - field: leadEmail
+    type: string
+  - field: leadFirstName
+    type: string
+  - field: leadLastName
+    type: string
+  - field: sendUserId
+    type: string
+  - field: sendUserEmail
+    type: string
+  - field: sendUserName
+    type: string
+  - field: subject
+    type: string
+    description: Email subject, email events only
+  - field: secret
+    type: string
+    description: Echoed back if a secret was set on the webhook
+event_count: 76
+event_groups:
+- group: Lead state groups
+  description: aggregate multiple activity types into one lead-state change event
+  events:
+  - name: contacted
+    description: Lead was contacted (email sent, LinkedIn message, API call, etc.)
+  - name: hooked
+    description: Lead opened a message (email, LinkedIn, WhatsApp)
+  - name: attracted
+    description: Lead clicked a link or accepted a LinkedIn invite
+  - name: warmed
+    description: Lead replied (email, LinkedIn, WhatsApp, SMS)
+  - name: interested
+    description: Lead marked as interested
+  - name: notInterested
+    description: Lead marked as not interested
+- group: Email activities
+  events:
+  - name: emailsSent
+    description: Email sent
+  - name: emailsOpened
+    description: Email opened
+  - name: emailsClicked
+    description: Link clicked in email
+  - name: emailsReplied
+    description: Email replied
+  - name: emailsBounced
+    description: Email bounced
+  - name: emailsFailed
+    description: Email failed to send
+  - name: emailsInterested
+    description: Lead marked as interested via email
+  - name: emailsNotInterested
+    description: Lead marked as not interested via email
+  - name: emailsUnsubscribed
+    description: Lead unsubscribed via email
+- group: LinkedIn activities
+  events:
+  - name: linkedinSent
+    description: LinkedIn message sent
+  - name: linkedinOpened
+    description: LinkedIn message opened
+  - name: linkedinReplied
+    description: LinkedIn message replied
+  - name: linkedinInterested
+    description: Lead marked as interested via LinkedIn
+  - name: linkedinNotInterested
+    description: Lead marked as not interested via LinkedIn
+  - name: linkedinSendFailed
+    description: LinkedIn message failed to send
+  - name: linkedinVisitDone
+    description: LinkedIn profile visit completed
+  - name: linkedinVisitFailed
+    description: LinkedIn profile visit failed
+  - name: linkedinFollowDone
+    description: LinkedIn follow completed
+  - name: linkedinFollowFailed
+    description: LinkedIn follow failed
+  - name: linkedinFollowSkipped
+    description: LinkedIn follow skipped
+  - name: linkedinInviteDone
+    description: LinkedIn invite sent
+  - name: linkedinInviteFailed
+    description: LinkedIn invite failed
+  - name: linkedinInviteAccepted
+    description: LinkedIn invite accepted
+  - name: linkedinEndorseDone
+    description: LinkedIn endorsement completed
+  - name: linkedinEndorseFailed
+    description: LinkedIn endorsement failed
+  - name: linkedinEndorseSkipped
+    description: LinkedIn endorsement skipped
+  - name: linkedinVoiceNoteDone
+    description: LinkedIn voice note sent
+  - name: linkedinVoiceNoteFailed
+    description: LinkedIn voice note failed
+  - name: linkedinLikeLastPostDone
+    description: LinkedIn like last post completed
+  - name: linkedinLikeLastPostNoPost
+    description: LinkedIn like last post — no post found
+  - name: linkedinLikeLastPostFailed
+    description: LinkedIn like last post failed
+  - name: linkedinWithdrawInvitationDone
+    description: LinkedIn invite withdrawn
+  - name: linkedinWithdrawInvitationFailed
+    description: LinkedIn invite withdrawal failed
+- group: WhatsApp activities
+  events:
+  - name: whatsappMessageSent
+    description: WhatsApp message sent
+  - name: whatsappMessageDelivered
+    description: WhatsApp message delivered
+  - name: whatsappMessageOpened
+    description: WhatsApp message opened
+  - name: whatsappReplied
+    description: WhatsApp message replied
+  - name: whatsappMessageFailed
+    description: WhatsApp message failed
+- group: SMS activities
+  events:
+  - name: smsSent
+    description: SMS sent
+  - name: smsDelivered
+    description: SMS delivered
+  - name: smsReplied
+    description: SMS replied
+  - name: smsFailed
+    description: SMS failed
+- group: Call activities
+  events:
+  - name: aircallCreated
+    description: Call created
+  - name: aircallEnded
+    description: Call ended
+  - name: aircallDone
+    description: Call task completed
+  - name: aircallInterested
+    description: Lead marked as interested via call
+  - name: aircallNotInterested
+    description: Lead marked as not interested via call
+  - name: callRecordingDone
+    description: Call recording ready
+  - name: callTranscriptDone
+    description: Call transcript ready
+- group: API activities
+  events:
+  - name: apiDone
+    description: API step executed
+  - name: apiInterested
+    description: Lead marked as interested via API
+  - name: apiNotInterested
+    description: Lead marked as not interested via API
+  - name: apiFailed
+    description: API step failed
+- group: Manual activities
+  events:
+  - name: manualInterested
+    description: Lead marked as interested manually
+  - name: manualNotInterested
+    description: Lead marked as not interested manually
+- group: Task activities
+  events:
+  - name: annotated
+    description: Lead annotated
+- group: Workspace activities
+  events:
+  - name: paused
+    description: Lead paused
+  - name: resumed
+    description: Lead resumed
+  - name: stopped
+    description: Lead stopped
+  - name: campaignComplete
+    description: Campaign completed
+  - name: customDomainErrors
+    description: Custom domain error detected
+  - name: connectionIssue
+    description: Email account connection issue
+  - name: sendLimitReached
+    description: Daily send limit reached
+  - name: lemwarmPaused
+    description: Lemwarm paused
+- group: Enrichment
+  events:
+  - name: enrichmentDone
+    description: Enrichment completed
+  - name: enrichmentError
+    description: Enrichment failed
+- group: Inbox activities
+  events:
+  - name: inboxLabelUpdated
+    description: Inbox conversation label changed
+- group: Signal Agents
+  events:
+  - name: signalRegistered
+    description: New signal detected by a Signal Agent
+- group: Deliverability hub
+  events:
+  - name: deliverabilityAlertTriggered
+    description: Deliverability alert triggered
+deprecated_events:
+- name: skipped
+  replacement: none
+- name: emailsSendFailed
+  replacement: emailsFailed
+- name: opportunitiesDone
+  replacement: annotated, or task-level webhooks
+gaps:
+- No AsyncAPI document
+- No HMAC signature or timestamp header — verification is a shared secret echoed in
+  the body
+- No documented delivery-retry policy or dead-letter behaviour

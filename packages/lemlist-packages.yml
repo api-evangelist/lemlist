@@ -1,0 +1,65 @@
+generated: '2026-08-13'
+method: searched
+source: https://www.npmjs.com/package/@lemlist-official/cli + https://developer.lemlist.com/cli/overview
+note: >-
+  lemlist publishes exactly one first-party client library: the CLI on npm. There is
+  no first-party REST SDK in any language. npm search for "lemlist" returns 19 further
+  packages, all third-party (Pipedream, ActivePieces, community SDKs); PyPI
+  (lemlist, lemlist-api, python-lemlist), RubyGems (lemlist) and crates.io all 404.
+  Maven Central, NuGet and pkg.go.dev were checked for a lemlist client and none exists.
+packages:
+- language: javascript
+  registry: npm
+  name: '@lemlist-official/cli'
+  url: https://www.npmjs.com/package/@lemlist-official/cli
+  install: npm install -g @lemlist-official/cli
+  binary: lemlist
+  official: true
+  version: 0.3.1
+  published: '2026-07-17'
+  runtime: Node.js 20 or later
+  description: lemlist command-line interface — a thin, OpenAPI-driven wrapper over
+    the lemlist REST API. The command surface is generated from the live OpenAPI spec.
+  docs: https://developer.lemlist.com/cli/overview
+  note: currency read from registry.npmjs.org on 2026-08-13; dist-tags.latest = 0.3.1,
+    published 2026-07-17T17:26:32Z
+third_party_observed:
+- registry: npm
+  name: lemlist-sdk
+  version: 0.0.8
+  published: '2025-12-17'
+  official: false
+  url: https://www.npmjs.com/package/lemlist-sdk
+  note: community Node SDK (github.com/JohnValanidas/lemlist-sdk), not lemlist-published
+- registry: npm
+  name: '@pipedream/lemlist'
+  version: 0.1.0
+  published: '2026-05-20'
+  official: false
+  note: Pipedream integration components
+- registry: npm
+  name: '@activepieces/piece-lemlist'
+  version: 0.1.9
+  published: '2026-08-04'
+  official: false
+  note: ActivePieces integration piece
+registries_checked:
+- registry: npm
+  result: 1 official package
+- registry: pypi
+  result: none — lemlist, lemlist-api, python-lemlist all 404
+- registry: rubygems
+  result: none — 404
+- registry: crates.io
+  result: none
+- registry: maven-central
+  result: none
+- registry: nuget
+  result: none
+- registry: pkg.go.dev
+  result: none
+summary:
+  official_count: 1
+  languages:
+  - javascript
+  cdn_distributed: false

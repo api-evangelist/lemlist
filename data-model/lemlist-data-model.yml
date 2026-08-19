@@ -1,0 +1,287 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/_original/lemlist-openapi-v2.json
+docs: https://developer.lemlist.com/api-reference/objects-definitions/
+note: >-
+  Entities and relationships are read from the 58 component schemas in the OpenAPI
+  lemlist publishes, plus the object definitions in its docs. Relationships are taken
+  from id-reference fields (teamId, campaignId, leadId, sequenceId, …) and $ref links.
+  Nothing is inferred beyond what a field name in the spec states.
+id_convention:
+  style: prefixed opaque string
+  shape: <prefix>_<17 mixed-case alphanumerics>
+  primary_key_field: _id
+  known_prefixes:
+  - prefix: tea_
+    entity: Team
+  - prefix: cam_
+    entity: Campaign
+  - prefix: act_
+    entity: Activity
+  source: https://developer.lemlist.com/CLAUDE.md and the spec examples
+  note: >-
+    lemlist ids are Mongo-style opaque strings behind a type prefix. Several endpoints
+    accept an id OR a natural key in the same path segment (leadIdOrEmail, idOrEmail,
+    idsOrDomains, {email}).
+entity_count: 58
+core_entities:
+- name: Team
+  description: The billing and membership entity. Everything else belongs to a team.
+  key_fields: [_id, name, userIds, agency, customDomain, hooks, users]
+  relationships:
+  - has_many: User
+    via: userIds
+  - has_many: Campaign
+    via: teamId
+  - has_many: Webhook
+    via: hooks
+  - has_one: Credits
+    via: GET /team/credits
+- name: Credits
+  description: The prepaid enrichment/signal balance for a team.
+  key_fields: [credits, details]
+  relationships:
+  - belongs_to: Team
+- name: User
+  description: A lemlist seat, with connected mailboxes and LinkedIn account.
+  key_fields: [_id, email, role, linkedIn, mailboxes]
+  relationships:
+  - belongs_to: Team
+  - has_many: Mailbox
+    via: mailboxes
+- name: Mailbox
+  description: A connected sending account and its lemlist/lemwarm state.
+  key_fields: [_id, email, provider, status, lemlist, lemwarm]
+  relationships:
+  - belongs_to: User
+  - has_one: LemwarmSettings
+    via: userMailboxId
+- name: Campaign
+  description: The outreach automation unit. One campaign has one sequence and one or
+    more schedules.
+  key_fields: [_id, name, status, sequenceId, scheduleIds, timezone, teamId, hasError,
+    errors]
+  relationships:
+  - belongs_to: Team
+    via: teamId
+  - has_one: Sequence
+    via: sequenceId
+  - has_many: Schedule
+    via: scheduleIds
+  - has_many: Lead
+    via: campaignId
+  - has_one: Report
+    via: campaignId
+- name: Sequence
+  description: The ordered set of steps a campaign runs.
+  key_fields: [_id, campaignId, steps, createdAt]
+  relationships:
+  - belongs_to: Campaign
+    via: campaignId
+  - has_many: Step
+    via: steps
+- name: Step
+  description: One step in a sequence — email, LinkedIn, call, task, API or delay —
+    optionally carrying an A/B variant.
+  key_fields: [_id, sequenceId, type, order, delay, subject, body, abTest, emailTemplateId,
+    emailTemplateBId]
+  relationships:
+  - belongs_to: Sequence
+    via: sequenceId
+- name: Schedule
+  description: The sending window a campaign runs in. Schedules may be shared (public)
+    across campaigns.
+  key_fields: [_id, name, secondsToWait, timezone, start, end, weekdays, public, teamId]
+  relationships:
+  - belongs_to: Team
+    via: teamId
+  - has_many: Campaign
+    via: scheduleIds
+- name: Lead
+  description: A person being contacted by a campaign. Distinct from Contact.
+  key_fields: [_id, email, firstName, lastName, companyName, phone, linkedinUrl, icebreaker,
+    campaignId, isUnsubscribed]
+  relationships:
+  - belongs_to: Campaign
+    via: campaignId
+  - has_many: Activity
+    via: leadId
+  - has_many: Task
+    via: leadId
+- name: Contact
+  description: The CRM-side person record, team-scoped rather than campaign-scoped.
+    lemlist documents the Lead/Contact distinction explicitly — pushing leads to
+    contacts creates a copy.
+  key_fields: [_id, teamId, fullName, email, fields, campaigns, ownerId, unsubscribed,
+    fieldRejections]
+  relationships:
+  - belongs_to: Team
+    via: teamId
+  - has_many: Campaign
+    via: campaigns
+  - has_many: FieldRejection
+    via: fieldRejections
+- name: Company
+  description: The CRM-side company record.
+  key_fields: [_id, name, domain, industry, size, location, fields, ownerId, crmSync]
+  relationships:
+  - belongs_to: Team
+  - has_many: CompanyNote
+    via: companyId
+  - has_many: FieldRejection
+    via: fieldRejections
+- name: CompanyNote
+  key_fields: [_id, teamId, companyId, note, type, userId, sendUserId]
+  relationships:
+  - belongs_to: Company
+    via: companyId
+  - belongs_to: Team
+    via: teamId
+- name: Activity
+  description: The immutable history record for every step outcome. Webhook payloads
+    mirror this record.
+  key_fields: [_id, type, leadId, campaignId, sequenceId, stepId, sequenceStep, totalSequenceStep,
+    createdAt]
+  relationships:
+  - belongs_to: Lead
+    via: leadId
+  - belongs_to: Campaign
+    via: campaignId
+  - belongs_to: Sequence
+    via: sequenceId
+  - belongs_to: Step
+    via: stepId
+- name: Task
+  key_fields: [_id, type, leadId, campaignId, userId, status, dueDate, completedAt]
+  relationships:
+  - belongs_to: Lead
+    via: leadId
+  - belongs_to: Campaign
+    via: campaignId
+  - belongs_to: User
+    via: userId
+- name: InboxConversation
+  description: A unified-inbox thread with one lead across channels.
+  key_fields: [_id, leadId, messages, createdAt]
+  relationships:
+  - belongs_to: Lead
+    via: leadId
+  - has_many: InboxMessage
+    via: messages
+  - has_many: Label
+    via: POST /inbox/conversations/labels/{contactId}
+- name: InboxMessage
+  key_fields: [_id, conversationId, sender, recipient, body, sentAt]
+  relationships:
+  - belongs_to: InboxConversation
+    via: conversationId
+- name: Label
+  key_fields: [_id, name, color, createdBy]
+  relationships:
+  - belongs_to: Team
+- name: Webhook
+  key_fields: [_id, targetUrl, type, campaignId, zapId]
+  relationships:
+  - belongs_to: Team
+  - belongs_to: Campaign
+    via: campaignId
+    optional: true
+- name: Unsubscribe
+  key_fields: [_id, email, campaignId, campaignName, unsubscribedAt, scope]
+  relationships:
+  - belongs_to: Campaign
+    via: campaignId
+- name: UnsubscribedVariable
+  description: A v2 unsubscribe keyed on an arbitrary variable value rather than an
+    email address.
+  key_fields: [_id, value, source, createdAt]
+- name: ContactSubscriptionStatus
+  key_fields: [_id, doNotContact]
+  relationships:
+  - belongs_to: Contact
+- name: Enrich
+  description: An asynchronous enrichment job and, once complete, its result.
+  key_fields: [_id, status, email, phone, firstName, lastName, companyName, linkedinUrl,
+    credits]
+  relationships:
+  - belongs_to: Lead
+    via: POST /leads/{leadId}/enrich
+    optional: true
+- name: PeopleSchema
+  description: A person record in the lemlist B2B people database (28 fields — experience,
+    education, industry, LinkedIn URL, location).
+  key_fields: [lead_id, full_name, lead_linkedin_url, lead_industry, experiences, education]
+  relationships:
+  - has_one: CompaniesSchema
+    via: company_id
+- name: CompaniesSchema
+  description: A company record in the lemlist B2B company database (29 fields).
+  key_fields: [company_id, company_name, company_website_url, company_linkedin_url,
+    company_employee_count, company_industry]
+- name: Persona
+  description: A saved people-database search definition.
+  key_fields: [_id, name, mode, filters]
+  relationships:
+  - has_many: PersonaFilter
+    via: filters
+- name: WatchListSchema
+  description: A Signal Agent — a saved watch definition that emits signals.
+  key_fields: [_id, name, type, status, entity, segmentType, signalProcessingType,
+    filters]
+  relationships:
+  - has_many: SignalSchema
+    via: watchListId
+  - has_many: WatchListFilter
+    via: filters
+  - has_many: WatchListConfigHistoryEntry
+    via: watchListId
+- name: SignalSchema
+  description: A detected buying signal, contact- or company-level.
+  key_fields: [_id, teamId, watchListId, type, status, receivedAt, contact, company,
+    signalData]
+  relationships:
+  - belongs_to: WatchListSchema
+    via: watchListId
+  - belongs_to: Team
+    via: teamId
+- name: DeliverabilityAlert
+  description: A threshold alert on a deliverability metric, scoped to entities.
+  key_fields: [_id, teamId, widget, metric, severity, scope, scopeEntities, threshold,
+    comparisonOperator, periodDays, periodMode]
+  relationships:
+  - belongs_to: Team
+    via: teamId
+- name: LemwarmSettings
+  description: Warm-up configuration for one mailbox.
+  key_fields: [active, dailyLimit, warmupTemplate, warmDailyVarianceEnabled, deliverability]
+  relationships:
+  - belongs_to: Mailbox
+    via: userMailboxId
+- name: Report
+  description: Aggregated campaign statistics.
+  key_fields: [campaignId, campaignName, stats, exportStatus]
+  relationships:
+  - belongs_to: Campaign
+    via: campaignId
+envelope_schemas:
+  note: >-
+    A further set of schemas are pagination/response envelopes rather than domain
+    entities — ScheduleListResponse, LeadListResponse, TaskListResponse,
+    InboxConversationPagination, InboxMessagePagination, PersonaListResponse,
+    PersonaCreateResponse, PersonaDeleteResponse, PersonaError, WatchListApi*Response,
+    WatchListListMeta, ExternalSignalPushResponse. The recurring list shape is
+    {results, page, total}, but it is not applied consistently across the surface.
+key_distinctions:
+- pair: Lead vs Contact
+  detail: >-
+    A Lead belongs to a campaign; a Contact lives in the CRM and belongs to the team.
+    They are separate objects — pushing leads to contacts creates a copy. lemlist calls
+    this out in its own Agent Skill because it is the most common integration mistake.
+- pair: sequenceStep vs stepId
+  detail: >-
+    sequenceStep is a 0-based position that shifts when a sequence is reordered;
+    stepId is stable. Store stepId.
+- pair: Persona vs WatchList (Signal Agent)
+  detail: >-
+    A Persona is a saved people-database search; a Signal Agent watches for events on
+    an audience and emits Signals.

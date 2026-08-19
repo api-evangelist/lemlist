@@ -1,0 +1,73 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/_original/lemlist-openapi-v2.json
+note: Request and response examples extracted VERBATIM from the OpenAPI lemlist publishes at https://developer.lemlist.com/api-reference/openapi/v2.json.
+  Nothing is authored here; operations with no example in the provider spec are simply absent. The extracted
+  payloads live in lemlist-examples.json keyed by "METHOD path" (the spec declares operationId on only
+  5 of 143 operations).
+file: lemlist-examples.json
+coverage:
+  operations_total: 143
+  operations_with_examples: 143
+  percent: 100.0
+by_tag:
+- tag: Activities
+  operations: 2
+  with_examples: 2
+- tag: Campaigns
+  operations: 15
+  with_examples: 15
+- tag: Companies
+  operations: 5
+  with_examples: 5
+- tag: Contacts
+  operations: 8
+  with_examples: 8
+- tag: Deliverability alerts
+  operations: 5
+  with_examples: 5
+- tag: Email Accounts
+  operations: 3
+  with_examples: 3
+- tag: Enrich
+  operations: 4
+  with_examples: 4
+- tag: Fields
+  operations: 1
+  with_examples: 1
+- tag: Inbox
+  operations: 15
+  with_examples: 15
+- tag: Leads
+  operations: 21
+  with_examples: 21
+- tag: People Database
+  operations: 6
+  with_examples: 6
+- tag: Schedules
+  operations: 7
+  with_examples: 7
+- tag: Sequences
+  operations: 9
+  with_examples: 9
+- tag: Signal Agents
+  operations: 10
+  with_examples: 10
+- tag: Tasks
+  operations: 4
+  with_examples: 4
+- tag: Team
+  operations: 4
+  with_examples: 4
+- tag: Unsubscribes
+  operations: 15
+  with_examples: 15
+- tag: Users
+  operations: 2
+  with_examples: 2
+- tag: Webhooks
+  operations: 3
+  with_examples: 3
+- tag: lemwarm
+  operations: 4
+  with_examples: 4

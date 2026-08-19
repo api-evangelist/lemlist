@@ -1,0 +1,124 @@
+generated: '2026-08-13'
+method: searched
+status: published
+source: https://developer.lemlist.com/mcp/setup
+docs:
+- https://developer.lemlist.com/mcp/setup
+- https://developer.lemlist.com/mcp/lemlist-agent
+- https://www.lemlist.com/product/lemlist-mcp
+- https://developer.lemlist.com/skill.md
+deployment:
+  mode: remote
+  endpoint: https://app.lemlist.com/mcp
+  auth: oauth
+  verified: probed
+  note: >-
+    POST {"jsonrpc":"2.0","id":1,"method":"tools/list"} to https://app.lemlist.com/mcp
+    on 2026-08-13 returned HTTP 401 with
+    WWW-Authenticate: Bearer resource_metadata="https://app.lemlist.com/.well-known/oauth-protected-resource/mcp"
+    and body {"error":{"code":-32602,"message":"X-API-Key header or Authorization: Bearer
+    token is required"}} — a live, correctly-challenging MCP endpoint. There is no
+    first-party stdio package: the npx invocation lemlist documents is the generic
+    `mcp-remote` bridge in front of this same hosted URL, not a lemlist-published
+    stdio server.
+server:
+  name: lemlist
+  transport: http
+  url: https://app.lemlist.com/mcp
+  authentication:
+  - scheme: oauth2
+    preferred: true
+    detail: Dynamic client registration + authorization-code with PKCE (S256). Access
+      token 1h, refresh token 30d. Metadata at https://app.lemlist.com/.well-known/oauth-authorization-server
+    scope: full_access
+  - scheme: api-key
+    detail: 'X-API-Key header carrying a lemlist API key (Settings > Team > Integrations
+      > Generate)'
+  clients_documented:
+  - Claude Desktop
+  - Claude Code
+  - Cursor
+  - Windsurf
+  install_documented:
+  - claude mcp add --transport http lemlist https://app.lemlist.com/mcp
+  - 'claude mcp add --transport http lemlist https://app.lemlist.com/mcp --header "X-API-Key:
+    YOUR_API_KEY"'
+  - npx mcp-remote https://app.lemlist.com/mcp
+tools_source: >-
+  The live tools/list is auth-gated, so tool input schemas could not be introspected
+  anonymously. The tool names below are the ones lemlist itself publishes in its Agent
+  Skill (https://developer.lemlist.com/skill.md) and in the /lemlist-agent Claude Code
+  prompt (https://developer.lemlist.com/mcp/lemlist-agent). Names and purpose are the
+  provider's; input schemas require an authenticated tools/list.
+tool_count_claimed: 40
+tool_count_claimed_source: https://www.lemlist.com/product/lemlist-mcp
+tools:
+- name: lemleads_search
+  description: Search the lemlist B2B people database by role, industry, company size,
+    location
+- name: create_campaign_with_sequence
+  description: Create a campaign together with its email sequence
+- name: add_sequence_step
+  description: Add a step (email, LinkedIn, phone, delay) to a campaign sequence
+- name: update_sequence_step
+  description: Update an existing sequence step
+- name: get_campaign_sequences
+  description: Retrieve the sequences and steps of a campaign
+- name: add_lead_to_campaign
+  description: Add a lead to a campaign, optionally with enrichment
+- name: search_campaign_leads
+  description: Search the leads inside a campaign
+- name: update_lead_variables
+  description: Update the custom variables stored on a lead
+- name: set_campaign_state
+  description: Start, pause, or stop a campaign
+- name: get_campaigns
+  description: List campaigns, filterable by status
+- name: get_campaign_stats
+  description: Get performance statistics for a campaign
+- name: get_campaigns_reports
+  description: Get aggregated reports across campaigns
+- name: enrich_data
+  description: Submit a single asynchronous enrichment request (consumes credits)
+- name: bulk_enrich_data
+  description: Submit a bulk enrichment request, max 500 per call (consumes credits)
+- name: get_enrichment_result
+  description: Poll an enrichment request for its result
+- name: get_inbox_conversations
+  description: List unified-inbox conversations
+- name: get_inbox_conversation
+  description: Read one conversation thread
+- name: send_inbox_email
+  description: Send an email reply from the unified inbox
+- name: send_inbox_linkedin
+  description: Send a LinkedIn message from the unified inbox
+- name: send_inbox_sms
+  description: Send an SMS from the unified inbox
+- name: send_whatsapp_message
+  description: Send a WhatsApp message from the unified inbox
+- name: get_contact_lists
+  description: List CRM contact lists
+- name: push_leads_to_contacts
+  description: Copy campaign leads into CRM contacts
+- name: get_team_info
+  description: Get team information including remaining credits
+- name: check_domain_health
+  description: Check sending-domain DNS health (MX, SPF, DMARC, blacklists)
+- name: connect_email_account
+  description: Connect a custom SMTP/IMAP sending account
+- name: test_email_account
+  description: Test the SMTP/IMAP connectivity of a connected account
+- name: get_webhooks
+  description: List the webhooks configured for the team
+- name: create_webhook
+  description: Create a webhook subscription for selected events
+- name: compose_messages
+  description: Compose outreach message copy for a sequence step
+credit_bearing_tools:
+- enrich_data
+- bulk_enrich_data
+- add_lead_to_campaign
+note: >-
+  lemlist documents that email finding, email verification, phone enrichment and
+  lead addition with enrichment consume account credits, and instructs agents to warn
+  the user and check get_team_info before calling them.

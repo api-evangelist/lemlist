@@ -1,0 +1,1459 @@
+openapi: 3.0.0
+info:
+  title: lemlist Inbox API
+  version: 1.0.0
+  description: The Inbox operations of the lemlist API, split by tag from the OpenAPI lemlist publishes
+    at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content is carried verbatim
+    from the provider spec.
+servers:
+- url: https://api.lemlist.com/api
+security:
+- basicAuth: []
+tags:
+- name: Inbox
+paths:
+  /inbox:
+    get:
+      summary: Get Many Inboxes
+      tags:
+      - Inbox
+      parameters:
+      - name: page
+        in: query
+        required: false
+        description: The page number to retrieve
+        example: '1'
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        required: false
+        description: The maximum number of records to return
+        example: '2'
+        schema:
+          type: integer
+      - name: userId
+        in: query
+        required: true
+        description: Filter by user ID
+        example: usr_dG0cI7mRz7wadvioF
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InboxConversation'
+                  pagination:
+                    type: object
+                    properties:
+                      totalItems:
+                        type: integer
+                      currentPage:
+                        type: integer
+                      nextPage:
+                        type: integer
+                        nullable: true
+                      previousPage:
+                        type: integer
+                        nullable: true
+                      perPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+              example:
+                data:
+                - _id: ibx_RsROKFC3gmowgc74P
+                  opportunities: []
+                  lastActivityAt: '2024-12-17T09:42:32.971Z'
+                  createdBy: act_gKmkJOLCfUl4TkhIl
+                  channels:
+                  - email
+                  teamId: tea_8QvkOiBfPdb2ZRhHi
+                  contactId: ctc_Ds0IaxECSACsbLMzA
+                  users:
+                  - userId: usr_xtJHBMYJSOHzI3ZFb
+                    sender: true
+                    read: true
+                  - userId: usr_bcPQCObkKptmHw2Rp
+                    sender: true
+                    read: true
+                  createdAt: '2024-12-03T09:52:55.466Z'
+                  haveReplies: true
+                  lastRepliedAt: '2024-12-03T10:12:20.620Z'
+                  lastRepliedChannel: email
+                  contact:
+                    _id: ctc_Ds0IaxECSACsbLMzA
+                    fullName: Alex
+                    email: alex@example.com
+                - _id: ibx_M1qunaOcugoqSEnNY
+                  opportunities: []
+                  lastActivityAt: '2024-12-17T09:42:30.430Z'
+                  createdBy: act_AzW7OkDzo7GZzfBYq
+                  channels:
+                  - email
+                  teamId: tea_8QvkOiBfPdb2ZRhHi
+                  contactId: ctc_p66lDxuCdb9ZUMSN2
+                  users:
+                  - userId: usr_xtJHBMYJSOHzI3ZFb
+                    sender: true
+                    read: false
+                  - userId: usr_bcPQCObkKptmHw2Rp
+                    sender: true
+                    read: true
+                  createdAt: '2024-12-03T14:01:15.873Z'
+                  haveReplies: true
+                  lastRepliedAt: '2024-12-03T14:14:00.848Z'
+                  lastRepliedChannel: email
+                  contact:
+                    _id: ctc_p66lDxuCdb9ZUMSN2
+                    email: casey@example.com
+                - _id: ibx_6vBhQEot19XAsTKvr
+                  opportunities: []
+                  lastActivityAt: '2024-12-17T09:42:17.682Z'
+                  createdBy: act_38dXN8dzn6D8LU9dp
+                  channels:
+                  - email
+                  teamId: tea_8QvkOiBfPdb2ZRhHi
+                  contactId: ctc_rtlWNMHykdtwjih7i
+                  users:
+                  - userId: usr_xtJHBMYJSOHzI3ZFb
+                    sender: true
+                    read: true
+                  - userId: usr_bcPQCObkKptmHw2Rp
+                    sender: true
+                    read: true
+                  createdAt: '2024-12-02T16:27:50.927Z'
+                  haveReplies: true
+                  lastRepliedAt: '2024-12-02T16:38:35.875Z'
+                  lastRepliedChannel: email
+                  contact:
+                    _id: ctc_rtlWNMHykdtwjih7i
+                    email: morgan@example.com
+                - _id: ibx_wemRUwJQXZLRTjG8F
+                  opportunities: []
+                  lastActivityAt: '2024-12-04T16:58:53.629Z'
+                  createdBy: act_GjM4hNyXjAm29XGa2
+                  channels:
+                  - email
+                  teamId: tea_8QvkOiBfPdb2ZRhHi
+                  contactId: ctc_POL1cAPMvKzr851KU
+                  users:
+                  - userId: usr_xtJHBMYJSOHzI3ZFb
+                    sender: true
+                    read: true
+                  - userId: usr_bcPQCObkKptmHw2Rp
+                    sender: true
+                    read: true
+                  createdAt: '2024-11-29T11:40:17.918Z'
+                  haveReplies: true
+                  lastRepliedAt: '2024-12-04T15:47:00.816Z'
+                  lastRepliedChannel: email
+                  contact:
+                    _id: ctc_POL1cAPMvKzr851KU
+                    fullName: Jordan
+                    email: jordan@example.com
+                pagination:
+                  totalItems: 4
+                  currentPage: 1
+                  nextPage: null
+                  previousPage: null
+                  perPage: 10
+                  totalPages: 1
+        '400':
+          description: 'Possible errors: Bad team / User ID is required / User not in team'
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '405':
+          description: Method not allowed
+  /inbox/{contactId}:
+    get:
+      summary: Get Contact Messages
+      tags:
+      - Inbox
+      parameters:
+      - name: userId
+        in: query
+        required: false
+        description: ID of the user viewing the conversation
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        description: The maximum number of records to return
+        example: '10'
+        schema:
+          type: integer
+      - name: skip
+        in: query
+        required: false
+        description: 'Number of items to skip. Default: 0'
+        example: '1'
+        schema:
+          type: integer
+      - name: markAsRead
+        in: query
+        required: false
+        description: 'When true, marks the conversation as read. Default: false'
+        example: 'true'
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InboxMessage'
+                  pagination:
+                    type: object
+                    properties:
+                      totalItems:
+                        type: integer
+                      currentPage:
+                        type: integer
+                      nextPage:
+                        type: integer
+                        nullable: true
+                      previousPage:
+                        type: integer
+                        nullable: true
+                      perPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+              example:
+                data:
+                - _id: act_vQJUQw4OMGqp25aTi
+                  type: emailsSent
+                  messageId: <CAPLqhUKnWmszLsJxMO3osKL7YgU3-b_5kC+f4SvqYOVfzRc28g@mail.gmail.com>
+                  createdAt: '2024-12-05T16:39:41.416Z'
+                  teamId: tea_8QvkOiBfPdb2ZRhHi
+                  leadId: lea_tmOgcDHB5wWwStNtN
+                  campaignId: cam_pijDVnytN5S7frriD
+                  sequenceId: seq_KnckIbUtWVFAsdCBG
+                  sequenceStep: 0
+                  sendUserId: usr_bcPQCObkKptmHw2Rp
+                  sendUserName: Alex DOE
+                  sendUserEmail: alex.doe@example.com
+                  sendUserMailboxId: usm_05P73WrvTqHY8OAee
+                  leadEmail: alex@example.com
+                  contactId: ctc_Ds0IaxECSACsbLMzA
+                  message: "<html><div style=\"min-width: 360px\"></div><div dir=\"ltr\">\n    <div>Hello\
+                    \ lemlist Team! \U0001F60E<br style=\"box-sizing: border-box;\"><br style=\"box-sizing:\
+                    \ border-box;\">I joined lemlist last Monday, and I am humbly offering you the chance\
+                    \ to meet me (and probably my cat, Megatron \U0001F63D\U0001F916) through a 15-minute\
+                    \ call at your convenience! You can book it <span style=\"cursor: pointer; background:\
+                    \ var(--tertiary2-color-100); color: var(--alert); box-sizing: border-box;\" data-error=\"\
+                    true\">[here]</span>(https://app.lemcal.com/@alex-doe/quick-meeting?leadId=lea_tmOgcDHB5wWwStNtN).<br\
+                    \ style=\"box-sizing: border-box;\"><br style=\"box-sizing: border-box;\">See you\
+                    \ soon!<br style=\"box-sizing: border-box;\"><br style=\"box-sizing: border-box;\"\
+                    >Alex DOE</div>\n    <div class=\"gmail_extra\">\n      <div class=\"gmail_signature\"\
+                    \ data-smartmail=\"gmail_signature\"><div dir=\"ltr\"><div><div dir=\"ltr\"></div></div></div></div>\n\
+                    \      \n    </div>\n    </div>\n<span summary=\"/api/reply/data-ll-tsk_lxY7QI0bYAop5cPBU\"\
+                    ></span>\n<img alt=\"logo\" src=\"https://zr0.lemlst.org/api/track/open/usr_bcPQCObkKptmHw2Rp/tsk_lxY7QI0bYAop5cPBU\"\
+                    \ height=\"1\" width=\"1\"></html>"
+                  subject: Meet me !
+                  attachments: []
+                - _id: act_HXQTqg6L29jdy3b6K
+                  type: emailsReplied
+                  messageId: <CAKs+3EYjH0POGz0H-rS1XHH1YnG9LtN2m4y8LocddFWWMm8HBw@mail.gmail.com>
+                  createdAt: '2024-12-03T10:10:45.000Z'
+                  fromEmail: alex@example.com
+                  teamId: tea_8QvkOiBfPdb2ZRhHi
+                  leadId: lea_lzfQLRbKAZdKvjCwg
+                  campaignId: cam_UBbMt30jHq0vNJKJr
+                  sequenceId: seq_ZDRIjDniOznJJLcKO
+                  sequenceStep: 0
+                  sendUserId: usr_xtJHBMYJSOHzI3ZFb
+                  sendUserName: Jordan DOE
+                  sendUserEmail: jordan.doe@example.com
+                  sendUserMailboxId: usm_CT2BPoHic0I1cmitZ
+                  leadEmail: alex@example.com
+                  contactId: ctc_Ds0IaxECSACsbLMzA
+                  message: "<div dir=\"ltr\">Haha Welcome Jordan, j&#39;adore cette campagne ! <br><br>A\
+                    \ très vite, <div>Alex </div></div><br><div class=\"gmail_quote gmail_quote_container\"\
+                    ><div dir=\"ltr\" class=\"gmail_attr\">On Tue, Dec 3, 2024 at 10:52 AM Jordan DOE\
+                    \ &lt;<a href=\"mailto:jordan.doe@example.com\">jordan.doe@example.com</a>&gt; wrote:<br></div><blockquote\
+                    \ class=\"gmail_quote\" style=\"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex\"\
+                    ><div style=\"min-width:360px\"></div><div dir=\"ltr\">\n    <div><p style=\"margin:0px;box-sizing:border-box\"\
+                    >Hey Alex  , </p><p style=\"margin:0px;box-sizing:border-box\"><br style=\"box-sizing:border-box\"\
+                    ></p><p style=\"margin:0px;box-sizing:border-box\">I hope this email finds you well!</p><p\
+                    \ style=\"margin:0px;box-sizing:border-box\"><br style=\"box-sizing:border-box\"></p><p\
+                    \ style=\"margin:0px;box-sizing:border-box\">Have you ever heard about Jordan Doe?\
+                    \ <br> <br>\U0001F1EB\U0001F1F7 He was a member of the French Parliament during the\
+                    \ French Revolution, <br>\U0001F3D8️ He has a street named after him<br><strong style=\"\
+                    font-weight:700;box-sizing:border-box\">\U0001F4D9 </strong>He authored the famous\
+                    \ &quot;Beurre frais épuré, et conservant longtemps ses bonnes qualités, sans devenir\
+                    \ rance&quot;.<br style=\"box-sizing:border-box\"><br style=\"box-sizing:border-box\"\
+                    ><img width=\"134\" style=\"width: 134px; display: block; vertical-align: top; margin:\
+                    \ 5px auto; text-align: center; border-style: none; padding: 0px 1px; box-sizing:\
+                    \ border-box;\" src=\"https://zr0.lemlst.org/api/files/Files/fil_3WlQwHwsxgZZCRnu3.png\"\
+                    ></p><p style=\"margin:0px;box-sizing:border-box\"><br style=\"box-sizing:border-box\"\
+                    ></p><p style=\"margin:0px;box-sizing:border-box\">Unfortunately, this brilliant man\
+                    \ died ages ago...</p><p style=\"margin:0px;box-sizing:border-box\"><br style=\"box-sizing:border-box\"\
+                    ></p><p style=\"margin:0px;box-sizing:border-box\">But wait, there&#39;s another Jordan\
+                    \ Doe you might be interested in meeting—one who is very much alive and well! Yes,\
+                    \ that&#39;s me. I&#39;ve just joined Lemlist, and I&#39;m looking forward to meeting\
+                    \ everyone for a quick chat.</p><p style=\"margin:0px;box-sizing:border-box\"><br\
+                    \ style=\"box-sizing:border-box\"></p><p style=\"margin:0px;box-sizing:border-box\"\
+                    >☑️ Book an appointment on \U0001F4C5 <a style=\"color:rgb(51,138,241);text-decoration:none;background-color:transparent;box-sizing:border-box;font-weight:500\"\
+                    \ href=\"https://app.lemcal.com/@jordan-doe/15-min-chat?leadId=lea_lzfQLRbKAZdKvjCwg\"\
+                    \ target=\"_blank\">my lemcal</a> !</p><p style=\"margin:0px;box-sizing:border-box\"\
+                    ><br></p><p style=\"margin:0px;box-sizing:border-box\">Feel free to reach out and\
+                    \ get to know me better. I'm excited to be part of the team and eager to contribute\
+                    \ to our collective success.</p><p style=\"margin:0px;box-sizing:border-box\">Looking\
+                    \ forward to seeing you all soon!<br style=\"box-sizing:border-box\"><br style=\"\
+                    box-sizing:border-box\">Best regards, as your contemporary, Jordan Doe</p></div>\n\
+                    \    <div class=\"gmail_extra\">\n      <div class=\"gmail_signature\"><div dir=\"\
+                    ltr\"><div><div dir=\"ltr\"></div></div></div></div>\n      \n    </div>\n    </div>\n\
+                    <span summary=\"/api/reply/data-ll-tsk_IMjjv5uq8YIsjuDSw\"></span>\n<img alt=\"logo\"\
+                    \ src=\"https://zr0.lemlst.org/api/track/open/usr_xtJHBMYJSOHzI3ZFb/tsk_IMjjv5uq8YIsjuDSw\"\
+                    \ height=\"1\" width=\"1\">\n</blockquote></div>\n"
+                  subject: 'Re: Have you heard about Jordan Doe ?'
+                  attachments: []
+                - _id: act_gKmkJOLCfUl4TkhIl
+                  type: emailsSent
+                  messageId: <CADuPnhJfe0BDrR47w4DNsvQT9kStS3DHQ9B4cP2=8AciE_M42w@mail.gmail.com>
+                  createdAt: '2024-12-03T09:52:55.319Z'
+                  teamId: tea_8QvkOiBfPdb2ZRhHi
+                  leadId: lea_lzfQLRbKAZdKvjCwg
+                  campaignId: cam_UBbMt30jHq0vNJKJr
+                  sequenceId: seq_ZDRIjDniOznJJLcKO
+                  sequenceStep: 0
+                  sendUserId: usr_xtJHBMYJSOHzI3ZFb
+                  sendUserName: Jordan DOE
+                  sendUserEmail: jordan.doe@example.com
+                  sendUserMailboxId: usm_CT2BPoHic0I1cmitZ
+                  leadEmail: alex@example.com
+                  contactId: ctc_Ds0IaxECSACsbLMzA
+                  message: "<html><div style=\"min-width: 360px\"></div><div dir=\"ltr\">\n    <div><p\
+                    \ style=\"margin: 0px; box-sizing: border-box;\">Hey Alex  ,&nbsp;</p><p style=\"\
+                    margin: 0px; box-sizing: border-box;\"><br style=\"box-sizing: border-box;\"></p><p\
+                    \ style=\"margin: 0px; box-sizing: border-box;\">I hope this email finds you well!</p><p\
+                    \ style=\"margin: 0px; box-sizing: border-box;\"><br style=\"box-sizing: border-box;\"\
+                    ></p><p style=\"margin: 0px; box-sizing: border-box;\">Have you ever heard about Jordan\
+                    \ Doe? <br> <br>\U0001F1EB\U0001F1F7 He was a member of the French Parliament during\
+                    \ the French Revolution, <br>\U0001F3D8️ He has a street named after him<br><strong\
+                    \ style=\"font-weight: 700; box-sizing: border-box;\">\U0001F4D9&nbsp;</strong>He\
+                    \ authored the famous \"Beurre frais épuré, et conservant longtemps ses bonnes qualités,\
+                    \ sans devenir rance\".<br style=\"box-sizing: border-box;\"><br style=\"box-sizing:\
+                    \ border-box;\"><img  width=\"134\" style=\"width: 134px; display: block; vertical-align:\
+                    \ top; margin: 5px auto; text-align: center; border-style: none; cursor: pointer;\
+                    \ padding: 0px 1px; box-sizing: border-box;\" src=\"https://zr0.lemlst.org/api/files/Files/fil_3WlQwHwsxgZZCRnu3.png\"\
+                    ></p><p style=\"margin: 0px; box-sizing: border-box;\"><br style=\"box-sizing: border-box;\"\
+                    ></p><p style=\"margin: 0px; box-sizing: border-box;\">Unfortunately, this brilliant\
+                    \ man died ages ago...</p><p style=\"margin: 0px; box-sizing: border-box;\"><br style=\"\
+                    box-sizing: border-box;\"></p><p style=\"margin: 0px; box-sizing: border-box;\">But\
+                    \ wait, there's another Jordan Doe you might be interested in meeting—one who is very\
+                    \ much alive and well! Yes, that's me. I've just joined Lemlist, and I'm looking forward\
+                    \ to meeting everyone for a quick chat.</p><p style=\"margin: 0px; box-sizing: border-box;\"\
+                    ><br style=\"box-sizing: border-box;\"></p><p style=\"margin: 0px; box-sizing: border-box;\"\
+                    >☑️ Book an appointment on \U0001F4C5 <a style=\"color: rgb(51, 138, 241); text-decoration:\
+                    \ none; background-color: transparent; user-select: auto; box-sizing: border-box;\
+                    \ font-weight: 500;\" href=\"https://app.lemcal.com/@jordan-doe/15-min-chat?leadId=lea_lzfQLRbKAZdKvjCwg\"\
+                    >my lemcal</a> !</p><p style=\"margin: 0px; box-sizing: border-box;\"><br></p><p style=\"\
+                    margin: 0px; box-sizing: border-box;\">Feel free to reach out and get to know me better.\
+                    \ I'm excited to be part of the team and eager to contribute to our collective success.</p><p\
+                    \ style=\"margin: 0px; box-sizing: border-box;\">Looking forward to seeing you all\
+                    \ soon!<br style=\"box-sizing: border-box;\"><br style=\"box-sizing: border-box;\"\
+                    >Best regards, as your contemporary, Jordan Doe</p></div>\n    <div class=\"gmail_extra\"\
+                    >\n      <div class=\"gmail_signature\" data-smartmail=\"gmail_signature\"><div dir=\"\
+                    ltr\"><div><div dir=\"ltr\"></div></div></div></div>\n      \n    </div>\n    </div>\n\
+                    <span summary=\"/api/reply/data-ll-tsk_IMjjv5uq8YIsjuDSw\"></span>\n<img alt=\"logo\"\
+                    \ src=\"https://zr0.lemlst.org/api/track/open/usr_xtJHBMYJSOHzI3ZFb/tsk_IMjjv5uq8YIsjuDSw\"\
+                    \ height=\"1\" width=\"1\"></html>"
+                  subject: Have you heard about Jordan Doe  ?
+                  attachments: []
+                pagination:
+                  totalItems: 3
+                  currentPage: 1
+                  nextPage: null
+                  previousPage: null
+                  perPage: 10
+                  totalPages: 1
+        '400':
+          description: 'Possible errors: Bad team / Invalid contactId / Invalid userId / User not in team
+            / User ID is required to mark as read'
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '405':
+          description: Method not allowed
+    parameters:
+    - name: contactId
+      in: path
+      required: true
+      description: The unique identifier of the contact
+      example: ctc_ei6zVayP9B2ugwUPN
+      schema:
+        type: string
+  /inbox/email:
+    post:
+      summary: Send Email
+      tags:
+      - Inbox
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sendUserId:
+                  type: string
+                  description: Sender user ID
+                sendUserEmail:
+                  type: string
+                  description: Sender email address
+                sendUserMailboxId:
+                  type: string
+                  description: Sender mailbox ID
+                contactId:
+                  type: string
+                  description: Contact ID. Provide either contactId or leadId (not both required). Returned
+                    in the response.
+                leadId:
+                  type: string
+                  description: Lead ID. Provide either contactId or leadId; when only leadId is sent,
+                    its contact is resolved and returned as contactId in the response.
+                subject:
+                  type: string
+                  description: Email subject. Required for a standalone email; on a reply (replyToActivityId
+                    set) omit to reuse the thread's subject.
+                message:
+                  type: string
+                  description: Email message (HTML)
+                cc:
+                  type: array
+                  items:
+                    type: string
+                  description: CC email addresses. On a reply, omit to inherit the thread's CC; pass a
+                    list to override, or an empty array to send without CC.
+                replyToActivityId:
+                  type: string
+                  description: Reply within an existing email thread. Pass a specific email activity ID
+                    (act_...) or "latest" for the contact's most recent email. Threads the message (In-Reply-To)
+                    and reuses the thread's subject. Omit to send a standalone email. If "latest" and
+                    the contact has no prior email, a standalone email is sent.
+              required:
+              - sendUserId
+              - sendUserEmail
+              - sendUserMailboxId
+              - message
+            example:
+              sendUserId: usr_FU6yAd3UdBFel0UDy
+              sendUserEmail: john@example.com
+              sendUserMailboxId: usm_pmZsNNO1gl5nwCQ07
+              contactId: ctc_ei6zVayP9B2ugwUPN
+              leadId: lea_wadZOcDDSFWSbFaCf
+              subject: Follow up
+              message: <p>Hello,</p><p>Following up on our conversation...</p>
+              cc: []
+              replyToActivityId: latest
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    description: True when the email was sent.
+                  contactId:
+                    type: string
+                    description: The contact the email was sent to (resolved from leadId when only a lead
+                      was provided).
+                additionalProperties: true
+              example:
+                ok: true
+                contactId: ctc_JgrwGbHKgFoEnunBA
+        '400':
+          description: 'Possible errors: Bad team / Invalid sendUserId / Invalid sendUserEmail / Invalid
+            sendUserMailboxId / contactId or leadId is required / Invalid leadId / Lead not found / Failed
+            to send email'
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '405':
+          description: Method not allowed
+      parameters: []
+  /inbox/linkedin:
+    post:
+      summary: Send LinkedIn Message
+      tags:
+      - Inbox
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sendUserId:
+                  type: string
+                  description: Sender user ID
+                leadId:
+                  type: string
+                  description: Lead ID
+                contactId:
+                  type: string
+                  description: Contact ID
+                message:
+                  type: string
+                  description: Message content
+              required:
+              - sendUserId
+              - leadId
+              - contactId
+              - message
+            example:
+              sendUserId: usr_FU6yAd3UdBFel0UDy
+              leadId: lea_wadZOcDDSFWSbFaCf
+              contactId: ctc_ei6zVayP9B2ugwUPN
+              message: Hi, I wanted to follow up...
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+              example:
+                ok: true
+        '400':
+          description: 'Possible errors: Bad team / Invalid sendUserId / contactId or leadId is required
+            / Invalid leadId / Lead not found / Invalid contactId / Failed to send message'
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '405':
+          description: Method not allowed
+      parameters: []
+  /inbox/whatsapp:
+    post:
+      summary: Send WhatsApp Message
+      tags:
+      - Inbox
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sendUserId:
+                  type: string
+                  description: Sender user ID
+                sendUserWhatsappAccountId:
+                  type: string
+                  description: WhatsApp account ID
+                contactId:
+                  type: string
+                  description: Contact ID
+                leadId:
+                  type: string
+                  description: Lead ID
+                message:
+                  type: string
+                  description: Message content
+              required:
+              - sendUserId
+              - sendUserWhatsappAccountId
+              - contactId
+              - leadId
+              - message
+            example:
+              sendUserId: usr_FU6yAd3UdBFel0UDy
+              sendUserWhatsappAccountId: wha_ABC123
+              contactId: ctc_ei6zVayP9B2ugwUPN
+              leadId: lea_wadZOcDDSFWSbFaCf
+              message: Hi, following up on our conversation
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: 'Possible errors: Bad team / Invalid sendUserId / Invalid sendUserWhatsappAccountId
+            / contactId or leadId is required / Invalid leadId / Lead not found / Failed to send whatsapp
+            message'
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '405':
+          description: Method not allowed
+      parameters: []
+  /inbox/labels:
+    get:
+      summary: Get Many Labels
+      description: List all labels available to your team.
+      tags:
+      - Inbox
+      responses:
+        '200':
+          description: Success - Returns array of labels
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Label'
+              example:
+              - _id: lbl_uPAAgsi4oi9juBHfW
+                name: Interested
+                color: '#F9A2A2'
+                createdAt: '2025-11-26T15:49:23.470Z'
+                createdBy: john.doe@example.com
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+      parameters: []
+    post:
+      summary: Create Label
+      description: Creates a new label available to the team.
+      tags:
+      - Inbox
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                labelName:
+                  type: string
+                  description: Name of the label to create
+              required:
+              - labelName
+            example:
+              labelName: Interested
+      responses:
+        '200':
+          description: Success - Label created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+              example:
+                _id: lbl_uPAAgsi4oi9juBHfW
+                name: Interested
+                color: '#F9A2A2'
+                createdAt: '2025-11-26T15:49:23.470Z'
+        '400':
+          description: 'Possible errors: Bad team / labelName is required / Failed to create label'
+          content:
+            text/plain:
+              example: labelName is required
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '409':
+          description: Label with this name already exists
+          content:
+            text/plain:
+              example: Label with this name already exists
+        '405':
+          description: Method not allowed
+      parameters: []
+  /inbox/labels/{labelId}:
+    get:
+      summary: Get Label
+      description: Get info of a specific label.
+      tags:
+      - Inbox
+      parameters:
+      - name: labelId
+        in: path
+        required: true
+        description: Label ID
+        example: lbl_uPAAgsi4oi9juBHfW
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+              example:
+                _id: lbl_uPAAgsi4oi9juBHfW
+                name: Interested
+                color: '#F9A2A2'
+                createdAt: '2025-11-26T15:49:23.470Z'
+                createdBy: john.doe@example.com
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '404':
+          description: Label not found
+          content:
+            text/plain:
+              example: Label not found
+        '405':
+          description: Method not allowed
+  /inbox/conversations/labels/{contactId}:
+    post:
+      summary: Attach Labels to Conversations
+      description: Attaches one or more labels to one or more conversations.
+      tags:
+      - Inbox
+      parameters:
+      - name: contactId
+        in: path
+        required: true
+        description: Contact ID
+        example: ctc_ei6zVayP9B2ugwUPN
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                labelIds:
+                  type: array
+                  description: Array of label IDs to attach
+                  items:
+                    type: string
+                appendLabels:
+                  type: boolean
+                  description: If true, appends labels to existing ones. If false, replaces all labels.
+              required:
+              - labelIds
+              - appendLabels
+            example:
+              labelIds:
+              - lbl_uPAAgsi4oi9juBHfW
+              - lbl_oZCShmPCP2L43b8qf
+              appendLabels: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+              example:
+                ok: true
+        '400':
+          description: 'Possible errors: Bad team / Invalid request body: labelIds must be an array and
+            appendLabels must be a boolean'
+          content:
+            text/plain:
+              example: 'Invalid request body: labelIds must be an array and appendLabels must be a boolean'
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '404':
+          description: 'Possible errors: Inbox not found / Label not found'
+          content:
+            text/plain:
+              example: Label not found
+        '405':
+          description: Method not allowed
+    delete:
+      summary: Remove Labels from Conversation
+      description: Removes one or more labels from one conversation.
+      tags:
+      - Inbox
+      parameters:
+      - name: contactId
+        in: path
+        required: true
+        description: Contact ID
+        example: ctc_ei6zVayP9B2ugwUPN
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                labelIds:
+                  type: array
+                  description: Array of label IDs to remove
+                  items:
+                    type: string
+              required:
+              - labelIds
+            example:
+              labelIds:
+              - lbl_uPAAgsi4oi9juBHfW
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+              example:
+                ok: true
+        '400':
+          description: 'Possible errors: Bad team / Invalid request body: labelIds must be an array'
+          content:
+            text/plain:
+              example: 'Invalid request body: labelIds must be an array'
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '404':
+          description: 'Possible errors: Inbox not found / Label not found'
+          content:
+            text/plain:
+              example: Label not found
+        '405':
+          description: Method not allowed
+  /inbox/{contactId}/drafts:
+    get:
+      summary: List Drafts
+      description: Lists all non-deleted drafts for a specific contact.
+      tags:
+      - Inbox
+      parameters:
+      - name: contactId
+        in: path
+        required: true
+        description: Contact ID
+        example: ctc_ei6zVayP9B2ugwUPN
+        schema:
+          type: string
+      - name: draftOwner
+        in: query
+        required: true
+        description: Draft owner identifier. Accepts either a userId (e.g., `usr_abc123def456789`) or
+          a login email (e.g., `john@acme.com`).
+        example: usr_abc123def456789
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  drafts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          description: Unique draft identifier
+                        channel:
+                          type: string
+                          enum:
+                          - email
+                          - linkedin
+                          - whatsapp
+                          - sms
+                          description: Communication channel
+                        subject:
+                          type: string
+                          description: Draft subject
+                        contentPreview:
+                          type: string
+                          description: Content preview (max 100 chars)
+                        source:
+                          type: string
+                          enum:
+                          - api
+                          - ui
+                          description: Draft creation source
+                        createdAt:
+                          type: string
+                          format: date-time
+                          description: Creation date
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          description: Last update date
+              example:
+                drafts:
+                - _id: drf_abc123def456789
+                  channel: email
+                  subject: Follow up on our meeting
+                  contentPreview: Hi John, I wanted to follow up on our conversation from last week...
+                  source: api
+                  createdAt: '2025-01-15T10:30:00.000Z'
+                  updatedAt: '2025-01-15T10:30:00.000Z'
+        '400':
+          description: 'Possible errors: Missing draftOwner / User not found'
+          content:
+            text/plain:
+              example: 'User not found: neither a valid email nor a valid user id for this team'
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '405':
+          description: Method not allowed
+    post:
+      summary: Create Draft
+      description: Creates a new draft for a specific contact. The source is automatically set to "api".
+      tags:
+      - Inbox
+      parameters:
+      - name: contactId
+        in: path
+        required: true
+        description: Contact ID
+        example: ctc_ei6zVayP9B2ugwUPN
+        schema:
+          type: string
+      - name: draftOwner
+        in: query
+        required: true
+        description: Draft owner identifier. Accepts either a userId (e.g., `usr_abc123def456789`) or
+          a login email (e.g., `john@acme.com`).
+        example: usr_abc123def456789
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                channel:
+                  type: string
+                  enum:
+                  - email
+                  - linkedin
+                  - whatsapp
+                  - sms
+                  description: Communication channel
+                content:
+                  type: string
+                  description: Draft content (max 30KB)
+                subject:
+                  type: string
+                  description: Draft subject (optional)
+                cc:
+                  type: array
+                  items:
+                    type: string
+                  description: CC email addresses (optional)
+                attachments:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Attachment file name
+                      url:
+                        type: string
+                        description: Attachment URL
+                      size:
+                        type: integer
+                        description: File size in bytes
+                      type:
+                        type: string
+                        description: MIME type
+                  description: File attachments (optional)
+                replyToActivityId:
+                  type: string
+                  description: Activity ID to reply to (optional)
+                sourceMetadata:
+                  type: object
+                  description: Additional metadata (optional)
+              required:
+              - channel
+              - content
+            example:
+              channel: email
+              content: <p>Hello John, I wanted to follow up on our conversation.</p>
+              subject: Follow up on our meeting
+              cc: []
+              attachments: []
+      responses:
+        '201':
+          description: Draft created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  draftId:
+                    type: string
+                    description: ID of the created draft
+              example:
+                draftId: drf_abc123def456789
+        '400':
+          description: 'Possible errors: Missing draftOwner / Invalid channel / Content must not be empty
+            / Content too large / Draft limit reached (max 10 per conversation) / User not found'
+          content:
+            text/plain:
+              example: Content must not be empty
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '405':
+          description: Method not allowed
+  /inbox/{contactId}/drafts/{draftId}:
+    get:
+      summary: Get Draft
+      description: Retrieves a single draft with its full content, including attachments.
+      tags:
+      - Inbox
+      parameters:
+      - name: contactId
+        in: path
+        required: true
+        description: Contact ID
+        example: ctc_ei6zVayP9B2ugwUPN
+        schema:
+          type: string
+      - name: draftId
+        in: path
+        required: true
+        description: Draft ID
+        example: drf_abc123def456789
+        schema:
+          type: string
+      - name: draftOwner
+        in: query
+        required: true
+        description: Draft owner identifier. Accepts either a userId (e.g., `usr_abc123def456789`) or
+          a login email (e.g., `john@acme.com`).
+        example: usr_abc123def456789
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  draft:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        description: Unique draft identifier
+                      channel:
+                        type: string
+                        enum:
+                        - email
+                        - linkedin
+                        - whatsapp
+                        - sms
+                        description: Communication channel
+                      subject:
+                        type: string
+                        description: Draft subject
+                      cc:
+                        type: array
+                        items:
+                          type: string
+                        description: CC email addresses
+                      content:
+                        type: string
+                        description: Full draft content
+                      attachments:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            url:
+                              type: string
+                            size:
+                              type: integer
+                            type:
+                              type: string
+                        description: File attachments
+                      source:
+                        type: string
+                        enum:
+                        - api
+                        - ui
+                        description: Draft creation source
+                      createdAt:
+                        type: string
+                        format: date-time
+                        description: Creation date
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        description: Last update date
+              example:
+                draft:
+                  _id: drf_abc123def456789
+                  channel: email
+                  subject: Follow up on our meeting
+                  cc: []
+                  content: <p>Hello John, I wanted to follow up on our conversation.</p>
+                  attachments: []
+                  source: api
+                  createdAt: '2025-01-15T10:30:00.000Z'
+                  updatedAt: '2025-01-15T10:30:00.000Z'
+        '400':
+          description: 'Possible errors: Missing draftOwner / User not found'
+          content:
+            text/plain:
+              example: 'User not found: neither a valid email nor a valid user id for this team'
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '404':
+          description: Draft not found
+          content:
+            text/plain:
+              example: Draft not found
+        '405':
+          description: Method not allowed
+    patch:
+      summary: Update Draft
+      description: Partially updates an existing draft. Only the provided fields will be updated.
+      tags:
+      - Inbox
+      parameters:
+      - name: contactId
+        in: path
+        required: true
+        description: Contact ID
+        example: ctc_ei6zVayP9B2ugwUPN
+        schema:
+          type: string
+      - name: draftId
+        in: path
+        required: true
+        description: Draft ID
+        example: drf_abc123def456789
+        schema:
+          type: string
+      - name: draftOwner
+        in: query
+        required: true
+        description: Draft owner identifier. Accepts either a userId (e.g., `usr_abc123def456789`) or
+          a login email (e.g., `john@acme.com`).
+        example: usr_abc123def456789
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subject:
+                  type: string
+                  description: Draft subject
+                cc:
+                  type: array
+                  items:
+                    type: string
+                  description: CC email addresses
+                content:
+                  type: string
+                  description: Draft content (max 30KB)
+                attachments:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Attachment file name
+                      url:
+                        type: string
+                        description: Attachment URL
+                      size:
+                        type: integer
+                        description: File size in bytes
+                      type:
+                        type: string
+                        description: MIME type
+                  description: File attachments
+                replyToActivityId:
+                  type: string
+                  description: Activity ID to reply to
+            example:
+              subject: Updated subject
+              content: <p>Updated content for the draft.</p>
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  draft:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        description: Unique draft identifier
+                      channel:
+                        type: string
+                        enum:
+                        - email
+                        - linkedin
+                        - whatsapp
+                        - sms
+                        description: Communication channel
+                      subject:
+                        type: string
+                        description: Draft subject
+                      cc:
+                        type: array
+                        items:
+                          type: string
+                        description: CC email addresses
+                      content:
+                        type: string
+                        description: Full draft content
+                      attachments:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            url:
+                              type: string
+                            size:
+                              type: integer
+                            type:
+                              type: string
+                        description: File attachments
+                      source:
+                        type: string
+                        enum:
+                        - api
+                        - ui
+                        description: Draft creation source
+                      createdAt:
+                        type: string
+                        format: date-time
+                        description: Creation date
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        description: Last update date
+              example:
+                draft:
+                  _id: drf_abc123def456789
+                  channel: email
+                  subject: Updated subject
+                  cc: []
+                  content: <p>Updated content for the draft.</p>
+                  attachments: []
+                  source: api
+                  createdAt: '2025-01-15T10:30:00.000Z'
+                  updatedAt: '2025-01-15T11:00:00.000Z'
+        '400':
+          description: 'Possible errors: Missing draftOwner / Content must not be empty / Content too
+            large / User not found'
+          content:
+            text/plain:
+              example: Content must not be empty
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '404':
+          description: Draft not found
+          content:
+            text/plain:
+              example: Draft not found
+        '405':
+          description: Method not allowed
+    delete:
+      summary: Delete Draft
+      description: Soft-deletes a draft by setting its deletedAt timestamp.
+      tags:
+      - Inbox
+      parameters:
+      - name: contactId
+        in: path
+        required: true
+        description: Contact ID
+        example: ctc_ei6zVayP9B2ugwUPN
+        schema:
+          type: string
+      - name: draftId
+        in: path
+        required: true
+        description: Draft ID
+        example: drf_abc123def456789
+        schema:
+          type: string
+      - name: draftOwner
+        in: query
+        required: true
+        description: Draft owner identifier. Accepts either a userId (e.g., `usr_abc123def456789`) or
+          a login email (e.g., `john@acme.com`).
+        example: usr_abc123def456789
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+              example:
+                success: true
+        '400':
+          description: 'Possible errors: Missing draftOwner / User not found'
+          content:
+            text/plain:
+              example: 'User not found: neither a valid email nor a valid user id for this team'
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '404':
+          description: Draft not found
+          content:
+            text/plain:
+              example: Draft not found
+        '405':
+          description: Method not allowed
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    InboxConversation:
+      type: object
+      description: A message thread between a user and a contact in the inbox.
+      properties:
+        _id:
+          type: string
+        leadId:
+          type: string
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboxMessage'
+        createdAt:
+          type: string
+          format: date-time
+    InboxMessage:
+      type: object
+      description: A single message within an inbox conversation.
+      properties:
+        _id:
+          type: string
+        conversationId:
+          type: string
+        sender:
+          type: string
+        recipient:
+          type: string
+        body:
+          type: string
+        sentAt:
+          type: string
+          format: date-time
+    Label:
+      type: object
+      description: A label used to categorize and organize inbox conversations.
+      properties:
+        _id:
+          type: string
+          description: Unique label identifier
+        name:
+          type: string
+          description: Label name
+        color:
+          type: string
+          description: Hex color code for the label
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the label was created
+          nullable: true
+        createdBy:
+          type: string
+          description: Email of the user who created the label
+          nullable: true

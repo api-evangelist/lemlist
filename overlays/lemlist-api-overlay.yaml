@@ -1,0 +1,89 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the lemlist API
+  version: 1.0.0
+extends: openapi/_original/lemlist-openapi-v2.json
+x-provenance:
+  generated: '2026-08-13'
+  method: generated
+  source: https://developer.lemlist.com/api-reference/openapi/v2.json
+  note: >-
+    Captures the API Evangelist enhancements over lemlist's own published OpenAPI.
+    The harvested document is never restructured:
+    openapi/_original/lemlist-openapi-v2.json is what lemlist serves, with the single
+    exception that the secret-sanitizer replaced an example Slack webhook URL in the
+    GET /team response example with a REDACTED placeholder, because its shape trips
+    GitHub push protection. The per-tag documents in openapi/ are a
+    mechanical partition of it — operation content is carried verbatim, no operationIds
+    are minted and no summaries are written. The single largest contract-quality gap
+    in the provider spec is that 138 of its 143 operations declare no operationId;
+    that is the provider's to fix and is deliberately NOT patched here.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-profile: https://apis.io/provider/lemlist/
+    x-apievangelist-harvested: '2026-08-13'
+    x-apievangelist-source: https://developer.lemlist.com/api-reference/openapi/v2.json
+    x-apievangelist-refined: 20 per-tag documents in openapi/, split from this spec by
+      tag
+- target: $.info
+  update:
+    x-agent-surfaces:
+      mcp: https://app.lemlist.com/mcp
+      cli: '@lemlist-official/cli'
+      agent_skill: https://developer.lemlist.com/skill.md
+      llms_txt: https://developer.lemlist.com/llms.txt
+      agent_card: https://developer.lemlist.com/.well-known/agent-card.json
+- target: $.info
+  update:
+    x-rate-limit:
+      requests: 20
+      window_seconds: 2
+      scope: per-api-key
+      headers:
+      - Retry-After
+      - X-RateLimit-Limit
+      - X-RateLimit-Remaining
+      - X-RateLimit-Reset
+      source: https://developer.lemlist.com/api-reference/getting-started/rate-limits
+- target: $.info
+  update:
+    x-versioning:
+      current: v2
+      deprecated: v1
+      mechanism: version=v2 query parameter on endpoints that still default to v1
+      source: https://developer.lemlist.com/api-reference/getting-started/version
+- target: $.info
+  update:
+    x-idempotency:
+      supported: false
+      note: no idempotency key is published; lemlist's own CLI never retries POST or
+        PATCH after a 5xx or network drop for this reason
+- target: $.info
+  update:
+    x-error-format:
+      rfc9457: false
+      note: errors are mostly text/plain strings with no machine-readable code
+- target: $.info
+  update:
+    x-webhooks:
+      catalog: asyncapi/lemlist-webhooks.yml
+      event_count: 76
+      verification: shared secret echoed in the callback body (no HMAC signature)
+- target: $.components.securitySchemes
+  update:
+    basicAuth:
+      x-note: the username is always EMPTY and the password is the lemlist API key —
+        Authorization&#58; Basic base64(":YOUR_API_KEY"). Bearer tokens are not accepted
+        on the REST API.
+- target: $.servers
+  update:
+  - url: https://api.lemlist.com/api
+    description: lemlist production API
+    x-verified: '2026-08-13'
+x-gaps-not-patched:
+- operationId missing on 138 of 143 operations
+- no tags[] declaration block at the document root (tags are used on operations only)
+- 429 declared on only 1 operation although the rate limit applies to all routes
+- three different pagination idioms (page/limit, offset/limit, skip/limit) across the
+  surface

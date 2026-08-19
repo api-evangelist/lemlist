@@ -1,0 +1,57 @@
+generated: '2026-08-13'
+method: probed
+source: https://developer.lemlist.com/.well-known/agent-card.json
+discovery:
+  path: /.well-known/agent-card.json
+  canonical: true
+  host: developer.lemlist.com
+  note: >-
+    Probed on every lemlist host. www.lemlist.com returned 404 on both the canonical
+    and the legacy /.well-known/agent.json path; app.lemlist.com and api.lemlist.com
+    answered 200 with the single-page-app HTML shell (soft-200, rejected). Only
+    developer.lemlist.com served a real JSON AgentCard.
+conformance:
+  spec: A2A 1.0.0
+  grade: conformant
+  protocol_version: '0.3'
+  preferred_transport: HTTP+JSON
+  hard_checks:
+    capabilities_is_object: true
+    protocol_version_present: true
+    skills_is_array: true
+  deviations:
+  - supportedInterfaces-instead-of-additionalInterfaces
+  - protocolVersion-0.3-predates-A2A-1.0.0
+  - single-placeholder-skill-with-empty-description
+  note: >-
+    The card is the Mintlify docs-platform agent card for the lemlist developer
+    documentation site, not a card for the lemlist product API. It advertises one
+    generic "default" skill that points at the published Agent Skill markdown, and
+    declares no streaming or push-notification capability. It is served from a
+    lemlist-controlled host and is recorded as published, but it does not describe
+    the lemlist campaign/lead API surface — that surface is reached through the
+    MCP server (mcp/lemlist-mcp.yml) and the REST API.
+card:
+  name: lemlist Developer Docs
+  description: lemlist API documentation to help you integrate and automate your email
+    outreach.
+  url: https://developer.lemlist.com/
+  version: 1.0.0
+  provider: lemlist Developer Docs
+  documentation_url: https://developer.lemlist.com/
+  capabilities:
+    streaming: false
+    pushNotifications: false
+  default_input_modes:
+  - text/plain
+  default_output_modes:
+  - text/plain
+  skills: 1
+  skill_ids:
+  - default
+  file: lemlist-agent-card.json
+x-evidence:
+  fetched: '2026-08-13'
+  url: https://developer.lemlist.com/.well-known/agent-card.json
+  http_status: 200
+  content_type: application/json

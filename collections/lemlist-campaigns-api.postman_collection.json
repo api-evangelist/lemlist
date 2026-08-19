@@ -1,0 +1,329 @@
+{
+  "item": [
+    {
+      "id": "91155c95-f4f9-4f00-af91-490058531bec",
+      "name": "Campaigns",
+      "description": {
+        "content": "Campaign CRUD and lifecycle",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f298828f-441d-4116-8c55-bded3c0399bf",
+          "name": "List campaigns",
+          "request": {
+            "name": "List campaigns",
+            "description": {},
+            "url": {
+              "path": [
+                "campaigns"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9a2cf616-ccec-4716-8cbc-f07bc5161fb1",
+              "name": "Paginated list of campaigns",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"_id\": \"string\",\n    \"name\": \"string\",\n    \"status\": \"string\"\n  },\n  {\n    \"_id\": \"string\",\n    \"name\": \"string\",\n    \"status\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "89e81257-0651-449b-ac7d-631710fd8d5c",
+          "name": "Create a campaign",
+          "request": {
+            "name": "Create a campaign",
+            "description": {},
+            "url": {
+              "path": [
+                "campaigns"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "622fa4bf-5ed2-4d57-99eb-570c11a0d3ca",
+              "name": "Created campaign",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"_id\": \"string\",\n  \"name\": \"string\",\n  \"status\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0563e514-4ce1-4dad-bfca-3f7f050b5532",
+          "name": "Get a campaign by ID",
+          "request": {
+            "name": "Get a campaign by ID",
+            "description": {},
+            "url": {
+              "path": [
+                "campaigns",
+                ":campaignId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "campaignId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7b7ec600-7e9d-4570-a413-d9b1d1e490d3",
+              "name": "Campaign object",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    ":campaignId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "campaignId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"_id\": \"string\",\n  \"name\": \"string\",\n  \"status\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.lemlist.com/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "185bd5de-10b1-40a7-b444-48385d21fce2",
+    "name": "lemlist Campaigns API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for lemlist's cold email outreach and sales engagement\nplatform. All routes live at https://api.lemlist.com/api/. The full\nURL pattern is https://api.lemlist.com/api/{endpoint}.\n\nAuthentication uses HTTP Basic with an empty username and the API\nkey as the password (`:YOUR_API_KEY` base64-encoded into the\nAuthorization header).\n\nSource: https://developer.lemlist.com and the published\nOpenAPI v2 spec at\nhttps://developer.lemlist.com/api-reference/openapi/v2.json\n",
+      "type": "text/plain"
+    }
+  }
+}

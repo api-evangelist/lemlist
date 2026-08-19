@@ -1,0 +1,138 @@
+{
+  "item": [
+    {
+      "id": "cf8d2e95-c452-44f2-bb6e-ac5e94e12ed4",
+      "name": "Users",
+      "description": {
+        "content": "User endpoints",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f07cb2b7-7799-453e-834c-5cdf1058fd9a",
+          "name": "Get user details",
+          "request": {
+            "name": "Get user details",
+            "description": {},
+            "url": {
+              "path": [
+                "users",
+                ":userId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "userId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d2f1fa09-aa6a-4fd8-9488-4e23a22400f0",
+              "name": "User object",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "users",
+                    ":userId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "userId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.lemlist.com/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "242bdbd4-f786-48cd-b683-d5a110979593",
+    "name": "lemlist Campaigns Users API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for lemlist's cold email outreach and sales engagement\nplatform. All routes live at https://api.lemlist.com/api/. The full\nURL pattern is https://api.lemlist.com/api/{endpoint}.\n\nAuthentication uses HTTP Basic with an empty username and the API\nkey as the password (`:YOUR_API_KEY` base64-encoded into the\nAuthorization header).\n\nSource: https://developer.lemlist.com and the published\nOpenAPI v2 spec at\nhttps://developer.lemlist.com/api-reference/openapi/v2.json\n",
+      "type": "text/plain"
+    }
+  }
+}

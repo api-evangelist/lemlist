@@ -1,0 +1,49 @@
+generated: '2026-08-13'
+method: searched
+source: https://developer.lemlist.com/api-reference/getting-started/rate-limits
+also_documented_in:
+- https://developer.lemlist.com/api-reference/openapi/v2.json (info.description)
+- https://developer.lemlist.com/skill.md
+limit_count: 1
+limits:
+- scope: per-api-key
+  applies_to: all routes
+  limit: 20
+  window: 2 seconds
+  burst: null
+  note: >-
+    "The rate limits are 20 requests per 2 seconds", applied on all routes and for
+    each API key separately. lemlist publishes no separate per-account, per-endpoint
+    or burst allowance.
+response_headers:
+- header: Retry-After
+  description: The number of seconds in which you can retry
+  example: 2
+- header: X-RateLimit-Limit
+  description: The maximum requests in that time
+  example: 20
+- header: X-RateLimit-Remaining
+  description: The number of remaining requests you can make
+  example: 7
+- header: X-RateLimit-Reset
+  description: The date when the rate limit will reset
+  example: Tue Feb 16 2021 09:02:42 GMT+0100 (Central European Standard Time)
+  note: >-
+    Published as a human-readable date string, not a Unix epoch — lemlist's own docs
+    call this out ("Pay special attention to the human-readable date format"). An
+    agent must parse it as a date, not an integer.
+headers_on_every_response: true
+exhaustion:
+  status: 429
+  meaning: Too Many Requests — rate limit exceeded
+  source: https://developer.lemlist.com/api-reference/getting-started/errors
+client_handling:
+  official_cli: >-
+    @lemlist-official/cli retries 429 automatically with exponential backoff, honoring
+    Retry-After, and exits with code 3 when the retry budget is exhausted.
+  docs_guidance: implement exponential backoff and request throttling
+quota_limits:
+- scope: enrichment
+  limit: 500
+  unit: contacts per bulk enrichment request
+  source: https://developer.lemlist.com/skill.md

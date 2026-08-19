@@ -1,68 +1,283 @@
-openapi: 3.1.0
+openapi: 3.0.0
 info:
   title: lemlist Campaigns API
-  version: '2.0'
-  description: 'REST API for lemlist''s cold email outreach and sales engagement
-
-    platform. All routes live at https://api.lemlist.com/api/. The full
-
-    URL pattern is https://api.lemlist.com/api/{endpoint}.
-
-
-    Authentication uses HTTP Basic with an empty username and the API
-
-    key as the password (`:YOUR_API_KEY` base64-encoded into the
-
-    Authorization header).
-
-
-    Source: https://developer.lemlist.com and the published
-
-    OpenAPI v2 spec at
-
-    https://developer.lemlist.com/api-reference/openapi/v2.json
-
-    '
+  version: 1.0.0
+  description: The Campaigns operations of the lemlist API, split by tag from the OpenAPI lemlist publishes
+    at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content is carried verbatim
+    from the provider spec.
 servers:
 - url: https://api.lemlist.com/api
-  description: lemlist production API
 security:
-- BasicAuth: []
+- basicAuth: []
 tags:
 - name: Campaigns
-  description: Campaign CRUD and lifecycle
 paths:
   /campaigns:
     get:
-      operationId: listCampaigns
-      summary: List campaigns
+      summary: Get Many Campaigns
       tags:
       - Campaigns
       parameters:
-      - name: page
+      - name: offset
         in: query
+        required: false
+        description: Offset from the start. For pagination.
+        example: '24'
         schema:
           type: integer
       - name: limit
         in: query
+        required: false
+        description: 'Number of campaigns to retrieve. Default: 100. Maximum: 100.'
+        example: '2'
         schema:
           type: integer
+      - name: version
+        in: query
+        required: false
+        description: Set to 'v2' to use the latest version
+        example: v2
+        schema:
+          type: string
+          default: v2
+          enum:
+          - v2
+      - name: page
+        in: query
+        required: false
+        description: Page number to retrieve
+        example: '1'
+        schema:
+          type: integer
+      - name: sortBy
+        in: query
+        required: false
+        description: The field by which to sort. Currently, only 'createdAt' is supported.
+        example: createdAt
+        schema:
+          type: string
+          enum:
+          - createdAt
+      - name: sortOrder
+        in: query
+        required: false
+        description: The sort direction. Use 'desc' for descending order; any other value (or omission)
+          will sort in ascending order.
+        example: desc
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      - name: status
+        in: query
+        required: false
+        description: 'The campaign status. Can be: running, draft, archived, ended, paused, errors. Note:
+          a campaign can be in multiple statuses at one time (e.g., a paused campaign with errors).'
+        example: running
+        schema:
+          type: string
+          enum:
+          - running
+          - draft
+          - archived
+          - ended
+          - paused
+          - errors
+      - name: createdBy
+        in: query
+        required: false
+        description: Filter campaigns by creator user ID (usr_xxx format). Only returns campaigns created
+          by the specified user.
+        example: usr_QG9E94KvTmC7KWqzs
+        schema:
+          type: string
       responses:
         '200':
-          description: Paginated list of campaigns
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Campaign'
+              example:
+              - _id: cam_4HrZbi8xsez4QlrnL
+                name: Product Launch Campaign
+                emoji: 🚀
+                timezone: Europe/Paris
+                labels: []
+                createdAt: '2025-02-20T14:45:54.230Z'
+                createdBy: usr_zdTCrNFyXblc4mrYK
+                status: running
+                hasError: true
+                errors:
+                - Your campaign does not have sender.
+              - _id: cam_k3gu2sa4KIfhRK34M
+                name: Sales Outreach 2025
+                labels: []
+                createdAt: '2025-02-05T09:00:07.541Z'
+                createdBy: usr_UEvrOEP0CTAYEoFR4
+                status: running
+                hasError: true
+                errors:
+                - One of your sender has no email provider.
+                - Your campaign have an invalid sender mailbox
+              - _id: cam_HcFmYEhnCI39Pscan
+                name: CRM Integration Test
+                labels:
+                - CRM
+                createdAt: '2023-01-27T14:58:52.482Z'
+                createdBy: usr_i52PiQtbq8SucjVTM
+                status: running
+                hasError: true
+                errors:
+                - One of your sender has no email provider.
+                - Your campaign have an invalid sender mailbox
+              - _id: cam_yZXeC6q3SXs3ha1FI
+                name: Customer Onboarding
+                labels: []
+                createdAt: '2022-06-14T13:32:57.880Z'
+                createdBy: usr_i52PiQtbq8SucjVTM
+                status: running
+        '400':
+          description: No API key provided
+          content:
+            text/plain:
+              example: No API key provided
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '403':
+          description: User linked to this API key is blocked
+          content:
+            text/plain:
+              example: User linked to this API key is blocked
+        '404':
+          description: No user found for this API key
+          content:
+            text/plain:
+              example: No user found for this API key
     post:
-      operationId: createCampaign
-      summary: Create a campaign
+      summary: Create Campaign
       tags:
       - Campaigns
+      parameters: []
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  sequenceId:
+                    type: string
+                  scheduleIds:
+                    type: array
+                    items:
+                      type: string
+                  teamId:
+                    type: string
+                  createdBy:
+                    type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+                  state:
+                    type: string
+                  scannedCount:
+                    type: integer
+                  reviewedCount:
+                    type: integer
+                  inSequenceLeadCount:
+                    type: integer
+                  variableKeys:
+                    type: array
+                    items: {}
+                  senders:
+                    type: array
+                    items: {}
+                  sendUsers:
+                    type: array
+                    items: {}
+                  displayedVariableKeys:
+                    type: array
+                    items:
+                      type: string
+                  emoji:
+                    type: string
+                  stopOnEmailReplied:
+                    type: boolean
+                  crmOpportunitiesOnTask:
+                    type: boolean
+                  unsubscribe:
+                    type: string
+                  name:
+                    type: string
+                  crm:
+                    type: string
+                  crmUserId:
+                    type: string
+              example:
+                _id: cam_kok3I33Sba7mcNIO7
+                sequenceId: seq_ScVmFnlKdP6aVmyZN
+                scheduleIds:
+                - skd_IrCdCoQ0ZUAEeUDwR
+                teamId: tea_edrkv2LgUK4Wf4ZzO
+                createdBy: usr_Sy3xIhbEi7auHFv5A
+                createdAt: '2025-01-16T13:53:22.726Z'
+                state: running
+                scannedCount: 0
+                reviewedCount: 0
+                inSequenceLeadCount: 0
+                variableKeys: []
+                senders: []
+                sendUsers: []
+                displayedVariableKeys:
+                - companyName
+                emoji: 🚀
+                stopOnEmailReplied: true
+                crmOpportunitiesOnTask: true
+                unsubscribe: campaign
+                name: My new campaign
+                crm: hubspot
+                crmUserId: usr_0p9Q8ZyXSTNGpsHOe
+        '400':
+          description: No API key provided
+          content:
+            text/plain:
+              example: No API key provided
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '403':
+          description: User linked to this API key is blocked
+          content:
+            text/plain:
+              example: User linked to this API key is blocked
+        '404':
+          description: No user found for this API key
+          content:
+            text/plain:
+              example: No user found for this API key
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -70,53 +285,2042 @@ paths:
               properties:
                 name:
                   type: string
+                  description: The name of the campaign
+                timezone:
+                  type: string
+                  description: IANA timezone for the campaign schedule (e.g. `America/New_York`). Defaults
+                    to `Europe/Paris` if omitted.
+                autoReview:
+                  type: boolean
+                  description: Automatically launch (review) leads as soon as they are added to the campaign,
+                    instead of requiring manual review. Defaults to `false`.
+                autoReviewConditions:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                    - deliverable
+                    - risky
+                    - undeliverable
+                    - unverified
+                  description: Email deliverability statuses for which a lead is auto-launched when `autoReview`
+                    is enabled. Only leads whose email verification matches one of these statuses are
+                    launched automatically. Invalid values are rejected with a `400` error.
+              required:
+              - name
+            example:
+              name: My new campaign
+              timezone: America/New_York
+              autoReview: true
+              autoReviewConditions:
+              - deliverable
+              - risky
+  /campaigns/{campaignId}:
+    get:
+      summary: Get Campaign
+      tags:
+      - Campaigns
+      parameters: []
       responses:
         '200':
-          description: Created campaign
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Campaign'
-  /campaigns/{campaignId}:
+              example:
+                _id: cam_bSn8EORHQxbWPjHvu
+                name: Product Launch Campaign
+                createdAt: '2025-10-27T07:01:04.058Z'
+                status: draft
+                creator:
+                  userId: usr_ahfFktBBHUIxbVG5P
+                  userEmail: support@lemlist.com
+                senders:
+                - id: usr_rhhX1KT0qgOGCOrgE
+                  email: support@lemlist.com
+                  sendUserMailboxId: usm_J7BzS86A1vRMc2AuB
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Campaign not found
+          content:
+            text/plain:
+              example: Campaign not found
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
+    patch:
+      summary: Update Campaign
+      tags:
+      - Campaigns
+      parameters: []
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The campaign name
+                  stopOnEmailReplied:
+                    type: boolean
+                    description: Stop the campaign when a lead replies by email
+                  stopOnMeetingBooked:
+                    type: boolean
+                    description: Stop the campaign when a meeting is booked
+                  stopOnLinkClicked:
+                    type: boolean
+                    description: Stop the campaign when a link is clicked
+                  leadsPausedByInterest:
+                    type: boolean
+                    description: Pause leads based on interest
+                  opportunityReplied:
+                    type: boolean
+                    description: Create an opportunity when a lead replies
+                  opportunityClicked:
+                    type: boolean
+                    description: Create an opportunity when a lead clicks a link
+                  autoLeadInterest:
+                    type: boolean
+                    description: Automatically detect lead interest
+                  disableTrackOpen:
+                    type: boolean
+                    description: Disable tracking of email opens
+                  disableTrackClick:
+                    type: boolean
+                    description: Disable tracking of link clicks
+                  disableTrackReply:
+                    type: boolean
+                    description: Disable tracking of email replies
+                  disableOutOfOffice:
+                    type: boolean
+                    description: Disable out-of-office detection
+                  sequenceSharing:
+                    type: boolean
+                    description: Enable sequence sharing for the campaign
+                  stopOnLinkClickedFilter:
+                    type: string
+                    description: Filter for which link clicks should stop the campaign
+                  sendUsers:
+                    type: array
+                    description: Configured senders for the campaign. Only present when sendUserIds was
+                      provided in the request. Senders that lack capabilities for any campaign sending
+                      channel are excluded.
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: User ID of the sender
+                        mailboxes:
+                          type: array
+                          description: Connected email mailboxes
+                          items:
+                            type: object
+                            properties:
+                              sendUserMailboxId:
+                                type: string
+                              email:
+                                type: string
+                        phoneNumbers:
+                          type: array
+                          description: Connected phone numbers
+                          items:
+                            type: string
+                        whatsappAccountIds:
+                          type: array
+                          description: Connected WhatsApp account IDs
+                          items:
+                            type: string
+              example:
+                name: New campaign name
+                stopOnEmailReplied: true
+                stopOnMeetingBooked: true
+                stopOnLinkClicked: false
+                leadsPausedByInterest: false
+                opportunityReplied: true
+                opportunityClicked: false
+                autoLeadInterest: true
+                disableTrackOpen: false
+                disableTrackClick: false
+                disableTrackReply: false
+                disableOutOfOffice: false
+                sequenceSharing: false
+                sendUsers:
+                - id: usr_2aBCdEfGHiJkLmNOp
+                  mailboxes:
+                  - sendUserMailboxId: smb_1aBcDeFgHiJkLmNoP
+                    email: john@acme.com
+                  phoneNumbers:
+                  - '+15551234567'
+                  whatsappAccountIds:
+                  - wha_3xYzAbCdEfGhIjKlM
+                - id: usr_7xYzAbCdEfGhIjKlM
+                  mailboxes:
+                  - sendUserMailboxId: smb_9zYxWvUtSrQpOnMlK
+                    email: jane@acme.com
+                  phoneNumbers: []
+                  whatsappAccountIds: []
+        '400':
+          description: Bad request
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                badTeam:
+                  summary: Bad team
+                  value: Bad team
+                dynamicStrategy:
+                  summary: Cannot update senders for dynamic strategy campaigns
+                  value: Cannot update senders on campaigns with a dynamic sender strategy (contactOwner,
+                    leadImporter, customField)
+                noValidSenders:
+                  summary: No valid sender IDs
+                  value: None of the provided sender IDs are members of this team
+                noCapableSenders:
+                  summary: No senders with required capabilities
+                  value: None of the provided senders have the required capabilities for this campaign
+                missingChannels:
+                  summary: Campaign channels not covered
+                  value: 'The provided senders do not cover the following campaign channels: linkedin,
+                    sms'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Campaign not found
+          content:
+            text/plain:
+              example: Campaign not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The campaign name
+                stopOnEmailReplied:
+                  type: boolean
+                  description: Stop the campaign when a lead replies by email
+                stopOnMeetingBooked:
+                  type: boolean
+                  description: Stop the campaign when a meeting is booked
+                stopOnLinkClicked:
+                  type: boolean
+                  description: Stop the campaign when a link is clicked
+                leadsPausedByInterest:
+                  type: boolean
+                  description: Pause leads based on interest
+                opportunityReplied:
+                  type: boolean
+                  description: Create an opportunity when a lead replies
+                opportunityClicked:
+                  type: boolean
+                  description: Create an opportunity when a lead clicks a link
+                autoLeadInterest:
+                  type: boolean
+                  description: Automatically detect lead interest
+                disableTrackOpen:
+                  type: boolean
+                  description: Disable tracking of email opens
+                disableTrackClick:
+                  type: boolean
+                  description: Disable tracking of link clicks
+                disableTrackReply:
+                  type: boolean
+                  description: Disable tracking of email replies
+                disableOutOfOffice:
+                  type: boolean
+                  description: Disable out-of-office detection
+                sequenceSharing:
+                  type: boolean
+                  description: Enable sequence sharing for the campaign
+                stopOnLinkClickedFilter:
+                  type: string
+                  description: Filter for which link clicks should stop the campaign
+                sendUserIds:
+                  type: array
+                  items:
+                    type: string
+                  description: 'Array of user IDs (usr_xxx format) to assign as campaign senders. Cannot
+                    be used on campaigns with a dynamic sender strategy (contactOwner, leadImporter, customField).
+                    Each sender is validated against the campaign''s sending channels (email, LinkedIn,
+                    SMS, WhatsApp): senders without capabilities for at least one channel are excluded,
+                    and all channels must be covered by at least one sender.'
+                autoReview:
+                  type: boolean
+                  description: Automatically launch (review) leads as soon as they are added to the campaign,
+                    instead of requiring manual review.
+                autoReviewConditions:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                    - deliverable
+                    - risky
+                    - undeliverable
+                    - unverified
+                  description: Email deliverability statuses for which a lead is auto-launched when `autoReview`
+                    is enabled. Only leads whose email verification matches one of these statuses are
+                    launched automatically. Invalid values are rejected with a `400` error.
+                aiFeatures:
+                  type: object
+                  description: AI reply-handling settings. Provide only the flags to change; omitted flags
+                    keep their current value.
+                  properties:
+                    scoreReplies:
+                      type: boolean
+                      description: Enable AI reply scoring for this campaign.
+                    onInterestedReply:
+                      type: object
+                      description: AI action when a reply is detected as INTERESTED.
+                      properties:
+                        enabled:
+                          type: boolean
+                          description: Enable the interested-reply AI action.
+                        pauseAllCampaignsForLead:
+                          type: boolean
+                          description: Pause all campaigns for this lead.
+                        pauseCampaignForCompany:
+                          type: boolean
+                          description: Pause this campaign for other leads in the same company.
+                        pauseAllCampaignsForCompany:
+                          type: boolean
+                          description: Pause all campaigns for leads in the same company.
+                    onNotInterestedReply:
+                      type: object
+                      description: AI action when a reply is detected as NOT interested.
+                      properties:
+                        enabled:
+                          type: boolean
+                          description: Enable the not-interested-reply AI action.
+                        pauseAllCampaignsForLead:
+                          type: boolean
+                          description: Pause all campaigns for this lead.
+                        pauseCampaignForCompany:
+                          type: boolean
+                          description: Pause this campaign for other leads in the same company.
+                        pauseAllCampaignsForCompany:
+                          type: boolean
+                          description: Pause all campaigns for leads in the same company.
+                tracking:
+                  type: object
+                  description: Open / click / reply tracking toggles.
+                  properties:
+                    trackOpens:
+                      type: boolean
+                      description: Whether email open tracking is enabled.
+                    trackClicks:
+                      type: boolean
+                      description: Whether link click tracking is enabled.
+                    trackReplies:
+                      type: boolean
+                      description: Whether reply tracking is enabled.
+                onReplied:
+                  type: object
+                  description: Behavior when a lead replies.
+                  properties:
+                    createNewTask:
+                      type: boolean
+                      description: Create a task when a lead replies.
+                    campaignProgress:
+                      type: string
+                      enum:
+                      - continue
+                      - pause
+                      - stop
+                      description: What happens to the lead on reply.
+                    propagateProgressToCompany:
+                      type: boolean
+                      description: Apply the same action to other leads in the same company.
+                    disableOutOfOffice:
+                      type: boolean
+                      description: Whether out-of-office detection is disabled.
+                onLinkClicked:
+                  type: object
+                  description: Behavior when a lead clicks a tracked link.
+                  properties:
+                    createNewTask:
+                      type: boolean
+                      description: Create a task when a lead clicks a link.
+                    campaignProgress:
+                      type: string
+                      enum:
+                      - continue
+                      - pause
+                      - stop
+                      description: What happens to the lead on link click.
+                    propagateProgressToCompany:
+                      type: boolean
+                      description: Apply the same action to other leads in the same company.
+                    specificLinks:
+                      type: array
+                      items:
+                        type: string
+                      description: If non-empty, only these link URLs trigger the action (empty = all
+                        links).
+                onMeetingBooked:
+                  type: object
+                  description: Behavior when a meeting is booked.
+                  properties:
+                    campaignProgress:
+                      type: string
+                      enum:
+                      - continue
+                      - pause
+                      - stop
+                      description: What happens to the lead when a meeting is booked.
+                    propagateProgressToCompany:
+                      type: boolean
+                      description: Apply the same action to other leads in the same company.
+            example:
+              name: New campaign name
+              stopOnEmailReplied: true
+              stopOnMeetingBooked: true
+              stopOnLinkClicked: false
+              leadsPausedByInterest: false
+              opportunityReplied: true
+              opportunityClicked: false
+              autoLeadInterest: true
+              disableTrackOpen: false
+              disableTrackClick: false
+              disableTrackReply: false
+              disableOutOfOffice: false
+              sequenceSharing: false
+              sendUserIds:
+              - usr_2aBCdEfGHiJkLmNOp
+              - usr_7xYzAbCdEfGhIjKlM
+              autoReview: true
+              autoReviewConditions:
+              - deliverable
+              - risky
+  /campaigns/{campaignId}/pause:
+    post:
+      summary: Pause Campaign
+      tags:
+      - Campaigns
+      parameters: []
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  state:
+                    type: string
+              example:
+                _id: cam_A1B2C3D4E5F6G7H8I9
+                state: paused
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Campaign not found
+          content:
+            text/plain:
+              example: Campaign not found
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
+  /campaigns/{campaignId}/start:
+    post:
+      summary: Start Campaign
+      tags:
+      - Campaigns
+      parameters: []
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  state:
+                    type: string
+              example:
+                _id: cam_A1B2C3D4E5F6G7H8I9
+                state: running
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Campaign not found
+          content:
+            text/plain:
+              example: Campaign not found
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
+  /campaigns/{campaignId}/export/start:
     get:
-      operationId: getCampaign
-      summary: Get a campaign by ID
+      summary: Start Campaign Stats Export
+      description: Start an asynchronous export of all campaign statistics. The final export result is
+        a CSV file.
+      tags:
+      - Campaigns
+      parameters: []
+      responses:
+        '200':
+          description: Export started successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: The unique identifier of the export
+                  id:
+                    type: string
+                    description: The unique identifier of the export (same as _id)
+                  teamId:
+                    type: string
+                    description: The team identifier
+                  campaignId:
+                    type: string
+                    description: The campaign identifier
+                  campaignName:
+                    type: string
+                    description: The name of the campaign
+                  status:
+                    type: string
+                    enum:
+                    - pending
+                    - done
+                    - error
+                    description: Current status of the export
+                  startedAt:
+                    type: string
+                    format: date-time
+                    description: When the export was started
+                  progressIndex:
+                    type: integer
+                    description: Current progress index
+                  progressTime:
+                    type: integer
+                    description: Timestamp of progress
+                  progressLastStepDuration:
+                    type: integer
+                    description: Duration of last step in milliseconds
+                  progressType:
+                    type: string
+                    description: Type of current progress step
+                  progress:
+                    type: integer
+                    description: Number of items processed
+                  total:
+                    type: integer
+                    description: Total number of items to process
+              example:
+                _id: axp_Vv6lJOc8NlVVmDud5
+                id: axp_Vv6lJOc8NlVVmDud5
+                teamId: tea_c123fg5h8ijKL9noP
+                campaignId: cam_A1B2C3D4E5F6G7H8I9
+                campaignName: Insights Outreach 2024
+                status: pending
+                startedAt: '2024-07-09T13:43:52.124Z'
+                progressIndex: 0
+                progressTime: 1720532632124
+                progressLastStepDuration: 0
+                progressType: starting
+                progress: 0
+                total: 0
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Campaign not found
+          content:
+            text/plain:
+              example: Campaign not found
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign to export
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
+  /campaigns/{campaignId}/export/{exportId}/status:
+    get:
+      summary: Get Campaign Export Status
+      description: Check the status of an asynchronous campaign export.
+      tags:
+      - Campaigns
+      parameters: []
+      responses:
+        '200':
+          description: Export status retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  status:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        description: MongoDB identifier of the export
+                      id:
+                        type: string
+                        description: The unique identifier of the export
+                      teamId:
+                        type: string
+                        description: The team identifier
+                      campaignId:
+                        type: string
+                        description: The campaign identifier
+                      campaignName:
+                        type: string
+                        description: The name of the campaign
+                      status:
+                        type: string
+                        enum:
+                        - pending
+                        - done
+                        - error
+                        description: Current status of the export
+                      startedAt:
+                        type: string
+                        format: date-time
+                        description: When the export was started
+                      endedAt:
+                        type: string
+                        format: date-time
+                        description: When the export finished (only present when done)
+                      progressIndex:
+                        type: integer
+                        description: Current progress index
+                      progressTime:
+                        type: integer
+                        description: Timestamp of progress
+                      progressLastStepDuration:
+                        type: integer
+                        description: Duration of last step in milliseconds
+                      progressType:
+                        type: string
+                        description: Type of current progress step
+                      progress:
+                        type: integer
+                        description: Number of items processed
+                      total:
+                        type: integer
+                        description: Total number of items to process
+                      fileSize:
+                        type: integer
+                        description: Size of the exported CSV file in bytes (only present when done)
+                      url:
+                        type: string
+                        description: Download URL for the CSV file (only present when status is done)
+              examples:
+                done:
+                  summary: Export completed
+                  value:
+                    ok: true
+                    status:
+                      _id: axp_eVuZ9rVr4yYWrnPWA
+                      id: axp_eVuZ9rVr4yYWrnPWA
+                      teamId: tea_8QvkOiBfPdb2ZRhHi
+                      campaignId: cam_lBCWmqEWI399hJZOd
+                      campaignName: lemstage
+                      status: done
+                      startedAt: '2025-10-27T07:53:16.267Z'
+                      progressIndex: 6
+                      progressTime: 1761551597286
+                      progressLastStepDuration: 0
+                      progressType: done
+                      progress: 0
+                      total: 0
+                      fileSize: 23654
+                      endedAt: '2025-10-27T07:53:17.286Z'
+                      url: https://api.lemlist.com/api/files/exports/fil_axp_7guBefhehehe.csv
+                pending:
+                  summary: Export in progress
+                  value:
+                    ok: true
+                    status:
+                      id: axp_Vv6lJOc8NlVVmDud5
+                      teamId: tea_c123fg5h8ijKL9noP
+                      campaignId: cam_A1B2C3D4E5F6G7H8I9
+                      campaignName: Insights Outreach 2024
+                      status: pending
+                      startedAt: '2020-01-01T00:00:00.000Z'
+                      progressIndex: 3
+                      progressTime: 1639138959979
+                      progressLastStepDuration: 200
+                      progressType: processing
+                      progress: 50
+                      total: 100
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Campaign or export not found
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    ok:
+                      type: boolean
+                    message:
+                      type: string
+                - type: string
+              examples:
+                exportNotFound:
+                  summary: Export not found
+                  value:
+                    ok: false
+                    message: Export with id axp_DIoSPp9YM5EwWdyP0 not found
+                campaignNotFound:
+                  summary: Campaign not found
+                  value: Campaign not found
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign that was exported
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
+    - name: exportId
+      in: path
+      required: true
+      description: The unique identifier of the export returned by the /start endpoint
+      example: axp_Vv6lJOc8NlVVmDud5
+      schema:
+        type: string
+  /campaigns/{campaignId}/export/{exportId}/email/{email}:
+    put:
+      summary: Set Email for Campaign Export Notification
+      description: Set an email address for a given export. When the export is done, an email with the
+        download URL will be sent to the address provided.
+      tags:
+      - Campaigns
+      parameters: []
+      responses:
+        '200':
+          description: Email notification set successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  status:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      id:
+                        type: string
+                      teamId:
+                        type: string
+                      campaignId:
+                        type: string
+                      campaignName:
+                        type: string
+                      status:
+                        type: string
+                        enum:
+                        - pending
+                        - done
+                        - error
+                      startedAt:
+                        type: string
+                        format: date-time
+                      progressIndex:
+                        type: integer
+                      progressTime:
+                        type: integer
+                      progressLastStepDuration:
+                        type: integer
+                      progressType:
+                        type: string
+                      progress:
+                        type: integer
+                      total:
+                        type: integer
+                      fileSize:
+                        type: integer
+                        description: Size of the export file in bytes
+                      endedAt:
+                        type: string
+                        format: date-time
+                      url:
+                        type: string
+                        description: Download URL for the CSV file
+                      email:
+                        type: string
+                        format: email
+                        description: Email address that will receive the notification
+              example:
+                ok: true
+                status:
+                  _id: axp_Vv6lJOc8NlVVmDud5
+                  id: axp_Vv6lJOc8NlVVmDud5
+                  teamId: tea_c123fg5h8ijKL9noP
+                  campaignId: cam_A1B2C3D4E5F6G7H8I9
+                  campaignName: Insights Outreach 2024
+                  status: done
+                  startedAt: '2024-07-11T09:49:15.278Z'
+                  progressIndex: 6
+                  progressTime: 1720691355497
+                  progressLastStepDuration: 0
+                  progressType: done
+                  progress: 0
+                  total: 0
+                  fileSize: 654
+                  endedAt: '2024-07-11T09:49:15.497Z'
+                  url: https://api.lemlist.com/api/files/exports/fil_axp_Vv6lJOc8NlVVmDud5_insights_outreach_2024.csv
+                  email: emily.johnson@example.com
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Campaign or export not found
+          content:
+            text/plain:
+              examples:
+                campaignNotFound:
+                  summary: Campaign not found
+                  value: Campaign not found
+                exportNotFound:
+                  summary: Export not found
+                  value: Export not found
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign that was exported
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
+    - name: exportId
+      in: path
+      required: true
+      description: The unique identifier of the export returned by the /start endpoint
+      example: axp_Vv6lJOc8NlVVmDud5
+      schema:
+        type: string
+    - name: email
+      in: path
+      required: true
+      description: The email address to send the export URL to when the export is done
+      example: emily.johnson@example.com
+      schema:
+        type: string
+        format: email
+  /campaigns/{campaignId}/export/leads:
+    get:
+      summary: Export Campaign Leads
+      description: Export leads from a campaign with filtering options. Returns leads in CSV or JSON format
+        based on their state (e.g., contacted, interested, replied, etc.).
       tags:
       - Campaigns
       parameters:
-      - name: campaignId
-        in: path
+      - name: state
+        in: query
+        required: false
+        description: 'Filter to export only the specified lead''s last states. Use ''all'' to export all
+          states. Can be a comma-separated list of states. **Global states**: imported, scanned, skipped,
+          reviewed, contacted, hooked, attracted, warmed, interested, notInterested, emailsBounced, emailsUnsubscribed,
+          failed, meetingBooked, paused. **Detailed states**: emailsSent, emailsOpened, emailsClicked,
+          emailsReplied, emailsInterested, emailsNotInterested, emailsFailed, opportunitiesDone, aircallDone,
+          aircallInterested, aircallNotInterested, apiDone, apiInterested, apiNotInterested, linkedinVisitDone,
+          linkedinVisitFailed, linkedinInviteDone, linkedinInviteAccepted, linkedinInviteFailed, linkedinSent,
+          linkedinOpened, linkedinReplied, linkedinInterested, linkedinNotInterested, linkedinSendFailed,
+          manualInterested, manualNotInterested'
+        example: all
+        schema:
+          type: string
+          enum:
+          - all
+          - imported
+          - scanned
+          - skipped
+          - reviewed
+          - contacted
+          - hooked
+          - attracted
+          - warmed
+          - interested
+          - notInterested
+          - emailsBounced
+          - emailsUnsubscribed
+          - failed
+          - meetingBooked
+          - paused
+          - emailsSent
+          - emailsOpened
+          - emailsClicked
+          - emailsReplied
+          - emailsInterested
+          - emailsNotInterested
+          - emailsFailed
+          - opportunitiesDone
+          - aircallDone
+          - aircallInterested
+          - aircallNotInterested
+          - apiDone
+          - apiInterested
+          - apiNotInterested
+          - linkedinVisitDone
+          - linkedinVisitFailed
+          - linkedinInviteDone
+          - linkedinInviteAccepted
+          - linkedinInviteFailed
+          - linkedinSent
+          - linkedinOpened
+          - linkedinReplied
+          - linkedinInterested
+          - linkedinNotInterested
+          - linkedinSendFailed
+          - manualInterested
+          - manualNotInterested
+          default: all
+      - name: format
+        in: query
+        required: false
+        description: 'Output format: ''json'' or ''csv''. Default is CSV.'
+        example: json
+        schema:
+          type: string
+          enum:
+          - json
+          - csv
+      responses:
+        '200':
+          description: Leads exported successfully
+          content:
+            text/csv:
+              example: 'emailStatus,email,firstName,lastName,picture,phone,linkedinUrl,timezone,companyName,companyDomain,icebreaker,Original
+                event page,url extension,event_link_to_send,testFieldToDelete,naissance,lastState,status,_id
+
+                ,jeremy@example.com,Jeremy,Smith,,,https://www.linkedin.com/in/jeremysmith,,example.com,,,https://www.example.com/event-registration,?name=Jeremy&email=jeremy@example.com,https://www.example.com/event-registration?name=Jeremy&email=jeremy@example.com,,,linkedinReplied,done,lea_s2cXajAHahdDKmDw8
+
+                ,frankie@example.org,Frankie,Johnson,,,https://www.linkedin.com/in/frankiejohnson,,example.org,,,https://www.example.com/event-registration,?name=Frankie&email=frankie@example.org,https://www.example.com/event-registration?name=Frankie&email=frankie@example.org,,,linkedinReplied,done,lea_E8hdds5NryDRXpGJa
+
+                ,louiza@example.io,Louiza,Brown,,,https://www.linkedin.com/in/louizabrown,,example.io,,,https://www.example.com/event-registration,?name=Louiza&email=louiza@example.io,https://www.example.com/event-registration?name=Louiza&email=louiza@example.io,,,emailsInterested,interested,lea_tLAI7Fr2gR5hVxAIc
+
+                ,benjamin@example.co,Benjamin,Williams,,,https://www.linkedin.com/in/benjaminwilliams,,example.co,,,https://www.example.com/event-registration,?name=Benjamin&email=benjamin@example.co,https://www.example.com/event-registration?name=Benjamin&email=benjamin@example.co,,,emailsUnsubscribed,unsubscribed,lea_oznzWQKKZGXrBdqXb
+
+                ,roxanne@example.net,Roxanne,Davis,,,https://www.linkedin.com/in/roxannedavis,,example.net,,,https://www.example.com/event-registration,?name=Roxanne&email=roxanne@example.net,https://www.example.com/event-registration?name=Roxanne&email=roxanne@example.net,,,emailsClicked,done,lea_M22nl3gUwvAiNl6Ks
+
+                ,thomas@example.fr,Thomas,Miller,,,https://www.linkedin.com/in/thomasmiller,,example.fr,,,https://www.example.com/event-registration,?name=Thomas&email=thomas@example.fr,https://www.example.com/event-registration?name=Thomas&email=thomas@example.fr,,,emailsSent,done,lea_z3DydraGgNBnLdV7o'
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    emailStatus:
+                      type: string
+                      enum:
+                      - deliverable
+                      - risky
+                      - undeliverable
+                    email:
+                      type: string
+                      format: email
+                    firstName:
+                      type: string
+                    lastName:
+                      type: string
+                    picture:
+                      type: string
+                    phone:
+                      type: string
+                    linkedinUrl:
+                      type: string
+                    timezone:
+                      type: string
+                    companyName:
+                      type: string
+                    companyDomain:
+                      type: string
+                    icebreaker:
+                      type: string
+                    jobTitle:
+                      type: string
+                    lastState:
+                      type: string
+                    status:
+                      type: string
+                    _id:
+                      type: string
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Campaign not found
+          content:
+            text/plain:
+              example: Campaign not found
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
+  /campaigns/reports:
+    get:
+      summary: Get Campaign Reports
+      description: Retrieve reports for one or multiple campaigns. Returns aggregated statistics and export
+        status for the specified campaigns.
+      tags:
+      - Campaigns
+      parameters:
+      - name: campaignIds
+        in: query
         required: true
+        description: Comma-separated list of campaign IDs to retrieve reports for
+        example: cam_A1B2C3D4E5F6G7H8I9,cam_B2C3D4E5F6G7H8I9J0
         schema:
           type: string
       responses:
         '200':
-          description: Campaign object
+          description: Campaign reports retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Campaign'
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                      description: Campaign ID
+                    name:
+                      type: string
+                      description: Campaign name
+                    creator:
+                      type: string
+                      description: Creator user ID and email in format 'userId|email'
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: Campaign creation date
+                    createdBy:
+                      type: string
+                      description: Name of the user who created the campaign
+                    labels:
+                      type: string
+                      description: Campaign labels
+                    totalCount:
+                      type: integer
+                      description: Total number of leads
+                    reviewedCount:
+                      type: integer
+                      description: Number of reviewed leads
+                    inSequenceLeadCount:
+                      type: integer
+                      description: Number of leads in sequence
+                    state:
+                      type: string
+                      description: Campaign state (running, paused, etc.)
+                    status:
+                      type: string
+                      description: Campaign status (draft, ended, etc.)
+                    senderNames:
+                      type: string
+                      description: Comma-separated list of sender email addresses
+                    sendersUsers:
+                      type: string
+                      description: Comma-separated list of sender names and emails
+                    reviewed:
+                      type: integer
+                      description: Number of reviewed leads
+                    emailsSent:
+                      type: integer
+                      description: Number of emails sent
+                    emailsOpened:
+                      type: integer
+                      description: Number of emails opened
+                    emailsClicked:
+                      type: integer
+                      description: Number of emails with links clicked
+                    emailsReplied:
+                      type: integer
+                      description: Number of email replies received
+                    emailsUnsubscribed:
+                      type: integer
+                      description: Number of unsubscribes via email
+                    emailsInterested:
+                      type: integer
+                      description: Number of interested responses via email
+                    linkedinSent:
+                      type: integer
+                      description: Number of LinkedIn messages sent
+                    linkedinOpened:
+                      type: integer
+                      description: Number of LinkedIn messages opened
+                    linkedinReplied:
+                      type: integer
+                      description: Number of LinkedIn replies received
+                    interested:
+                      type: integer
+                      description: Total number of interested leads
+                    notInterested:
+                      type: integer
+                      description: Total number of not interested leads
+              example:
+              - _id: cam_bSn8EORHQxbWPjHvu
+                name: Product Launch Campaign
+                creator: usr_ahfFktBBHUIxbVG5P|user@example.com
+                createdAt: '2025-10-27T07:01:04.058Z'
+                createdBy: John Smith
+                labels: ''
+                totalCount: 0
+                reviewedCount: 0
+                inSequenceLeadCount: 0
+                state: running
+                status: draft
+                senderNames: sender@example.com
+                sendersUsers: Jane Doe:sender@example.com
+                reviewed: 0
+                emailsSent: 0
+                emailsOpened: 0
+                emailsClicked: 0
+                emailsReplied: 0
+                emailsInterested: 0
+                linkedinSent: 0
+                linkedinReplied: 0
+                interested: 0
+                notInterested: 0
+              - _id: cam_lBCWmqEWI399hJZOd
+                name: Event Outreach Campaign
+                creator: usr_QHeXD2DttUIlvWT9V|admin@example.co
+                createdAt: '2022-11-09T16:41:03.538Z'
+                createdBy: Sarah Johnson
+                labels: ''
+                totalCount: 0
+                reviewedCount: 32
+                inSequenceLeadCount: 32
+                state: paused
+                status: ended
+                senderNames: ''
+                sendersUsers: ''
+                reviewed: 0
+                emailsSent: 20
+                emailsOpened: 18
+                emailsClicked: 4
+                emailsReplied: 1
+                emailsUnsubscribed: 1
+                emailsInterested: 1
+                linkedinSent: 32
+                linkedinOpened: 15
+                linkedinReplied: 15
+                interested: 0
+                notInterested: 0
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+  /v2/campaigns/{campaignId}/stats:
+    get:
+      summary: Get Campaign Stats
+      tags:
+      - Campaigns
+      description: Retrieve detailed statistics for a specific campaign, with filtering options by date,
+        user, A/B testing, and communication channels.
+      parameters:
+      - name: campaignId
+        in: path
+        required: true
+        description: Unique campaign ID
+        example: cam_123
+        schema:
+          type: string
+      - name: startDate
+        in: query
+        required: true
+        description: Start date in ISO 8601 format
+        example: '2024-01-07T22:00:00.000Z'
+        schema:
+          type: string
+          format: date-time
+      - name: endDate
+        in: query
+        required: true
+        description: End date in ISO 8601 format
+        example: '2025-07-10T21:59:59.999Z'
+        schema:
+          type: string
+          format: date-time
+      - name: sendUser
+        in: query
+        required: false
+        description: 'Filter stats by send user. Format: `sendUserId|sendUserEmail`. The sendUserId should
+          begin with ''usr_'' and the sendUserEmail should be a valid sender email. If the param is specified,
+          both sendUserId and sendUserEmail are mandatory.'
+        example: usr_OcIHizJyIeaDxicQP|email@example.com
+        schema:
+          type: string
+      - name: ABSelected
+        in: query
+        required: false
+        description: A/B version filter
+        example: A
+        schema:
+          type: string
+          enum:
+          - A
+          - B
+      - name: channels
+        in: query
+        required: false
+        description: 'JSON array of channels to include. Possible values: ''email'', ''linkedin'', ''others'''
+        example: '["others", "linkedin", "email"]'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nbLeads:
+                    type: integer
+                    description: Total number of leads in the campaign
+                  nbLeadsLaunched:
+                    type: integer
+                    description: Number of leads launched in the campaign
+                  nbLeadsReached:
+                    type: integer
+                    description: Number of leads that were successfully reached
+                  nbLeadsOpened:
+                    type: integer
+                    description: Number of leads that opened messages
+                  nbLeadsInteracted:
+                    type: integer
+                    description: Number of leads that interacted with messages (clicked, replied)
+                  nbLeadsAnswered:
+                    type: integer
+                    description: Number of leads that answered
+                  nbLeadsInterested:
+                    type: integer
+                    description: Number of leads marked as interested
+                  nbLeadsNotInterested:
+                    type: integer
+                    description: Number of leads marked as not interested
+                  nbLeadsUnsubscribed:
+                    type: integer
+                    description: Number of leads that unsubscribed
+                  nbLeadsInterrupted:
+                    type: integer
+                    description: Number of leads with interrupted sequences
+                  messagesSent:
+                    type: integer
+                    description: Total number of messages sent
+                  messagesNotSent:
+                    type: integer
+                    description: Number of messages that failed to send
+                  messagesBounced:
+                    type: integer
+                    description: Number of messages that bounced
+                  delivered:
+                    type: integer
+                    description: Number of messages successfully delivered
+                  opened:
+                    type: integer
+                    description: Number of messages opened
+                  clicked:
+                    type: integer
+                    description: Number of messages with clicks
+                  replied:
+                    type: integer
+                    description: Number of messages that received replies
+                  invitationAccepted:
+                    type: integer
+                    description: Number of LinkedIn invitations accepted
+                  meetingBooked:
+                    type: integer
+                    description: Number of meetings booked
+                  steps:
+                    type: array
+                    description: Detailed metrics for each step in the campaign
+                    items:
+                      type: object
+                      properties:
+                        index:
+                          type: integer
+                          description: Step index in the sequence
+                        sequenceId:
+                          type: string
+                          description: ID of the sequence
+                        sequenceStep:
+                          type: integer
+                          description: Step number within the sequence
+                        abTest:
+                          type: string
+                          description: A/B test variant (if applicable)
+                        taskType:
+                          type: string
+                          description: Type of task
+                          enum:
+                          - email
+                          - linkedinVisit
+                          - linkedinInvite
+                          - linkedinSend
+                          - phone
+                          - manual
+                          - conditional
+                        conditionLabel:
+                          type: string
+                          description: Label for conditional steps
+                        invited:
+                          type: integer
+                          description: Number of LinkedIn invitations sent
+                        sent:
+                          type: integer
+                          description: Number of messages sent
+                        delivered:
+                          type: integer
+                          description: Number of messages delivered
+                        opened:
+                          type: integer
+                          description: Number of messages opened
+                        clicked:
+                          type: integer
+                          description: Number of clicks from a message from this step
+                        replied:
+                          type: integer
+                          description: Number of replies
+                        notDelivered:
+                          type: integer
+                          description: Number of messages not delivered
+                        bounced:
+                          type: integer
+                          description: Number of messages bounced
+                        unsubscribed:
+                          type: integer
+                          description: Number of unsubscribes from this step
+              example:
+                nbLeads: 32
+                nbLeadsLaunched: 32
+                nbLeadsReached: 32
+                nbLeadsOpened: 31
+                nbLeadsInteracted: 4
+                nbLeadsAnswered: 16
+                nbLeadsInterested: 1
+                nbLeadsNotInterested: 0
+                nbLeadsUnsubscribed: 1
+                nbLeadsInterrupted: 1
+                messagesSent: 72
+                messagesNotSent: 0
+                messagesBounced: 0
+                delivered: 72
+                opened: 47
+                clicked: 4
+                replied: 16
+                invitationAccepted: 0
+                meetingBooked: 0
+                steps:
+                - index: 1
+                  sequenceId: seq_rH5RD3fMkkt2gM3YC
+                  sequenceStep: 0
+                  taskType: linkedinSend
+                  invited: 0
+                  sent: 32
+                  delivered: 32
+                  opened: 15
+                  clicked: 0
+                  replied: 15
+                  notDelivered: 0
+                  bounced: 0
+                  unsubscribed: 1
+                - index: 2
+                  sequenceId: seq_rH5RD3fMkkt2gM3YC
+                  sequenceStep: 1
+                  invited: 0
+                  sent: 20
+                  delivered: 20
+                  opened: 17
+                  clicked: 1
+                  replied: 1
+                  notDelivered: 0
+                  bounced: 0
+                  unsubscribed: 0
+                - index: 3
+                  sequenceId: seq_rH5RD3fMkkt2gM3YC
+                  sequenceStep: 2
+                  invited: 0
+                  sent: 20
+                  delivered: 20
+                  opened: 15
+                  clicked: 3
+                  replied: 0
+                  notDelivered: 0
+                  bounced: 0
+                  unsubscribed: 0
+        '400':
+          description: Bad request - Invalid parameters
+          content:
+            text/plain:
+              examples:
+                badTeam:
+                  summary: Bad team
+                  value: Bad team
+                missingDates:
+                  summary: Missing dates
+                  value: 'Bad params: startDate and endDate are required'
+                invalidChannels:
+                  summary: Invalid channels format
+                  value: 'Bad params: channels must be a valid array'
+                invalidChannelValues:
+                  summary: Invalid channel values
+                  value: 'Bad params: channels must be empty or contain "others", "email" or "linkedin"'
+                invalidAB:
+                  summary: Invalid A/B selection
+                  value: 'Bad params: ABSelected must be A or B'
+                invalidSendUserFormat:
+                  summary: Invalid send user format
+                  value: 'Bad param format: sendUser must be formatted as follow: <sendUserId>|<sendUserEmail>'
+                invalidSendUser:
+                  summary: Send user email mismatch
+                  value: 'Bad params: the send user email is not related to the send user id'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Campaign not found
+          content:
+            text/plain:
+              example: Campaign not found
+        '405':
+          description: Method not allowed
+          content:
+            text/plain:
+              example: Bad method
+  /v2/campaigns/stats/batch:
+    post:
+      summary: Get Batch Campaign Stats
+      tags:
+      - Campaigns
+      description: Retrieve detailed statistics for multiple campaigns in a single request, with filtering
+        options by date, user, A/B testing, and communication channels. Processes up to 100 campaigns
+        per request.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - campaignIds
+              - startDate
+              - endDate
+              properties:
+                campaignIds:
+                  type: array
+                  items:
+                    type: string
+                  minItems: 1
+                  maxItems: 100
+                  description: Array of campaign IDs to retrieve stats for
+                  example:
+                  - cam_123
+                  - cam_456
+                startDate:
+                  type: string
+                  description: Start date in ISO 8601 format
+                  example: '2024-01-07T22:00:00.000Z'
+                endDate:
+                  type: string
+                  description: End date in ISO 8601 format
+                  example: '2025-07-10T21:59:59.999Z'
+                sendUser:
+                  type: string
+                  description: 'Filter stats by send user. Format: `sendUserId|sendUserEmail`. The sendUserId
+                    should begin with ''usr_'' and the sendUserEmail should be a valid sender email. If
+                    the param is specified, both sendUserId and sendUserEmail are mandatory.'
+                  example: usr_OcIHizJyIeaDxicQP|email@example.com
+                ABSelected:
+                  type: string
+                  enum:
+                  - A
+                  - B
+                  description: A/B version filter
+                channels:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                    - email
+                    - linkedin
+                    - others
+                  description: Filter by communication channels
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    description: Array of campaign stats results
+                    items:
+                      type: object
+                      properties:
+                        campaignId:
+                          type: string
+                          description: The campaign ID
+                        nbLeads:
+                          type: integer
+                          description: Total number of leads in the campaign
+                        nbLeadsLaunched:
+                          type: integer
+                          description: Number of leads launched in the campaign
+                        nbLeadsReached:
+                          type: integer
+                          description: Number of leads that were successfully reached
+                        nbLeadsOpened:
+                          type: integer
+                          description: Number of leads that opened messages
+                        nbLeadsInteracted:
+                          type: integer
+                          description: Number of leads that interacted with messages (clicked, replied)
+                        nbLeadsAnswered:
+                          type: integer
+                          description: Number of leads that answered
+                        nbLeadsInterested:
+                          type: integer
+                          description: Number of leads marked as interested
+                        nbLeadsNotInterested:
+                          type: integer
+                          description: Number of leads marked as not interested
+                        nbLeadsUnsubscribed:
+                          type: integer
+                          description: Number of leads that unsubscribed
+                        nbLeadsInterrupted:
+                          type: integer
+                          description: Number of leads with interrupted sequences
+                        messagesSent:
+                          type: integer
+                          description: Total number of messages sent
+                        messagesNotSent:
+                          type: integer
+                          description: Number of messages that failed to send
+                        messagesBounced:
+                          type: integer
+                          description: Number of messages that bounced
+                        delivered:
+                          type: integer
+                          description: Number of messages successfully delivered
+                        opened:
+                          type: integer
+                          description: Number of messages opened
+                        clicked:
+                          type: integer
+                          description: Number of messages with clicks
+                        replied:
+                          type: integer
+                          description: Number of messages that received replies
+                        invitationAccepted:
+                          type: integer
+                          description: Number of LinkedIn invitations accepted
+                        meetingBooked:
+                          type: integer
+                          description: Number of meetings booked
+                        steps:
+                          type: array
+                          description: Detailed metrics for each step in the campaign
+                          items:
+                            type: object
+                            properties:
+                              index:
+                                type: integer
+                                description: Step index in the sequence
+                              sequenceId:
+                                type: string
+                                description: ID of the sequence
+                              sequenceStep:
+                                type: integer
+                                description: Step number within the sequence
+                              abTest:
+                                type: string
+                                description: A/B test variant (if applicable)
+                              taskType:
+                                type: string
+                                description: Type of task
+                                enum:
+                                - email
+                                - linkedinVisit
+                                - linkedinInvite
+                                - linkedinSend
+                                - phone
+                                - manual
+                                - conditional
+                              conditionLabel:
+                                type: string
+                                description: Label for conditional steps
+                              invited:
+                                type: integer
+                                description: Number of LinkedIn invitations sent
+                              sent:
+                                type: integer
+                                description: Number of messages sent
+                              delivered:
+                                type: integer
+                                description: Number of messages delivered
+                              opened:
+                                type: integer
+                                description: Number of messages opened
+                              clicked:
+                                type: integer
+                                description: Number of clicks from a message from this step
+                              replied:
+                                type: integer
+                                description: Number of replies
+                              notDelivered:
+                                type: integer
+                                description: Number of messages not delivered
+                              bounced:
+                                type: integer
+                                description: Number of messages bounced
+                              unsubscribed:
+                                type: integer
+                                description: Number of unsubscribes from this step
+                  errors:
+                    type: array
+                    description: Array of errors for campaigns that failed to retrieve stats
+                    items:
+                      type: object
+                      properties:
+                        campaignId:
+                          type: string
+                          description: The campaign ID that failed
+                        error:
+                          type: string
+                          description: Error message
+              example:
+                results:
+                - campaignId: cam_123
+                  nbLeads: 32
+                  nbLeadsLaunched: 32
+                  nbLeadsReached: 32
+                  nbLeadsOpened: 31
+                  nbLeadsInteracted: 4
+                  nbLeadsAnswered: 16
+                  nbLeadsInterested: 1
+                  nbLeadsNotInterested: 0
+                  nbLeadsUnsubscribed: 1
+                  nbLeadsInterrupted: 1
+                  messagesSent: 72
+                  messagesNotSent: 0
+                  messagesBounced: 0
+                  delivered: 72
+                  opened: 47
+                  clicked: 4
+                  replied: 16
+                  invitationAccepted: 0
+                  meetingBooked: 0
+                  steps:
+                  - index: 1
+                    sequenceId: seq_rH5RD3fMkkt2gM3YC
+                    sequenceStep: 0
+                    taskType: linkedinSend
+                    invited: 0
+                    sent: 32
+                    delivered: 32
+                    opened: 15
+                    clicked: 0
+                    replied: 15
+                    notDelivered: 0
+                    bounced: 0
+                    unsubscribed: 1
+                errors: []
+        '400':
+          description: Bad request - Invalid parameters
+          content:
+            text/plain:
+              examples:
+                emptyCampaignIds:
+                  summary: Empty campaign IDs
+                  value: 'Bad params: campaignIds must be a non-empty array'
+                tooManyCampaignIds:
+                  summary: Too many campaign IDs
+                  value: 'Bad params: campaignIds must contain at most 100 items'
+                missingDates:
+                  summary: Missing dates
+                  value: 'Bad params: startDate and endDate are required'
+                invalidChannels:
+                  summary: Invalid channels
+                  value: 'Bad params: channels must be an array of "others", "email" or "linkedin"'
+                invalidAB:
+                  summary: Invalid A/B selection
+                  value: 'Bad params: ABSelected must be A or B'
+                invalidSendUserFormat:
+                  summary: Invalid send user format
+                  value: 'Bad param format: sendUser must be formatted as follow: <sendUserId>|<sendUserEmail>'
+                invalidSendUser:
+                  summary: Send user email mismatch
+                  value: 'Bad params: the send user email is not related to the send user id'
+        '401':
+          description: Unauthorized
+        '405':
+          description: Method not allowed
+          content:
+            text/plain:
+              example: Bad method
+  /campaigns/{campaignId}/duplicate:
+    post:
+      summary: Duplicate Campaign
+      tags:
+      - Campaigns
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Custom name for the duplicated campaign. If not provided, the original
+                    name with ' Copy' suffix is used.
+            example:
+              name: My duplicated campaign
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  name:
+                    type: string
+                  sequenceId:
+                    type: string
+                  archived:
+                    type: boolean
+                  labels:
+                    type: array
+                    items:
+                      type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+                  createdBy:
+                    type: string
+                  status:
+                    type: string
+                  senders:
+                    type: array
+                    items: {}
+                  hasError:
+                    type: boolean
+                  errors:
+                    type: array
+                    items:
+                      type: string
+              example:
+                _id: cam_X1Y2Z3A4B5C6D7E8F9
+                name: My duplicated campaign
+                sequenceId: seq_A1B2C3D4E5F6G7H8I9
+                labels: []
+                createdAt: '2024-01-15T10:30:00.000Z'
+                createdBy: usr_A1B2C3D4E5F6G7H8I9
+                status: draft
+                senders: []
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Campaign not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: Campaign not found
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign to duplicate
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
+  /campaigns/{campaignId}/statutes:
+    get:
+      summary: Get Campaign Statutes
+      description: Retrieves validation statutes for a campaign, including errors that block launching
+        and warnings about daily limits, DNS issues, etc. Uses the same validation engine as the lemlist
+        UI.
+      tags:
+      - Campaigns
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: The campaign name
+                  status:
+                    type: string
+                    description: The campaign status (draft, running, paused, etc.)
+                  statutes:
+                    type: array
+                    description: List of validation statutes for the campaign
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - issue
+                          - information
+                          description: 'Statute type: ''issue'' for problems, ''information'' for non-blocking
+                            info'
+                        level:
+                          type: integer
+                          enum:
+                          - 1
+                          - 2
+                          - 3
+                          description: 'Severity: 3 = error (blocks launch), 2 = warning (actionable),
+                            1 = info'
+                        message:
+                          type: string
+                          description: Human-readable description of the issue (may contain HTML)
+                        category:
+                          type: string
+                          description: Optional category (e.g. 'limit', 'steps', 'schedule')
+              example:
+                name: Product Launch Campaign
+                status: draft
+                statutes:
+                - type: issue
+                  level: 3
+                  message: No senders configured on this campaign.
+                - type: information
+                  level: 2
+                  category: limit
+                  message: John Doe daily email sending limit has been exceeded. You can increase the
+                    limit in settings or wait 2 hours
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Campaign not found
+        '405':
+          description: Bad method
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
 components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
   schemas:
     Campaign:
       type: object
+      description: An automated outreach workflow containing sequences of steps.
       properties:
         _id:
           type: string
+          description: Unique campaign identifier
         name:
           type: string
+          description: Campaign name
+        emoji:
+          type: string
+          description: Emoji shown next to the campaign name
+        labels:
+          type: array
+          description: Categorization labels
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        createdBy:
+          type: string
+          description: Creator user ID
         status:
           type: string
-  securitySchemes:
-    BasicAuth:
-      type: http
-      scheme: basic
-      description: 'HTTP Basic Authentication. The login is always empty and the
-
-        password is your lemlist API key. Send the header as
-
-        `Authorization: Basic ` followed by the base64 encoding of
-
-        `:YOUR_API_KEY`.
-
-        '
+          description: Campaign status
+          enum:
+          - running
+          - paused
+          - draft
+          - ended
+          - archived
+          - errors
+        sequenceId:
+          type: string
+          description: Main sequence ID
+        scheduleIds:
+          type: array
+          description: Associated schedule IDs
+          items:
+            type: string
+        timezone:
+          type: string
+          description: IANA timezone the campaign schedule runs in (e.g. "Europe/Paris")
+        teamId:
+          type: string
+          description: ID of the team that owns this campaign
+        hasError:
+          type: boolean
+          description: Whether the campaign has errors
+        errors:
+          type: array
+          description: List of error messages if campaign has errors
+          items:
+            type: string
+        creator:
+          type: object
+          description: Campaign creator information
+          properties:
+            userId:
+              type: string
+              description: Creator user ID
+            userEmail:
+              type: string
+              format: email
+              description: Creator email address
+        senders:
+          type: array
+          description: Campaign senders configuration
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Sender user ID
+              email:
+                type: string
+                format: email
+                description: Sender email address
+              sendUserMailboxId:
+                type: string
+                description: Mailbox ID used for sending

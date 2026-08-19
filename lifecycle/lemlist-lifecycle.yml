@@ -1,0 +1,67 @@
+generated: '2026-08-13'
+method: searched
+source: https://developer.lemlist.com/api-reference/getting-started/version
+versioning:
+  scheme: query-parameter
+  current: v2
+  previous: v1
+  docs: https://developer.lemlist.com/api-reference/getting-started/version
+  detail: >-
+    lemlist runs two API versions behind one base URL (https://api.lemlist.com/api).
+    v1 is deprecated and lemlist's docs say plainly "do not use it". v2 is the one to
+    use — but the default for SOME endpoints is still v1, so a caller must pass
+    `version=v2` as a query parameter on those endpoints to get v2 behaviour. lemlist
+    states in the docs that it is working on a better solution. A small number of
+    routes are versioned in the path instead (/v2/campaigns/{id}/stats,
+    /v2/unsubscribes/*, /v2/enrichments/bulk).
+  parameter: version
+  parameter_in: query
+  parameter_value: v2
+deprecation:
+  policy_url: https://developer.lemlist.com/api-reference/getting-started/version
+  sunset_header: false
+  deprecation_header: false
+  detail: >-
+    v1 is declared deprecated in the docs, but lemlist publishes no dated sunset
+    schedule and the API returns no RFC 8594 Sunset or Deprecation headers. Deprecated
+    webhook event types are listed with named replacements, which is the one place
+    lemlist gives a migration path.
+  deprecated_surfaces:
+  - surface: API v1
+    replacement: API v2 (pass version=v2 where the default is still v1)
+    sunset_date: null
+  - surface: webhook event `skipped`
+    replacement: none
+  - surface: webhook event `emailsSendFailed`
+    replacement: emailsFailed
+  - surface: webhook event `opportunitiesDone`
+    replacement: annotated, or task-level webhooks
+  deprecated_operations: []
+  note: >-
+    No operation in the published OpenAPI carries a `deprecated` flag set to true.
+status_page:
+  url: https://status.lemlist.com
+  resolves_to: https://status.lempire.com/
+  http_status: 200
+  provider: lempire (lemlist's parent company) status page
+  covers: lemlist and the other lempire products
+  detail: Shows component status, uptime and incident history.
+sla:
+  url: null
+  uptime_target: null
+  note: >-
+    No published SLA or uptime commitment was found. The Enterprise tier advertises
+    "Priority Support" and a dedicated account manager but does not publish an SLA
+    document.
+changelog:
+  url: null
+  note: >-
+    No dated API changelog was found. developer.lemlist.com/changelog,
+    www.lemlist.com/changelog and www.lemlist.com/whats-new all return 404, and the
+    docs carry no release-notes page. Product feedback is collected through
+    https://lemlist.canny.io and a Typeform
+    (https://lemlist.typeform.com/to/mfVlkyGf) instead. This is the single largest
+    operational-transparency gap in an otherwise strong developer surface.
+support:
+  help_center: https://help.lemlist.com
+  feedback_form: https://lemlist.typeform.com/to/mfVlkyGf

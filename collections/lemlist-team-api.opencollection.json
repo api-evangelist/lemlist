@@ -1,0 +1,58 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "lemlist Campaigns Team API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Team",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get team information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.lemlist.com/api/team"
+          },
+          "docs": "Get team information"
+        },
+        {
+          "info": {
+            "name": "List team senders across campaigns",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.lemlist.com/api/team/senders"
+          },
+          "docs": "List team senders across campaigns"
+        },
+        {
+          "info": {
+            "name": "Get team credit balance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.lemlist.com/api/team/credits"
+          },
+          "docs": "Get team credit balance"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

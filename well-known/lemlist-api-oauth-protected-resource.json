@@ -1,0 +1,12 @@
+{
+  "resource": "https://api.lemlist.com/mcp",
+  "authorization_servers": [
+    "https://api.lemlist.com"
+  ],
+  "bearer_methods_supported": [
+    "header"
+  ],
+  "scopes_supported": [
+    "full_access"
+  ]
+}

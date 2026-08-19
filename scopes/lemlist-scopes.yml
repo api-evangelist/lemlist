@@ -1,0 +1,100 @@
+generated: '2026-08-13'
+method: probed
+source: https://app.lemlist.com/.well-known/oauth-authorization-server
+also_served_at:
+- https://app.lemlist.com/.well-known/openid-configuration
+- https://api.lemlist.com/.well-known/oauth-authorization-server
+- https://api.lemlist.com/.well-known/openid-configuration
+note: >-
+  The lemlist OpenAPI declares only basicAuth, so no scopes are derivable from the
+  spec. These scopes come from the RFC 8414 authorization-server metadata lemlist
+  serves anonymously, which is what the MCP server and the CLI authorize against.
+  lemlist publishes no prose scopes reference page; descriptions below are the
+  resource + access-level the scope name states, not provider copy.
+docs: https://developer.lemlist.com/mcp/setup
+schemes:
+- name: oauth2
+  source: https://app.lemlist.com/.well-known/oauth-authorization-server
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://app.lemlist.com/oauth/authorize
+    tokenUrl: https://app.lemlist.com/oauth/token
+    code_challenge_methods:
+    - S256
+scope_count: 14
+scopes:
+- scope: campaigns:read
+  description: Read campaigns, their sequences metadata and stats
+  flows:
+  - authorizationCode
+- scope: campaigns:write
+  description: Create, update, start, pause and duplicate campaigns
+  flows:
+  - authorizationCode
+- scope: leads:read
+  description: Read leads in campaigns and look leads up by id or email
+  flows:
+  - authorizationCode
+- scope: leads:write
+  description: Create, update, pause, resume, unsubscribe and delete leads, and set
+    lead custom variables
+  flows:
+  - authorizationCode
+- scope: sequences:read
+  description: Read campaign sequences and their steps
+  flows:
+  - authorizationCode
+- scope: sequences:write
+  description: Add, update and delete sequence steps and A/B test variants
+  flows:
+  - authorizationCode
+- scope: team:read
+  description: Read team information, senders and remaining credits
+  flows:
+  - authorizationCode
+- scope: webhooks:read
+  description: List webhook subscriptions
+  flows:
+  - authorizationCode
+- scope: webhooks:write
+  description: Create and delete webhook subscriptions
+  flows:
+  - authorizationCode
+- scope: unsubscribes:read
+  description: Read unsubscribed contacts and variables
+  flows:
+  - authorizationCode
+- scope: unsubscribes:write
+  description: Unsubscribe and re-subscribe contacts and variables
+  flows:
+  - authorizationCode
+- scope: full_access
+  description: Full access to the lemlist account. This is the only scope the MCP
+    protected-resource metadata advertises as supported, so an MCP client authorizing
+    against https://app.lemlist.com/mcp requests full_access rather than the granular
+    set.
+  flows:
+  - authorizationCode
+- scope: openid
+  description: OIDC — issue an id_token for the authenticated user
+  flows:
+  - authorizationCode
+- scope: email
+  description: OIDC — include the user's email claim
+  flows:
+  - authorizationCode
+protected_resources:
+- resource: https://app.lemlist.com/mcp
+  authorization_servers:
+  - https://app.lemlist.com
+  bearer_methods_supported:
+  - header
+  scopes_supported:
+  - full_access
+  source: https://app.lemlist.com/.well-known/oauth-protected-resource
+gap:
+  detail: >-
+    lemlist publishes 11 granular resource scopes plus full_access, but the MCP
+    protected-resource metadata lists only full_access as supported. An agent
+    connecting over MCP therefore cannot request least privilege today; the granular
+    scopes are only reachable through a direct OAuth client.

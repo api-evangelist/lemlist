@@ -1,0 +1,40 @@
+{
+  "issuer": "https://api.lemlist.com",
+  "authorization_endpoint": "https://api.lemlist.com/oauth/authorize",
+  "token_endpoint": "https://api.lemlist.com/oauth/token",
+  "revocation_endpoint": "https://api.lemlist.com/oauth/revoke",
+  "jwks_uri": "https://api.lemlist.com/.well-known/jwks.json",
+  "registration_endpoint": "https://api.lemlist.com/oauth/register",
+  "scopes_supported": [
+    "campaigns:read",
+    "campaigns:write",
+    "leads:read",
+    "leads:write",
+    "sequences:read",
+    "sequences:write",
+    "team:read",
+    "webhooks:read",
+    "webhooks:write",
+    "unsubscribes:read",
+    "unsubscribes:write",
+    "full_access",
+    "openid",
+    "email"
+  ],
+  "response_types_supported": [
+    "code"
+  ],
+  "grant_types_supported": [
+    "authorization_code",
+    "refresh_token"
+  ],
+  "token_endpoint_auth_methods_supported": [
+    "none",
+    "client_secret_post"
+  ],
+  "code_challenge_methods_supported": [
+    "S256"
+  ],
+  "resource_indicators_supported": false,
+  "service_documentation": "https://developer.lemlist.com"
+}

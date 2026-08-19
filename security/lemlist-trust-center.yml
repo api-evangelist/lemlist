@@ -1,0 +1,35 @@
+generated: '2026-08-13'
+method: searched
+probe: true
+url: https://trust.lemlist.com/
+platform: Bastion
+certifications:
+- SOC 2 Type 2
+evidence:
+- source: https://trust.lemlist.com/
+  http_status: 200
+  kind: trust-center
+  keywords:
+  - trust center
+  - lemlist
+  - SOC2 type 2
+  detail: >-
+    Bastion-hosted Trust Center branded "Lemlist". The page is client-rendered, so
+    only the certification names present in the server-delivered HTML are recorded —
+    SOC 2 Type 2 is the one named there. Additional documents may sit behind the
+    portal's request/NDA flow.
+related:
+- kind: privacy-policy
+  url: https://www.lemlist.com/legal/privacy-policy
+  http_status: 200
+- kind: dpa
+  url: https://www.lemlist.com/legal/dpa
+- kind: sending-policy
+  url: https://www.lemlist.com/legal/sending-policy
+- kind: terms
+  url: https://www.lemlist.com/legal/terms
+  http_status: 200
+- kind: vulnerability-disclosure
+  url: https://hackerone.com/lemlist
+gaps:
+- item: no ISO 27001, PCI DSS, HIPAA or FedRAMP claim was found in the delivered page

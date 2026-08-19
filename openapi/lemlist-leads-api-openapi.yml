@@ -1,0 +1,1660 @@
+openapi: 3.0.0
+info:
+  title: lemlist Leads API
+  version: 1.0.0
+  description: The Leads operations of the lemlist API, split by tag from the OpenAPI lemlist publishes
+    at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content is carried verbatim
+    from the provider spec.
+servers:
+- url: https://api.lemlist.com/api
+security:
+- basicAuth: []
+tags:
+- name: Leads
+paths:
+  /leads:
+    get:
+      summary: Get Lead by Email or ID
+      tags:
+      - Leads
+      description: Retrieve a lead using either their email address or lead ID
+      parameters:
+      - name: id
+        in: query
+        required: false
+        description: The lead ID. You should use at least one of 'email' or 'id'.
+        example: lea_8xJSc7sV7ggpiVnXe
+        schema:
+          type: string
+      - name: email
+        in: query
+        required: false
+        description: The lead email. You should use at least one of 'email' or 'id'.
+        example: john.doe@domain.com
+        schema:
+          type: string
+      - name: version
+        in: query
+        required: false
+        description: API version. v2 is the only option
+        example: v2
+        schema:
+          type: string
+          enum:
+          - v2
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    format: email
+                    description: Email address of the lead
+                  firstName:
+                    type: string
+                    description: First name of the lead
+                  lastName:
+                    type: string
+                    description: Last name of the lead
+                  companyName:
+                    type: string
+                    description: Company name
+                  jobTitle:
+                    type: string
+                    description: Job title
+                  companyDomain:
+                    type: string
+                    description: Company domain
+                  _id:
+                    type: string
+                    description: Unique identifier for the lead
+                  isPaused:
+                    type: boolean
+                    description: Indicates if the lead is paused
+                  campaignId:
+                    type: string
+                    description: ID of the campaign the lead is associated with
+                  contactId:
+                    type: string
+                    description: Associated contact ID (if any)
+                  emailStatus:
+                    type: string
+                    description: Email status of the lead
+              example:
+                firstName: John
+                lastName: Doe
+                companyName: lemlist
+                jobTitle: GTM Engineer
+                companyDomain: example.com
+                email: support@lemlist.com
+                _id: lea_fiDpiGV585wy3Oii2
+                isPaused: false
+                campaignId: cam_bSn8EORHQxbWPjHvu
+                contactId: ctc_xW8Ou6C03Csv8vatp
+                emailStatus: deliverable
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Lead not found
+          content:
+            text/plain:
+              example: Lead not found
+  /leads/{email}:
+    get:
+      summary: Get Lead by Email
+      tags:
+      - Leads
+      parameters:
+      - name: version
+        in: query
+        required: false
+        description: API version. v2 is the only option
+        example: v2
+        schema:
+          type: string
+          default: v2
+          enum:
+          - v2
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                      description: Unique lead identifier
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      description: Last update timestamp
+                    isPaused:
+                      type: boolean
+                      description: Whether the lead is paused
+                    state:
+                      type: string
+                      description: Current state of the lead (e.g., scanned, contacted)
+                    status:
+                      type: string
+                      description: Current status (e.g., review, done)
+                    personalized:
+                      type: boolean
+                      description: Whether the lead has personalized content
+                    source:
+                      type: string
+                      description: Source of the lead (e.g., api, csv)
+                    variables:
+                      type: object
+                      description: Custom variables associated with the lead
+                      additionalProperties: true
+                    contactId:
+                      type: string
+                      description: Associated contact ID
+                    enrichment:
+                      type: object
+                      description: Enrichment data
+                      properties:
+                        emailStatus:
+                          type: string
+                          description: Email verification status
+                    campaign:
+                      type: object
+                      description: Campaign information
+                      properties:
+                        id:
+                          type: string
+                          description: Campaign ID
+                        name:
+                          type: string
+                          description: Campaign name
+                        status:
+                          type: string
+                          description: Campaign status
+                    sendingUser:
+                      type: object
+                      description: Sending user information
+                      additionalProperties: true
+              example:
+              - _id: lea_fiDpiGV585wy3Oii2
+                updatedAt: '2025-10-28T00:40:39.230Z'
+                isPaused: false
+                state: scanned
+                status: review
+                personalized: false
+                source: api
+                variables:
+                  firstName: John
+                  lastName: Doe
+                  companyName: lemlist
+                  jobTitle: GTM Engineer
+                  companyDomain: example.com
+                  email: support@lemlist.com
+                contactId: ctc_xW8Ou6C03Csv8vatp
+                enrichment:
+                  emailStatus: deliverable
+                campaign:
+                  id: cam_bSn8EORHQxbWPjHvu
+                  name: NEW TO DELETE
+                  status: draft
+                sendingUser: {}
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Lead not found
+          content:
+            text/plain:
+              example: Lead not found
+    parameters:
+    - name: email
+      in: path
+      required: true
+      description: The email address of the lead
+      example: john.doe@domain.com
+      schema:
+        type: string
+        format: email
+  /campaigns/{campaignId}/leads/:
+    get:
+      summary: Get Campaign Leads
+      tags:
+      - Leads
+      parameters:
+      - name: state
+        in: query
+        required: false
+        description: Filter leads by state (e.g., scanned, contacted, interested, notInterested, etc.)
+        example: scanned
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        description: 'Maximum number of leads to return. Default: 100, Max: 500'
+        example: 100
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 100
+      responses:
+        '200':
+          description: List of leads in the campaign
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                      description: Unique lead identifier
+                    contactId:
+                      type: string
+                      description: Associated contact identifier
+                    state:
+                      type: string
+                      description: Current lead state
+              example:
+              - _id: lea_A1B2C3D4E5F6G7H8I9
+                contactId: con_Z9Y8X7W6V5U4T3S2R1
+                state: scanned
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
+    post:
+      summary: Create Lead in Campaign
+      tags:
+      - Leads
+      parameters:
+      - name: deduplicate
+        in: query
+        required: false
+        description: 'Search email address in other campaigns. Will not insert the lead if email address
+          already exists. Default: false'
+        example: 'true'
+        schema:
+          type: boolean
+      - name: linkedinEnrichment
+        in: query
+        required: false
+        description: 'Run the LinkedIn enrichment. Default: false'
+        example: 'true'
+        schema:
+          type: boolean
+      - name: findEmail
+        in: query
+        required: false
+        description: 'Find verified email. Default: false'
+        example: 'true'
+        schema:
+          type: boolean
+      - name: verifyEmail
+        in: query
+        required: false
+        description: 'Verify existing email (debounce). Default: false'
+        example: 'true'
+        schema:
+          type: boolean
+      - name: findPhone
+        in: query
+        required: false
+        description: 'Find phone number. Default: false'
+        example: 'true'
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: Email of the lead
+                firstName:
+                  type: string
+                  description: First name of the lead
+                lastName:
+                  type: string
+                  description: Last name of the lead
+                companyName:
+                  type: string
+                  description: Company name
+                jobTitle:
+                  type: string
+                  description: Job title
+                linkedinUrl:
+                  type: string
+                  description: LinkedIn profile URL
+                picture:
+                  type: string
+                  description: Profile picture URL
+                phone:
+                  type: string
+                  description: Phone number
+                companyDomain:
+                  type: string
+                  description: Company domain
+                icebreaker:
+                  type: string
+                  description: Personalized icebreaker message
+                timezone:
+                  type: string
+                  description: Lead's timezone in IANA format (e.g., Europe/Paris, America/New_York)
+                contactOwner:
+                  type: string
+                  description: Contact owner (user ID or user login email)
+              additionalProperties:
+                type: string
+            example:
+              email: support@lemlist.com
+              firstName: John
+              lastName: Doe
+              companyName: lemlist
+              jobTitle: Developer
+              linkedinUrl: https://www.linkedin.com/in/johndoe
+              phone: +33 123456789
+              timezone: Europe/Paris
+              contactOwner: login_email@lemlist.com
+              companySize: 50-100
+              customVariable1: any value you want
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  campaignId:
+                    type: string
+                  campaignName:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  firstName:
+                    type: string
+                  lastName:
+                    type: string
+                  companyName:
+                    type: string
+                  jobTitle:
+                    type: string
+                  companyDomain:
+                    type: string
+                  _id:
+                    type: string
+                  isPaused:
+                    type: boolean
+                    description: Whether the lead is paused in the campaign
+                  contactId:
+                    type: string
+                    description: Associated contact ID
+              example:
+                campaignId: cam_bSn8EORHQxbWPjHvu
+                campaignName: NEW TO DELETE
+                firstName: John
+                lastName: Doe
+                companyName: lemlist
+                jobTitle: GTM Engineer
+                companyDomain: example.com
+                email: support@lemlist.com
+                _id: lea_fiDpiGV585wy3Oii2
+                isPaused: false
+                contactId: ctc_xW8Ou6C03Csv8vatp
+        '400':
+          description: 'Possible errors: No API key provided / Bad team'
+          content:
+            text/plain:
+              example: No API key provided
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '403':
+          description: User linked to this API key is blocked
+          content:
+            text/plain:
+              example: User linked to this API key is blocked
+        '404':
+          description: 'Possible errors: No user found for this API key / Campaign not found'
+          content:
+            text/plain:
+              example: No user found for this API key
+    delete:
+      summary: Unsubscribe Lead from Campaign
+      tags:
+      - Leads
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                  firstName:
+                    type: string
+                  lastName:
+                    type: string
+                  _id:
+                    type: string
+                  isPaused:
+                    type: boolean
+                  campaignId:
+                    type: string
+              example:
+                email: john.doe@domain.com
+                firstName: John
+                lastName: Doe
+                _id: lea_8xJSc7sV7ggpiVnXe
+                isPaused: false
+                campaignId: cam_A1B2C3D4E5F6G7H8I9
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Lead not found
+          content:
+            text/plain:
+              example: Lead not found
+      parameters: []
+  /campaigns/{campaignId}/leads/{leadId}:
+    patch:
+      summary: Update Lead in a Campaign
+      tags:
+      - Leads
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                companyName:
+                  type: string
+                jobTitle:
+                  type: string
+                preferredContactMethod:
+                  type: string
+                  description: Preferred contact method (email, linkedIn)
+            example:
+              preferredContactMethod: email
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  campaignId:
+                    type: string
+                  campaignName:
+                    type: string
+                  leadUrl:
+                    type: string
+                    description: URL to access the lead
+                  email:
+                    type: string
+                    format: email
+                  firstName:
+                    type: string
+                  lastName:
+                    type: string
+                  companyName:
+                    type: string
+                  jobTitle:
+                    type: string
+                  companyDomain:
+                    type: string
+                  preferredContactMethod:
+                    type: string
+                  _id:
+                    type: string
+                  isPaused:
+                    type: boolean
+                    description: Whether the lead is paused in the campaign
+                  contactId:
+                    type: string
+                    description: Associated contact ID
+                  emailStatus:
+                    type: string
+                    description: Email verification status
+              example:
+                campaignId: cam_bSn8EORHQxbWPjHvu
+                campaignName: NEW TO DELETE
+                leadUrl: https://api.lemlist.com/api/leads/alex.doe%40example.com
+                firstName: John
+                lastName: Doe
+                companyName: Acme Inc
+                jobTitle: Growth Engineer
+                companyDomain: example.com
+                email: support@lemlist.com
+                preferredContactMethod: email
+                _id: lea_fiDpiGV585wy3Oii2
+                isPaused: false
+                contactId: ctc_xW8Ou6C03Csv8vatp
+                emailStatus: deliverable
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Lead not found
+          content:
+            text/plain:
+              example: Lead not found
+        '500':
+          description: Lead in graveyard
+      parameters: []
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
+    - name: leadId
+      in: path
+      required: true
+      description: The unique identifier of the lead
+      example: lea_8xJSc7sV7ggpiVnXe
+      schema:
+        type: string
+    delete:
+      summary: Delete or Unsubscribe Lead
+      tags:
+      - Leads
+      parameters:
+      - name: action
+        in: query
+        required: false
+        description: Use 'remove' to force delete. Otherwise it will just unsubscribe the lead from the
+          campaign.
+        example: remove
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  firstName:
+                    type: string
+                  lastName:
+                    type: string
+                  companyName:
+                    type: string
+                  jobTitle:
+                    type: string
+                  companyDomain:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  preferredContactMethod:
+                    type: string
+                  industry:
+                    type: string
+                  Company name:
+                    type: string
+                  _id:
+                    type: string
+                  isPaused:
+                    type: boolean
+                  campaignId:
+                    type: string
+                  contactId:
+                    type: string
+                  emailStatus:
+                    type: string
+                additionalProperties:
+                  type: string
+              example:
+                firstName: John
+                lastName: Doe
+                companyName: Acme Inc
+                jobTitle: Growth Engineer
+                companyDomain: example.com
+                email: support@lemlist.com
+                preferredContactMethod: email
+                industry: Technology
+                Company name: John Doe
+                _id: lea_fiDpiGV585wy3Oii2
+                isPaused: false
+                campaignId: cam_bSn8EORHQxbWPjHvu
+                contactId: ctc_xW8Ou6C03Csv8vatp
+                emailStatus: deliverable
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Lead not found
+          content:
+            text/plain:
+              example: Lead not found
+  /campaigns/{campaignId}/leads/{email}:
+    delete:
+      summary: Unsubscribe Lead from Campaign
+      tags:
+      - Leads
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    format: email
+                  _id:
+                    type: string
+                  isPaused:
+                    type: boolean
+                  campaignId:
+                    type: string
+                  contactId:
+                    type: string
+              example:
+                email: alex.doe@example.com
+                _id: lea_8RmJYElD9S5Jp2kyv
+                isPaused: false
+                campaignId: cam_8qJ1qAE5tekBYkJac
+                contactId: ctc_joap8q9YGlV45Ypc6
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Lead not found
+          content:
+            text/plain:
+              example: Lead not found
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
+    - name: email
+      in: path
+      required: true
+      description: The email of the lead
+      example: alex.doe@example.com
+      schema:
+        type: string
+  /leads/start/{leadId}:
+    post:
+      summary: Resume Paused Lead
+      tags:
+      - Leads
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    firstName:
+                      type: string
+                    lastName:
+                      type: string
+                    companyName:
+                      type: string
+                    jobTitle:
+                      type: string
+                    companyDomain:
+                      type: string
+                    email:
+                      type: string
+                      format: email
+                    preferredContactMethod:
+                      type: string
+                    industry:
+                      type: string
+                    Company name:
+                      type: string
+                    _id:
+                      type: string
+                    isPaused:
+                      type: boolean
+                    campaignId:
+                      type: string
+                    contactId:
+                      type: string
+                    emailStatus:
+                      type: string
+                  additionalProperties:
+                    type: string
+              example:
+              - firstName: John
+                lastName: Doe
+                companyName: Acme Inc
+                jobTitle: Growth Engineer
+                companyDomain: example.com
+                email: support@lemlist.com
+                preferredContactMethod: email
+                industry: Technology
+                Company name: John Doe
+                _id: lea_fiDpiGV585wy3Oii2
+                isPaused: false
+                campaignId: cam_bSn8EORHQxbWPjHvu
+                contactId: ctc_xW8Ou6C03Csv8vatp
+                emailStatus: deliverable
+        '401':
+          description: Unauthorized
+        '404':
+          description: Lead not found
+          content:
+            text/plain:
+              example: Lead not found
+        '405':
+          description: Method not allowed
+      parameters: []
+    parameters:
+    - name: leadId
+      in: path
+      required: true
+      description: The unique identifier of the lead
+      example: lea_8xJSc7sV7ggpiVnXe
+      schema:
+        type: string
+  /leads/pause/{leadId}:
+    post:
+      summary: Pause Lead
+      tags:
+      - Leads
+      parameters:
+      - name: campaignId
+        in: query
+        required: false
+        description: ID of the campaign. If provided, pauses the lead only in that campaign.
+        example: cam_A1B2C3D4E5F6G7H8I9
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    firstName:
+                      type: string
+                    lastName:
+                      type: string
+                    companyName:
+                      type: string
+                    jobTitle:
+                      type: string
+                    companyDomain:
+                      type: string
+                    email:
+                      type: string
+                      format: email
+                    preferredContactMethod:
+                      type: string
+                    industry:
+                      type: string
+                    Company name:
+                      type: string
+                    _id:
+                      type: string
+                    isPaused:
+                      type: boolean
+                    campaignId:
+                      type: string
+                    contactId:
+                      type: string
+                    emailStatus:
+                      type: string
+                  additionalProperties:
+                    type: string
+              example:
+              - firstName: John
+                lastName: Doe
+                companyName: Acme Inc
+                jobTitle: Growth Engineer
+                companyDomain: example.com
+                email: support@lemlist.com
+                preferredContactMethod: email
+                industry: Technology
+                Company name: John Doe
+                _id: lea_fiDpiGV585wy3Oii2
+                isPaused: true
+                campaignId: cam_bSn8EORHQxbWPjHvu
+                contactId: ctc_xW8Ou6C03Csv8vatp
+                emailStatus: deliverable
+        '401':
+          description: Unauthorized
+        '404':
+          description: Lead not found
+          content:
+            text/plain:
+              example: Lead not found
+        '405':
+          description: Method not allowed
+    parameters:
+    - name: leadId
+      in: path
+      required: true
+      description: The unique identifier of the lead
+      example: lea_8xJSc7sV7ggpiVnXe
+      schema:
+        type: string
+  /leads/review/{leadId}:
+    post:
+      summary: Launch Lead
+      description: 'Use this endpoint to launch a lead that is waiting for review, without having to enable
+        campaign-wide auto-review.
+
+
+        You''re auto launching this specific lead, while still enforcing every other launch guard: the
+        campaign must have no step errors, any AI variables required by the campaign must be valid for
+        the lead, and a sender must be available.
+
+
+        No need to enable autolaunch in the campaign.
+
+
+        This endpoint requires an `emailPro` plan or higher.'
+      tags:
+      - Leads
+      responses:
+        '200':
+          description: Lead launched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+              example:
+                ok: true
+        '400':
+          description: 'The lead cannot be launched. Possible `error` codes: `CAMPAIGN_LEAD_REVIEW_LEAD_PAUSED`
+            (lead is paused), `CAMPAIGN_LEAD_REVIEW_LEAD_ALREADY_LAUNCHED` (lead is already launched),
+            `CAMPAIGN_LEAD_REVIEW_LEAD_AI_VARIABLE_INVALID` (missing or invalid AI variables required
+            by the campaign), `CAMPAIGN_LEAD_REVIEW_LEAD_NO_SENDER_AVAILABLE` (no sender available), `CAMPAIGN_LEAD_REVIEW_CAMPAIGN_STEP_ERRORS`
+            (campaign has step errors).'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+              example:
+                error: CAMPAIGN_LEAD_REVIEW_LEAD_ALREADY_LAUNCHED
+                message: Lead is already launched
+        '401':
+          description: Unauthorized
+        '404':
+          description: 'Lead or campaign not found. Possible `error` codes: `CAMPAIGN_LEAD_REVIEW_LEAD_NOT_FOUND`,
+            `CAMPAIGN_LEAD_REVIEW_CAMPAIGN_NOT_FOUND`.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+              example:
+                error: CAMPAIGN_LEAD_REVIEW_LEAD_NOT_FOUND
+                message: Lead not found
+        '405':
+          description: Method not allowed
+    parameters:
+    - name: leadId
+      in: path
+      required: true
+      description: The unique identifier of the lead to launch
+      example: lea_8xJSc7sV7ggpiVnXe
+      schema:
+        type: string
+  /leads/interested/{leadIdOrEmail}:
+    post:
+      summary: Mark Lead as Interested
+      tags:
+      - Leads
+      description: Mark a lead as interested across all campaigns
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    firstName:
+                      type: string
+                    lastName:
+                      type: string
+                    companyName:
+                      type: string
+                    jobTitle:
+                      type: string
+                    companyDomain:
+                      type: string
+                    email:
+                      type: string
+                      format: email
+                    preferredContactMethod:
+                      type: string
+                    industry:
+                      type: string
+                    Company name:
+                      type: string
+                    _id:
+                      type: string
+                    isPaused:
+                      type: boolean
+                    campaignId:
+                      type: string
+                    contactId:
+                      type: string
+                    emailStatus:
+                      type: string
+                  additionalProperties:
+                    type: string
+              example:
+              - firstName: John
+                lastName: Doe
+                companyName: Acme Inc
+                jobTitle: Growth Engineer
+                companyDomain: example.com
+                email: support@lemlist.com
+                preferredContactMethod: email
+                industry: Technology
+                Company name: John Doe
+                _id: lea_fiDpiGV585wy3Oii2
+                isPaused: false
+                campaignId: cam_bSn8EORHQxbWPjHvu
+                contactId: ctc_xW8Ou6C03Csv8vatp
+                emailStatus: deliverable
+        '401':
+          description: Unauthorized
+        '404':
+          description: Lead not found
+          content:
+            text/plain:
+              example: Lead not found
+        '405':
+          description: Method not allowed
+      parameters: []
+    parameters:
+    - name: leadIdOrEmail
+      in: path
+      required: true
+      description: The unique identifier or email of the lead
+      example: lea_8xJSc7sV7ggpiVnXe
+      schema:
+        type: string
+  /leads/notinterested/{leadIdOrEmail}:
+    post:
+      summary: Mark Lead as Not Interested
+      tags:
+      - Leads
+      description: Mark a lead as not interested across all campaigns
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    firstName:
+                      type: string
+                    lastName:
+                      type: string
+                    companyName:
+                      type: string
+                    jobTitle:
+                      type: string
+                    companyDomain:
+                      type: string
+                    email:
+                      type: string
+                      format: email
+                    preferredContactMethod:
+                      type: string
+                    industry:
+                      type: string
+                    Company name:
+                      type: string
+                    _id:
+                      type: string
+                    isPaused:
+                      type: boolean
+                    campaignId:
+                      type: string
+                    contactId:
+                      type: string
+                    emailStatus:
+                      type: string
+                  additionalProperties:
+                    type: string
+              example:
+              - firstName: John
+                lastName: Doe
+                companyName: Acme Inc
+                jobTitle: Growth Engineer
+                companyDomain: example.com
+                email: support@lemlist.com
+                preferredContactMethod: email
+                industry: Technology
+                Company name: John Doe
+                _id: lea_fiDpiGV585wy3Oii2
+                isPaused: false
+                campaignId: cam_bSn8EORHQxbWPjHvu
+                contactId: ctc_xW8Ou6C03Csv8vatp
+                emailStatus: deliverable
+        '401':
+          description: Unauthorized
+        '404':
+          description: Lead not found
+          content:
+            text/plain:
+              example: Lead not found
+        '405':
+          description: Method not allowed
+      parameters: []
+    parameters:
+    - name: leadIdOrEmail
+      in: path
+      required: true
+      description: The unique identifier or email of the lead
+      example: lea_8xJSc7sV7ggpiVnXe
+      schema:
+        type: string
+  /campaigns/{campaignId}/leads/{leadIdOrEmail}/interested:
+    post:
+      summary: Mark Lead as Interested in Campaign
+      tags:
+      - Leads
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  firstName:
+                    type: string
+                  lastName:
+                    type: string
+                  companyName:
+                    type: string
+                  jobTitle:
+                    type: string
+                  companyDomain:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  preferredContactMethod:
+                    type: string
+                  industry:
+                    type: string
+                  Company name:
+                    type: string
+                  _id:
+                    type: string
+                  isPaused:
+                    type: boolean
+                  campaignId:
+                    type: string
+                  contactId:
+                    type: string
+                  emailStatus:
+                    type: string
+                additionalProperties:
+                  type: string
+              example:
+                firstName: John
+                lastName: Doe
+                companyName: Acme Inc
+                jobTitle: Growth Engineer
+                companyDomain: example.com
+                email: support@lemlist.com
+                preferredContactMethod: email
+                industry: Technology
+                Company name: John Doe
+                _id: lea_fiDpiGV585wy3Oii2
+                isPaused: false
+                campaignId: cam_bSn8EORHQxbWPjHvu
+                contactId: ctc_xW8Ou6C03Csv8vatp
+                emailStatus: deliverable
+        '401':
+          description: Unauthorized
+        '404':
+          description: 'Possible errors: Campaign not found / Lead not found'
+          content:
+            text/plain:
+              example: Campaign not found
+        '405':
+          description: Method not allowed
+      parameters: []
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
+    - name: leadIdOrEmail
+      in: path
+      required: true
+      description: The unique identifier or email of the lead
+      example: lea_8xJSc7sV7ggpiVnXe
+      schema:
+        type: string
+  /campaigns/{campaignId}/leads/{leadIdOrEmail}/notinterested:
+    post:
+      summary: Mark Lead as Not Interested in Campaign
+      tags:
+      - Leads
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  firstName:
+                    type: string
+                  lastName:
+                    type: string
+                  companyName:
+                    type: string
+                  jobTitle:
+                    type: string
+                  companyDomain:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  preferredContactMethod:
+                    type: string
+                  industry:
+                    type: string
+                  Company name:
+                    type: string
+                  _id:
+                    type: string
+                  isPaused:
+                    type: boolean
+                  campaignId:
+                    type: string
+                  contactId:
+                    type: string
+                  emailStatus:
+                    type: string
+                additionalProperties:
+                  type: string
+              example:
+                firstName: John
+                lastName: Doe
+                companyName: Acme Inc
+                jobTitle: Growth Engineer
+                companyDomain: example.com
+                email: support@lemlist.com
+                preferredContactMethod: email
+                industry: Technology
+                Company name: John Doe
+                _id: lea_fiDpiGV585wy3Oii2
+                isPaused: false
+                campaignId: cam_bSn8EORHQxbWPjHvu
+                contactId: ctc_xW8Ou6C03Csv8vatp
+                emailStatus: deliverable
+        '401':
+          description: Unauthorized
+        '404':
+          description: 'Possible errors: Campaign not found / Lead not found'
+          content:
+            text/plain:
+              example: Campaign not found
+        '405':
+          description: Method not allowed
+      parameters: []
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
+    - name: leadIdOrEmail
+      in: path
+      required: true
+      description: The unique identifier or email of the lead
+      example: lea_8xJSc7sV7ggpiVnXe
+      schema:
+        type: string
+  /leads/{leadId}/variables:
+    post:
+      summary: Add Custom Variables on Leads
+      tags:
+      - Leads
+      description: Add custom variables to a lead and sets values for that specific lead.
+      parameters:
+      - name: customField1
+        in: query
+        required: false
+        description: Example custom variable
+        example: Lemlist
+        schema:
+          type: string
+      - name: customField2
+        in: query
+        required: false
+        description: Example custom variable
+        example: Will Rule
+        schema:
+          type: string
+      - name: customField3
+        in: query
+        required: false
+        description: Example custom variable
+        example: The World
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+              example:
+                ok: true
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Variable not found
+        '401':
+          description: Unauthorized
+        '404':
+          description: Lead not found
+          content:
+            text/plain:
+              example: Lead not found
+    parameters:
+    - name: leadId
+      in: path
+      required: true
+      description: The unique identifier of the lead
+      example: lea_8xJSc7sV7ggpiVnXe
+      schema:
+        type: string
+    patch:
+      summary: Update Values of Custom Variables of a Lead
+      tags:
+      - Leads
+      description: Update values of custom variables for a lead.
+      parameters:
+      - name: customField1
+        in: query
+        required: false
+        description: Example custom variable
+        example: Lemlist
+        schema:
+          type: string
+      - name: customField2
+        in: query
+        required: false
+        description: Example custom variable
+        example: Will Rule
+        schema:
+          type: string
+      - name: customField3
+        in: query
+        required: false
+        description: Example custom variable
+        example: The World
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+              example:
+                ok: true
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Lead not found
+          content:
+            text/plain:
+              example: Lead not found
+    delete:
+      summary: Erase Values of Custom Variables on a Lead
+      tags:
+      - Leads
+      description: Erases the values of custom variables on a lead.
+      parameters:
+      - name: customField1
+        in: query
+        required: false
+        description: Example custom variable
+        schema:
+          type: string
+      - name: customField2
+        in: query
+        required: false
+        description: Example custom variable
+        schema:
+          type: string
+      - name: customField3
+        in: query
+        required: false
+        description: Example custom variable
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+              example:
+                ok: true
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Lead not found
+          content:
+            text/plain:
+              example: Lead not found
+  /leads/audio:
+    post:
+      summary: Upload Audio for Voice Message Step
+      tags:
+      - Leads
+      parameters:
+      - name: leadId
+        in: query
+        required: true
+        description: The unique identifier of the lead
+        example: lea_8xJSc7sV7ggpiVnXe
+        schema:
+          type: string
+      - name: stepId
+        in: query
+        required: true
+        description: The unique identifier of the voice message step
+        example: stp_xflJG8ZxUjc9vb2ce
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Audio file to upload
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  status:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                      teamId:
+                        type: string
+                      campaignId:
+                        type: string
+                      leadId:
+                        type: string
+                      fileName:
+                        type: string
+              example:
+                ok: true
+                status:
+                  url: https://example.com/files/fil_CD7M60ym74aR0e57f.m4a
+                  teamId: tea_Sh11ph1qHfjSpLKGT
+                  campaignId: cam_R9mwDo0iZRwNEHUcW
+                  leadId: lea_jZKIJ1Jn1SaMsP83s
+                  fileName: file2
+        '400':
+          description: 'Possible errors: Bad team / Invalid audio file'
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+  /crm/filters:
+    get:
+      summary: Get CRM Filters
+      tags:
+      - Leads
+      parameters:
+      - name: crm
+        in: query
+        required: true
+        description: CRM name (e.g., hubspot, salesforce, pipedrive)
+        example: hubspot
+        schema:
+          type: string
+      - name: userId
+        in: query
+        required: true
+        description: Connected user ID
+        example: usr_FU6yAd3UdBFel0UDy
+        schema:
+          type: string
+      - name: type
+        in: query
+        required: false
+        description: 'Filter type for Salesforce. Can be: lead, contact, or report.'
+        example: lead
+        schema:
+          type: string
+          enum:
+          - lead
+          - contact
+          - report
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CrmFilter'
+              example:
+              - id: 16
+                name: Filter 1
+              - id: 17
+                name: Filter 2
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+  /campaigns/{campaignId}/leads/import:
+    post:
+      summary: Import Leads from CRM
+      tags:
+      - Leads
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                crm:
+                  type: string
+                  description: CRM name
+                userId:
+                  type: string
+                  description: User ID with CRM connection
+                filterId:
+                  type: string
+                  description: Filter ID from the CRM
+                filterType:
+                  type: string
+                  description: Type of filter (for Salesforce)
+                deduplicate:
+                  type: boolean
+                  description: Whether to deduplicate leads
+              required:
+              - crm
+              - userId
+              - filterId
+            example:
+              crm: hubspot
+              userId: usr_FU6yAd3UdBFel0UDy
+              filterId: '16'
+              deduplicate: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+              example:
+                ok: true
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+      parameters: []
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    CrmFilter:
+      type: object
+      description: A filter used in the CRM to segment leads or companies.
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        criteria:
+          type: object
+          additionalProperties: true

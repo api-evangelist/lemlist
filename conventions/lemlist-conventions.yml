@@ -1,0 +1,131 @@
+generated: '2026-08-13'
+method: searched
+source: https://developer.lemlist.com/api-reference/getting-started/overview
+derived_from: openapi/_original/lemlist-openapi-v2.json
+docs:
+- https://developer.lemlist.com/api-reference/getting-started/authentication
+- https://developer.lemlist.com/api-reference/getting-started/rate-limits
+- https://developer.lemlist.com/api-reference/getting-started/errors
+- https://developer.lemlist.com/api-reference/getting-started/version
+- https://developer.lemlist.com/api-reference/getting-started/multiple-accounts
+base_url: https://api.lemlist.com/api
+authentication:
+  style: http-basic-with-empty-username
+  header: 'Authorization: Basic base64(":YOUR_API_KEY")'
+  bearer_accepted: false
+  detail: see authentication/lemlist-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  detail: >-
+    lemlist publishes no idempotency-key header or parameter, and none appears in the
+    OpenAPI. One operation (POST /v2/unsubscribes/variables/{value}) documents
+    semantic idempotency — re-unsubscribing an already-unsubscribed variable returns
+    the existing record — but that is a property of that operation, not an API-wide
+    contract. lemlist's own CLI works around the absence by never retrying POST or
+    PATCH after a 5xx or network drop.
+  evidence: 1 occurrence of "idempotent" across the whole 143-operation spec
+pagination:
+  styles:
+  - style: offset-limit
+    params:
+    - limit
+    - offset
+    used_by: campaign leads, activities, inbox, contacts, companies, unsubscribes
+  - style: page-limit
+    params:
+    - page
+    - limit
+    used_by: campaigns and several list surfaces
+  - style: skip-limit
+    params:
+    - skip
+    - limit
+  response_fields: not documented as a standard envelope — list operations return
+    arrays or a bespoke object per endpoint
+  cursor: false
+  note: >-
+    Three different pagination idioms coexist across the surface. There is no single
+    documented pagination contract, so a client must read each operation's parameters.
+sorting_filtering:
+  params:
+  - sortBy
+  - sortOrder
+  - search
+  - query
+  - filters
+  - filterId
+  - state
+  - status
+  - startDate
+  - endDate
+  - minDate
+  - maxDate
+field_selection:
+  supported: partial
+  params:
+  - fields
+  detail: a `fields` query parameter appears on some list operations; there is no
+    general sparse-fieldset or expansion syntax
+versioning:
+  scheme: query-parameter
+  parameter: version
+  current: v2
+  detail: see lifecycle/lemlist-lifecycle.yml — some endpoints still default to the
+    deprecated v1 unless version=v2 is sent
+request_tracing:
+  request_id_header: null
+  documented: false
+rate_limit_signaling:
+  headers:
+  - Retry-After
+  - X-RateLimit-Limit
+  - X-RateLimit-Remaining
+  - X-RateLimit-Reset
+  status_on_exhaustion: 429
+  detail: see rate-limits/lemlist-rate-limits.yml. X-RateLimit-Reset is a human-readable
+    date string, not an epoch.
+error_envelope:
+  format: bespoke
+  rfc9457: false
+  detail: see errors/lemlist-problem-types.yml
+identifiers:
+  style: prefixed opaque strings
+  examples:
+  - cam_<17 mixed-case alphanumerics> — campaign
+  - tea_<17 mixed-case alphanumerics> — team
+  - act_<...> — activity
+  source: https://developer.lemlist.com/CLAUDE.md
+  detail: >-
+    lemlist's public documentation-repo guidelines describe the id format as
+    `<prefix>_<17 mixed-case alphanumerics>`. Several endpoints accept either an id
+    or a natural key (leadIdOrEmail, idOrEmail, idsOrDomains).
+multi_tenancy:
+  model: one credential resolves to exactly one team
+  detail: >-
+    There is no team-selector header. Agencies operating several client accounts hold
+    one API key or OAuth grant per team and switch credentials; the CLI models this
+    as named profiles.
+  docs: https://developer.lemlist.com/api-reference/getting-started/multiple-accounts
+async_operations:
+  pattern: submit-then-poll
+  surfaces:
+  - surface: enrichment
+    submit: POST /enrich, POST /v2/enrichments/bulk, POST /leads/{leadId}/enrich
+    poll: GET /enrich/{enrichId}
+    guidance: poll every 5-10 seconds; results typically arrive within 30 seconds
+  - surface: campaign stats export
+    submit: GET /campaigns/{campaignId}/export/start
+    poll: GET /campaigns/{campaignId}/export/{exportId}/status
+    notify: PUT /campaigns/{campaignId}/export/{exportId}/email/{email}
+  webhook_alternative: enrichmentDone / enrichmentError events — see asyncapi/lemlist-webhooks.yml
+metering:
+  model: prepaid credits on enrichment and signal operations
+  balance: GET /team/credits
+  detail: see plans/lemlist-plans-pricing.yml
+cross_links:
+  errors: errors/lemlist-problem-types.yml
+  lifecycle: lifecycle/lemlist-lifecycle.yml
+  authentication: authentication/lemlist-authentication.yml
+  rate_limits: rate-limits/lemlist-rate-limits.yml
+  webhooks: asyncapi/lemlist-webhooks.yml

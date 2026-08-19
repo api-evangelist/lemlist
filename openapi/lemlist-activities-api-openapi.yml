@@ -1,0 +1,424 @@
+openapi: 3.0.0
+info:
+  title: lemlist Activities API
+  version: 1.0.0
+  description: The Activities operations of the lemlist API, split by tag from the OpenAPI lemlist publishes
+    at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content is carried verbatim
+    from the provider spec.
+servers:
+- url: https://api.lemlist.com/api
+security:
+- basicAuth: []
+tags:
+- name: Activities
+paths:
+  /activities:
+    get:
+      summary: Get Many Activities
+      tags:
+      - Activities
+      parameters:
+      - name: version
+        in: query
+        required: true
+        description: API version. v2 is mandatory
+        example: v2
+        schema:
+          type: string
+          enum:
+          - v2
+      - name: type
+        in: query
+        required: false
+        description: Filter by activity type (e.g., paused)
+        example: paused
+        schema:
+          type: string
+      - name: campaignId
+        in: query
+        required: false
+        description: Filter by campaign ID
+        example: cam_123
+        schema:
+          type: string
+      - name: isFirst
+        in: query
+        required: false
+        description: Filter for first activity
+        example: 'true'
+        schema:
+          type: boolean
+      - name: offset
+        in: query
+        required: false
+        description: 'Number of records to skip. Note: This is not traditional cursor-based pagination.
+          To retrieve all activities, increment offset by the limit value on each request (e.g., offset=0,
+          then offset=100, then offset=200, etc.).'
+        example: '0'
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        required: false
+        description: 'Number of activities to retrieve. Default: 100. Maximum: 100'
+        example: '2'
+        schema:
+          type: integer
+      - name: leadId
+        in: query
+        required: false
+        description: Filter by lead ID
+        example: lea_123
+        schema:
+          type: string
+      - name: minDate
+        in: query
+        required: false
+        description: Filter activities by `createdAt >= minDate`. Accepts either a Unix timestamp in seconds
+          (e.g. `1715385600`) or an ISO 8601 datetime (e.g. `2026-05-11T00:00:00Z`). `minDate` is the
+          primary name; `startDate` is accepted as an alias and `minDate` takes precedence when both are
+          provided.
+        example: '2026-05-01T00:00:00Z'
+        schema:
+          type: string
+      - name: maxDate
+        in: query
+        required: false
+        description: Filter activities by `createdAt <= maxDate`. Accepts either a Unix timestamp in seconds
+          (e.g. `1715385600`) or an ISO 8601 datetime (e.g. `2026-05-11T00:00:00Z`). Must be strictly
+          greater than `minDate` when both are provided. `maxDate` is the primary name; `endDate` is accepted
+          as an alias and `maxDate` takes precedence when both are provided.
+        example: '2026-05-31T23:59:59Z'
+        schema:
+          type: string
+      - name: startDate
+        in: query
+        required: false
+        description: Alias for `minDate`, provided for consistency with sibling endpoints (e.g. `/campaigns/{campaignId}/stats`).
+          Accepts either a Unix timestamp in seconds or an ISO 8601 datetime. Ignored when `minDate` is
+          also provided.
+        example: '2026-05-01T00:00:00Z'
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        required: false
+        description: Alias for `maxDate`, provided for consistency with sibling endpoints (e.g. `/campaigns/{campaignId}/stats`).
+          Accepts either a Unix timestamp in seconds or an ISO 8601 datetime. Ignored when `maxDate` is
+          also provided.
+        example: '2026-05-31T23:59:59Z'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Activity'
+              example:
+              - _id: act_PbKqTGpQqSlPcoOZ5
+                type: manualDone
+                userId: usr_Emu1g29BMtBixhMSP
+                userName: Guillaume Moubeche
+                bot: false
+                createdAt: '2025-10-28T08:07:38.375Z'
+                leadFirstName: John
+                leadLastName: Doe
+                leadEmail: support@lemlist.com
+                leadCompanyName: Acme Inc
+                leadId: lea_fiDpiGV585wy3Oii2
+                contactId: ctc_xW8Ou6C03Csv8vatp
+                campaignId: cam_bSn8EORHQxbWPjHvu
+                teamId: tea_8QvkOiBfPdb2ZRhHi
+                opportunityId: opp_LyXDV8KHzctQdLFpG
+                metaData:
+                  teamId: tea_8QvkOiBfPdb2ZRhHi
+                  campaignId: cam_bSn8EORHQxbWPjHvu
+                  leadId: lea_fiDpiGV585wy3Oii2
+                  type: manualDone
+                lead:
+                  _id: lea_fiDpiGV585wy3Oii2
+                  isPaused: false
+                  state: manualNotInterested
+                  personalized: false
+                  source: api
+                  variables:
+                    firstName: John
+                    lastName: Doe
+                    companyName: Acme Inc
+                    jobTitle: Growth Engineer
+                    companyDomain: example.com
+                    email: support@lemlist.com
+                    preferredContactMethod: email
+                    industry: Technology
+                    Company name: John Doe
+                  contactId: ctc_xW8Ou6C03Csv8vatp
+                  enrichment:
+                    emailStatus: deliverable
+                campaignName: NEW TO DELETE
+                sequenceTested: B
+              - _id: act_j0NrG6rYEPP9TMmWC
+                teamId: tea_8QvkOiBfPdb2ZRhHi
+                companyId: cpn_Qf4CJuUrNUNmHm6uZ
+                type: annotated
+                createdAt: '2025-10-28T04:25:00.653Z'
+                note: could help our GTM team be more productive
+                sendUserId: usr_ahfFktBBHUIxbVG5P
+                userId: usr_ahfFktBBHUIxbVG5P
+              - _id: act_WeKrlIaQlBnM3LZ6G
+                type: manualNotInterested
+                teamId: tea_8QvkOiBfPdb2ZRhHi
+                userName: api
+                isFirst: false
+                bot: false
+                createdAt: '2025-10-28T02:14:34.834Z'
+                name: NEW TO DELETE
+                leadFirstName: John
+                leadLastName: Doe
+                leadEmail: support@lemlist.com
+                leadCompanyName: Acme Inc
+                leadId: lea_fiDpiGV585wy3Oii2
+                contactId: ctc_xW8Ou6C03Csv8vatp
+                campaignId: cam_bSn8EORHQxbWPjHvu
+                metaData:
+                  teamId: tea_8QvkOiBfPdb2ZRhHi
+                  campaignId: cam_bSn8EORHQxbWPjHvu
+                  leadId: lea_fiDpiGV585wy3Oii2
+                  type: manualNotInterested
+                lead:
+                  _id: lea_fiDpiGV585wy3Oii2
+                  isPaused: false
+                  state: manualNotInterested
+                  personalized: false
+                  source: api
+                  variables:
+                    firstName: John
+                    lastName: Doe
+                    companyName: Acme Inc
+                    jobTitle: Growth Engineer
+                    companyDomain: example.com
+                    email: support@lemlist.com
+                    preferredContactMethod: email
+                    industry: Technology
+                    Company name: John Doe
+                  contactId: ctc_xW8Ou6C03Csv8vatp
+                  enrichment:
+                    emailStatus: deliverable
+                campaignName: NEW TO DELETE
+                sequenceTested: B
+              - _id: act_zktTG4HXXXSOQya5U
+                type: paused
+                userName: api
+                bot: false
+                createdAt: '2025-10-28T01:54:56.099Z'
+                name: NEW TO DELETE
+                leadFirstName: John
+                leadLastName: Doe
+                leadEmail: support@lemlist.com
+                leadCompanyName: Acme Inc
+                leadId: lea_fiDpiGV585wy3Oii2
+                contactId: ctc_xW8Ou6C03Csv8vatp
+                campaignId: cam_bSn8EORHQxbWPjHvu
+                teamId: tea_8QvkOiBfPdb2ZRhHi
+                metaData:
+                  teamId: tea_8QvkOiBfPdb2ZRhHi
+                  campaignId: cam_bSn8EORHQxbWPjHvu
+                  leadId: lea_fiDpiGV585wy3Oii2
+                  type: paused
+                lead:
+                  _id: lea_fiDpiGV585wy3Oii2
+                  isPaused: false
+                  state: manualNotInterested
+                  personalized: false
+                  source: api
+                  variables:
+                    firstName: John
+                    lastName: Doe
+                    companyName: Acme Inc
+                    jobTitle: Growth Engineer
+                    companyDomain: example.com
+                    email: support@lemlist.com
+                    preferredContactMethod: email
+                    industry: Technology
+                    Company name: John Doe
+                  contactId: ctc_xW8Ou6C03Csv8vatp
+                  enrichment:
+                    emailStatus: deliverable
+                campaignName: NEW TO DELETE
+                sequenceTested: B
+              - _id: act_x6esGLhoPa2SMHCZ7
+                type: emailsOpened
+                isFirst: false
+                stopped: false
+                createdAt: '2025-10-27T20:20:59.696Z'
+                bot: false
+                teamId: tea_8QvkOiBfPdb2ZRhHi
+                leadId: lea_wj47uWhDbbN6Qq6oT
+                campaignId: cam_oxeGg6paG3ZVxjHkH
+                sequenceId: seq_ODjsLXkxXiySRw6dK
+                sequenceStep: 1
+                emailTemplateId: etp_z3nAbjdHuewVEjIl5
+                createdBy: usr_EvXz6JqPSJJL9lHkp
+                sendUserId: usr_EvXz6JqPSJJL9lHkp
+                name: Unicorn campaign
+                leadFirstName: Sam
+                leadLastName: Taylor
+                leadEmail: sam@example.com
+                leadCompanyName: lemlist
+                contactId: ctc_FkeUdQHEfhqG2HMbK
+                relatedSentAt: '2020-12-07T11:49:14.830Z'
+                metaData:
+                  teamId: tea_8QvkOiBfPdb2ZRhHi
+                  campaignId: cam_oxeGg6paG3ZVxjHkH
+                  leadId: lea_wj47uWhDbbN6Qq6oT
+                  type: emailsOpened
+                  createdBy: usr_EvXz6JqPSJJL9lHkp
+                  taskId: tsk_namMcIQnA6gxQIupP
+                lead:
+                  _id: lea_wj47uWhDbbN6Qq6oT
+                  isPaused: false
+                  state: emailsUnsubscribed
+                  personalized: false
+                  source: manually
+                  variables:
+                    firstName: 'Sam '
+                    lastName: Taylor
+                    email: sam@example.com
+                    companyName: lemlist
+                    linkedinUrl: https://www.linkedin.com/in/sam-doe
+                  contactId: ctc_FkeUdQHEfhqG2HMbK
+                  enrichment: {}
+                campaignName: Unicorn campaign
+                sequenceTested: A
+                emailTemplateName: Blank
+              - _id: act_q4tnlXNdXsBeQceYW
+                type: emailsOpened
+                isFirst: false
+                stopped: false
+                createdAt: '2025-10-27T20:17:24.119Z'
+                bot: false
+                teamId: tea_8QvkOiBfPdb2ZRhHi
+                leadId: lea_wj47uWhDbbN6Qq6oT
+                campaignId: cam_oxeGg6paG3ZVxjHkH
+                sequenceId: seq_ODjsLXkxXiySRw6dK
+                sequenceStep: 1
+                emailTemplateId: etp_z3nAbjdHuewVEjIl5
+                createdBy: usr_EvXz6JqPSJJL9lHkp
+                sendUserId: usr_EvXz6JqPSJJL9lHkp
+                name: Unicorn campaign
+                leadFirstName: Sam
+                leadLastName: Taylor
+                leadEmail: sam@example.com
+                leadCompanyName: lemlist
+                contactId: ctc_FkeUdQHEfhqG2HMbK
+                relatedSentAt: '2020-12-07T11:49:14.830Z'
+                metaData:
+                  teamId: tea_8QvkOiBfPdb2ZRhHi
+                  campaignId: cam_oxeGg6paG3ZVxjHkH
+                  leadId: lea_wj47uWhDbbN6Qq6oT
+                  type: emailsOpened
+                  createdBy: usr_EvXz6JqPSJJL9lHkp
+                  taskId: tsk_namMcIQnA6gxQIupP
+                lead:
+                  _id: lea_wj47uWhDbbN6Qq6oT
+                  isPaused: false
+                  state: emailsUnsubscribed
+                  personalized: false
+                  source: manually
+                  variables:
+                    firstName: 'Sam '
+                    lastName: Taylor
+                    email: sam@example.com
+                    companyName: lemlist
+                    linkedinUrl: https://www.linkedin.com/in/sam-doe
+                  contactId: ctc_FkeUdQHEfhqG2HMbK
+                  enrichment: {}
+                campaignName: Unicorn campaign
+                sequenceTested: A
+                emailTemplateName: Blank
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+  /activities/{activityId}/recording-transcript:
+    delete:
+      summary: Delete Activity Recording & Transcript
+      tags:
+      - Activities
+      parameters:
+      - name: activityId
+        in: path
+        required: true
+        description: Unique activity ID
+        example: act_123
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+        '401':
+          description: Unauthorized
+        '404':
+          description: Activity not found or has no recording
+          content:
+            text/plain:
+              example: Activity not found
+        '405':
+          description: Method not allowed
+        '500':
+          description: Error while deleting recording or transcript
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    Activity:
+      type: object
+      description: A recorded action or event in a campaign sequence (email sent, opened, clicked, etc.).
+      properties:
+        _id:
+          type: string
+          description: Unique activity identifier
+        type:
+          type: string
+          description: Activity type (emailOpened, emailClicked, emailReplied, etc.)
+        leadId:
+          type: string
+          description: Associated lead ID
+        campaignId:
+          type: string
+          description: Campaign ID
+        sequenceId:
+          type: string
+          description: Sequence ID
+        stepId:
+          type: string
+          description: Stable identifier of the sequence step that produced this activity. Present on
+            every activity created from now on; older activities gain it progressively as historical records
+            are backfilled, so treat it as optional when reading history.
+        sequenceStep:
+          type: number
+          description: 0-based position of the step within the sequence. Still emitted on every activity,
+            unchanged. Prefer `stepId` for a reference that survives steps being reordered.
+        totalSequenceStep:
+          type: number
+          description: 0-based count of the sequence steps already delivered to this lead.
+        createdAt:
+          type: string
+          format: date-time
+          description: When the activity occurred

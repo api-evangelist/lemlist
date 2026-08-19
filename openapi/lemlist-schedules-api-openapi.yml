@@ -1,0 +1,689 @@
+openapi: 3.0.0
+info:
+  title: lemlist Schedules API
+  version: 1.0.0
+  description: The Schedules operations of the lemlist API, split by tag from the OpenAPI lemlist publishes
+    at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content is carried verbatim
+    from the provider spec.
+servers:
+- url: https://api.lemlist.com/api
+security:
+- basicAuth: []
+tags:
+- name: Schedules
+paths:
+  /schedules:
+    get:
+      summary: Get Many Schedules
+      tags:
+      - Schedules
+      parameters:
+      - name: page
+        in: query
+        required: false
+        description: The page number to retrieve
+        example: '1'
+        schema:
+          type: integer
+      - name: offset
+        in: query
+        required: false
+        description: The number of records to skip. Used if page is not provided.
+        example: '0'
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        required: false
+        description: The maximum number of records to return
+        example: '2'
+        schema:
+          type: integer
+      - name: sortBy
+        in: query
+        required: false
+        description: The field by which to sort the schedules. Currently, only 'createdAt' is supported.
+        example: createdAt
+        schema:
+          type: string
+          enum:
+          - createdAt
+      - name: sortOrder
+        in: query
+        required: false
+        description: The sort direction. Use 'desc' for descending order; any other value (or omission)
+          will sort in ascending order.
+        example: desc
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleListResponse'
+              example:
+                schedules:
+                - _id: skd_iQiNG7VinWIUkgLy1
+                  name: Custom Schedule
+                  secondsToWait: 1200
+                  timezone: Europe/Paris
+                  start: 09:00
+                  end: '18:00'
+                  weekdays:
+                  - 1
+                  - 2
+                  - 3
+                  - 4
+                  public: true
+                  teamId: tea_8QvkOiBfPdb2ZRhHi
+                  createdBy: usr_ahfFktBBHUIxbVG5P
+                  createdAt: '2025-10-27T09:41:11.187Z'
+                - _id: skd_u6cfmo0a7pgwfup9i
+                  name: Default schedule
+                  secondsToWait: 1200
+                  timezone: Europe/Paris
+                  start: 09:00
+                  end: '18:00'
+                  weekdays:
+                  - 1
+                  - 2
+                  - 3
+                  - 4
+                  - 5
+                  teamId: tea_8QvkOiBfPdb2ZRhHi
+                  createdBy: usr_ahfFktBBHUIxbVG5P
+                  createdAt: '2025-10-27T07:01:04.041Z'
+                - _id: skd_nNGfP0HEkRYJLW4qA
+                  name: Default schedule
+                  secondsToWait: 1200
+                  timezone: Asia/Seoul
+                  start: 09:00
+                  end: '18:00'
+                  weekdays:
+                  - 1
+                  - 2
+                  - 3
+                  - 4
+                  - 5
+                  teamId: tea_8QvkOiBfPdb2ZRhHi
+                  createdBy: usr_ahfFktBBHUIxbVG5P
+                  createdAt: '2025-10-24T09:37:25.040Z'
+                - _id: skd_kgykTULiqy42doHxY
+                  name: Default schedule
+                  secondsToWait: 1200
+                  timezone: Asia/Seoul
+                  start: 09:00
+                  end: '18:00'
+                  weekdays:
+                  - 1
+                  - 2
+                  - 3
+                  - 4
+                  - 5
+                  teamId: tea_8QvkOiBfPdb2ZRhHi
+                  createdBy: usr_ahfFktBBHUIxbVG5P
+                  createdAt: '2025-10-24T07:24:44.785Z'
+                - _id: skd_SvcCMF1LTI3mgzmCW
+                  name: Default schedule
+                  secondsToWait: 1200
+                  timezone: Europe/Sofia
+                  start: 09:00
+                  end: '18:00'
+                  weekdays:
+                  - 1
+                  - 2
+                  - 3
+                  - 4
+                  - 5
+                  teamId: tea_8QvkOiBfPdb2ZRhHi
+                  createdBy: usr_46he8cjrZ7s0IQi53
+                  createdAt: '2025-10-20T13:13:34.680Z'
+                pagination:
+                  totalRecords: 3039
+                  currentPage: 1
+                  nextPage: 2
+                  totalPage: 608
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+    post:
+      summary: Create Schedule
+      tags:
+      - Schedules
+      security:
+      - basicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the schedule
+                  default: Default schedule
+                secondsToWait:
+                  type: integer
+                  description: Delay in seconds between operations
+                  default: 1200
+                timezone:
+                  type: string
+                  description: Timezone for the schedule (e.g., 'Europe/Paris')
+                  default: Europe/Paris
+                start:
+                  type: string
+                  description: Start time in HH:mm format
+                  pattern: ^([01]\d|2[0-3]):[0-5]\d$
+                  default: 09:00
+                end:
+                  type: string
+                  description: End time in HH:mm format
+                  pattern: ^([01]\d|2[0-3]):[0-5]\d$
+                  default: '18:00'
+                weekdays:
+                  type: array
+                  items:
+                    type: integer
+                    minimum: 1
+                    maximum: 7
+                  description: Days of the week the schedule is active (1=Monday, 7=Sunday)
+                  default:
+                  - 1
+                  - 2
+                  - 3
+                  - 4
+                  - 5
+                public:
+                  type: boolean
+                  description: Set to true to make the schedule visible to use as a template
+                  default: false
+              required:
+              - name
+              - timezone
+              - start
+              - end
+              - weekdays
+            example:
+              name: Default schedule
+              secondsToWait: 1200
+              timezone: Europe/Paris
+              start: 09:00
+              end: '18:00'
+              weekdays:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+              public: false
+      responses:
+        '200':
+          description: Schedule successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Schedule'
+              example:
+                _id: skd_VK2e2ON1xErgrc8NC
+                name: Default schedule
+                secondsToWait: 120
+                timezone: Europe/Paris
+                start: 09:00
+                end: '18:00'
+                weekdays:
+                - 1
+                - 2
+                - 3
+                - 4
+                - 5
+                public: false
+                teamId: tea_oQGvp4rfqA5RWLkqW
+                createdBy: usr_AUGImxyH3VKF6eYEf
+                createdAt: '2025-01-17T15:17:59.207Z'
+        '400':
+          description: Bad request (invalid team or schedule data)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+              example:
+                error: BadRequest
+                message: Bad team or invalid schedule fields
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: The authentication you supplied is incorrect
+      parameters: []
+  /schedules/{scheduleId}:
+    get:
+      summary: Get Schedule
+      tags:
+      - Schedules
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schedule'
+                required:
+                - _id
+                - name
+                - secondsToWait
+                - timezone
+                - start
+                - end
+                - weekdays
+              example:
+                _id: skd_iQiNG7VinWIUkgLy1
+                name: Renamed Schedule
+                secondsToWait: 1000
+                timezone: Europe/Berlin
+                start: 08:00
+                end: '18:00'
+                weekdays:
+                - 1
+                - 2
+                - 3
+                - 2
+                - 5
+                public: true
+                teamId: tea_8QvkOiBfPdb2ZRhHi
+                createdBy: usr_ahfFktBBHUIxbVG5P
+                createdAt: '2025-10-27T09:41:11.187Z'
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: The authentication you supplied is incorrect
+          content:
+            text/plain:
+              example: The authentication you supplied is incorrect
+        '404':
+          description: Schedule not found
+          content:
+            text/plain:
+              example: Schedule not found
+      parameters: []
+    parameters:
+    - name: scheduleId
+      in: path
+      required: true
+      description: The unique identifier of the schedule
+      example: skd_VK2e2ON1xErgrc8NC
+      schema:
+        type: string
+    patch:
+      summary: Update Schedule
+      tags:
+      - Schedules
+      security:
+      - basicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the schedule
+                secondsToWait:
+                  type: integer
+                  description: Delay in seconds between operations
+                timezone:
+                  type: string
+                  description: Timezone for the schedule (e.g., 'Europe/Paris')
+                start:
+                  type: string
+                  description: Start time in HH:mm format
+                  pattern: ^([01]\d|2[0-3]):[0-5]\d$
+                end:
+                  type: string
+                  description: End time in HH:mm format
+                  pattern: ^([01]\d|2[0-3]):[0-5]\d$
+                weekdays:
+                  type: array
+                  items:
+                    type: integer
+                    minimum: 1
+                    maximum: 7
+                  description: Days of the week the schedule is active (1=Monday, 7=Sunday)
+                public:
+                  type: boolean
+                  description: Set to true to make the schedule visible to use as a template
+            example:
+              name: Schedule new name
+      responses:
+        '200':
+          description: Schedule successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Schedule'
+              example:
+                _id: skd_iQiNG7VinWIUkgLy1
+                name: Renamed Schedule
+                secondsToWait: 1000
+                timezone: Europe/Berlin
+                start: 08:00
+                end: '18:00'
+                weekdays:
+                - 1
+                - 2
+                - 3
+                - 2
+                - 5
+                public: true
+                teamId: tea_8QvkOiBfPdb2ZRhHi
+                createdBy: usr_ahfFktBBHUIxbVG5P
+                createdAt: '2025-10-27T09:41:11.187Z'
+        '400':
+          description: Bad request (invalid data or team)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+              example:
+                error: BadRequest
+                message: Bad team or invalid schedule update
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: The authentication you supplied is incorrect
+        '404':
+          description: Schedule not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: Schedule not found
+      parameters: []
+    delete:
+      summary: Delete Schedule
+      tags:
+      - Schedules
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+              example:
+                _id: skd_Z6mAiyX6c73uqQtCV
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Schedule not found
+          content:
+            text/plain:
+              example: Schedule not found
+      parameters: []
+  /campaigns/{campaignId}/schedules/:
+    get:
+      summary: Get Campaign Schedules
+      tags:
+      - Schedules
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Schedule'
+              example:
+              - _id: skd_dI6LDboHxORcW2quf
+                name: Test 2
+                secondsToWait: 1200
+                timezone: Atlantic/Reykjavik
+                start: 08:00
+                end: '18:00'
+                weekdays:
+                - 1
+                - 2
+                - 3
+                - 4
+                - 5
+                teamId: tea_HpxHgbqZR5p7jPodG
+                createdBy: usr_gbY1wCFnSHq5ubnyG
+                createdAt: '2025-02-06T16:29:10.217Z'
+              - _id: skd_shtm9OHLWbGkro94C
+                name: Default schedule
+                secondsToWait: 1200
+                timezone: Africa/Ceuta
+                start: 09:00
+                end: '18:00'
+                weekdays:
+                - 1
+                - 2
+                - 3
+                - 4
+                - 5
+                teamId: tea_HpxHgbqZR5p7jPodG
+                createdBy: usr_z7biYanHn06hmOlXs
+                createdAt: '2025-02-06T15:36:01.531Z'
+              - _id: skd_R90npZ8YWo0QqjO3u
+                name: Default schedule
+                secondsToWait: 1200
+                timezone: Europe/Paris
+                start: 09:00
+                end: '18:00'
+                weekdays:
+                - 1
+                - 2
+                - 3
+                - 4
+                - 5
+                teamId: tea_HpxHgbqZR5p7jPodG
+                createdBy: usr_z7biYanHn06hmOlXs
+                createdAt: '2025-02-06T15:35:52.079Z'
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: Campaign not found
+          content:
+            text/plain:
+              example: Campaign not found
+      parameters: []
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
+  /campaigns/{campaignId}/schedules/{scheduleId}:
+    post:
+      summary: Associate Schedule with Campaign
+      tags:
+      - Schedules
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scheduleId:
+                    type: string
+                  campaignId:
+                    type: string
+              example:
+                scheduleId: skd_J4m3pn7lRnVmwm02m
+                campaignId: cam_JWW1H20HETqEXaKyR
+        '400':
+          description: Bad team
+          content:
+            text/plain:
+              example: Bad team
+        '401':
+          description: Unauthorized
+        '404':
+          description: 'Possible errors: Campaign not found / Schedule not found'
+          content:
+            text/plain:
+              example: Campaign not found
+        '405':
+          description: Method not allowed
+      parameters: []
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      description: The unique identifier of the campaign
+      example: cam_A1B2C3D4E5F6G7H8I9
+      schema:
+        type: string
+    - name: scheduleId
+      in: path
+      required: true
+      description: The unique identifier of the schedule
+      example: skd_J4m3pn7lRnVmwm02m
+      schema:
+        type: string
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    Schedule:
+      type: object
+      description: Sending time windows defining when campaigns can send messages (days and hours).
+      properties:
+        _id:
+          type: string
+          description: Unique schedule identifier
+        name:
+          type: string
+          description: Schedule name
+        secondsToWait:
+          type: integer
+          description: Seconds between sends
+        timezone:
+          type: string
+          description: Schedule timezone (e.g., 'Europe/Paris')
+        start:
+          type: string
+          description: Daily start time (HH:mm)
+          pattern: ^([01]\d|2[0-3]):[0-5]\d$
+        end:
+          type: string
+          description: Daily end time (HH:mm)
+          pattern: ^([01]\d|2[0-3]):[0-5]\d$
+        weekdays:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+            maximum: 7
+          description: Active weekdays (1=Monday, 7=Sunday)
+        public:
+          type: boolean
+          description: Whether the schedule is available as a template for other users
+        teamId:
+          type: string
+          description: Unique identifier of the team that owns this schedule
+        createdBy:
+          type: string
+          description: Unique identifier of the user who created this schedule
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the schedule was created
+        deletedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the schedule was deleted (only present if deleted)
+        deletedBy:
+          type: string
+          description: Unique identifier of the user who deleted this schedule (only present if deleted)
+    ScheduleListResponse:
+      type: object
+      description: Paginated response containing multiple schedules.
+      properties:
+        schedules:
+          type: array
+          description: Array of schedule objects
+          items:
+            $ref: '#/components/schemas/Schedule'
+        pagination:
+          type: object
+          description: Pagination information
+          properties:
+            totalRecords:
+              type: integer
+              description: Total number of schedules across all pages
+            currentPage:
+              type: integer
+              description: Current page number
+            nextPage:
+              type: integer
+              description: Next page number (null if on last page)
+            totalPage:
+              type: integer
+              description: Total number of pages

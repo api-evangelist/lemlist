@@ -1,0 +1,111 @@
+generated: '2026-08-13'
+method: probed
+source: live probes of lemlist hosts + openapi/_original/lemlist-openapi-v2.json +
+  provider docs
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: lemlist publishes OpenAPI 3.0.0 at https://developer.lemlist.com/api-reference/openapi/v2.json
+    — 101 paths, 143 operations, 58 component schemas
+- id: openapi-3.1
+  conforms: false
+  evidence: the published document declares openapi 3.0.0
+- id: http-basic-auth
+  conforms: true
+  evidence: components.securitySchemes.basicAuth type http scheme basic, applied API-wide
+- id: oauth2
+  conforms: true
+  evidence: authorization-code grant with refresh_token advertised at https://app.lemlist.com/.well-known/oauth-authorization-server
+- id: oauth2-pkce
+  conforms: true
+  evidence: code_challenge_methods_supported = [S256]
+- id: rfc8414-oauth-authorization-server-metadata
+  conforms: true
+  evidence: 'HTTP 200 JSON at /.well-known/oauth-authorization-server on both app.lemlist.com
+    and api.lemlist.com'
+- id: rfc9728-oauth-protected-resource-metadata
+  conforms: true
+  evidence: 'HTTP 200 JSON at /.well-known/oauth-protected-resource, and the MCP 401
+    challenge carries WWW-Authenticate: Bearer resource_metadata="https://app.lemlist.com/.well-known/oauth-protected-resource/mcp"'
+- id: rfc7591-dynamic-client-registration
+  conforms: true
+  evidence: registration_endpoint https://app.lemlist.com/oauth/register advertised
+    in the AS metadata
+- id: oidc-discovery
+  conforms: true
+  evidence: 'HTTP 200 JSON at /.well-known/openid-configuration; userinfo_endpoint,
+    jwks_uri, RS256 id_token signing, claims advertised'
+- id: mcp
+  conforms: true
+  evidence: hosted MCP server at https://app.lemlist.com/mcp; tools/list returned a
+    JSON-RPC 401 with an RFC 9728 resource_metadata challenge, i.e. a correctly
+    behaving MCP endpoint
+- id: a2a
+  conforms: partial
+  evidence: an AgentCard is served at https://developer.lemlist.com/.well-known/agent-card.json
+    declaring protocolVersion 0.3, but it describes the documentation site rather than
+    the product API and uses supportedInterfaces rather than additionalInterfaces —
+    see a2a/lemlist-a2a.yml
+- id: llms-txt
+  conforms: true
+  evidence: https://developer.lemlist.com/llms.txt returns a 199-link llms.txt index
+    naming the OpenAPI spec, the MCP setup page, the CLI docs and the Agent Skill
+- id: agent-skills
+  conforms: true
+  evidence: a skill is published at https://developer.lemlist.com/skill.md and mirrored
+    at /.well-known/agent-skills/default/skill.md; 37 further Claude Skills at
+    https://www.lemlist.com/claude-skills
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: no application/problem+json anywhere in the spec; errors are mostly text/plain
+    strings
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: no /.well-known/security.txt on any lemlist host (404 or SPA soft-200)
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: v1 is declared deprecated in prose only; no Sunset or Deprecation headers
+    and no dated schedule
+- id: idempotency-key
+  conforms: false
+  evidence: no idempotency key header or parameter in the spec or the docs
+- id: rate-limit-headers
+  conforms: partial
+  evidence: >-
+    lemlist returns X-RateLimit-Limit / -Remaining / -Reset and Retry-After on every
+    response, which is the widely deployed de-facto convention — but not the IETF
+    draft RateLimit-* fields, and X-RateLimit-Reset is a human-readable date string
+    rather than a number
+- id: webhooks
+  conforms: true
+  evidence: 76 documented event types with a documented payload envelope and a
+    shared-secret verification mechanism — see asyncapi/lemlist-webhooks.yml
+- id: asyncapi
+  conforms: false
+  evidence: no AsyncAPI document published
+- id: graphql
+  conforms: false
+  evidence: POST /graphql returned 405 on api.lemlist.com, app.lemlist.com and api.lemlist.com/api
+- id: grpc
+  conforms: false
+  evidence: no .proto published
+- id: soc2-type-2
+  conforms: true
+  evidence: named on the lemlist Trust Center at https://trust.lemlist.com/ — see security/lemlist-trust-center.yml
+- id: gdpr
+  conforms: true
+  evidence: GDPR referenced in https://www.lemlist.com/legal/privacy-policy; a DPA is
+    published at https://www.lemlist.com/legal/dpa
+- id: iso-27001
+  conforms: false
+  evidence: not named on the trust center page as delivered
+- id: pci-dss
+  conforms: false
+- id: hipaa
+  conforms: false
+- id: fedramp
+  conforms: false
+summary:
+  conforms: 15
+  partial: 2
+  does_not_conform: 10

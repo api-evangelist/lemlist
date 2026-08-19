@@ -1,0 +1,106 @@
+generated: '2026-08-13'
+method: searched
+source: https://developer.lemlist.com/api-reference/getting-started/errors
+derived_from: openapi/_original/lemlist-openapi-v2.json
+format: bespoke
+media_type: text/plain and application/json (varies by operation)
+note: >-
+  lemlist does NOT use RFC 9457 problem+json. Error responses in the published
+  OpenAPI are described mostly as text/plain strings ("Bad params", "Variable not
+  found") or bare JSON objects; there is no `type`/`title`/`detail`/`instance`
+  envelope and no stable machine-readable error code. The status table below is the
+  provider's own; the per-status counts are counted from the 143 operations in the
+  published spec.
+envelope:
+  documented: false
+  rest_shape: >-
+    A short human-readable message, most often as a plain-text body. Some operations
+    return a JSON object with a message field. There is no error code field.
+  cli_shape: '{ "error", "message", "status", "details" } on stderr — the official CLI
+    normalizes API errors into this object, which is the closest thing lemlist ships
+    to a structured error contract.'
+  cli_source: https://developer.lemlist.com/cli/output
+problems:
+- status: 400
+  title: Bad Request
+  detail: Invalid parameters or invalid team
+  operations_declaring: 132
+  common_messages:
+  - message: Bad team
+    meaning: The team associated with the API key is invalid, or the resource belongs
+      to a different team, or the key has no access to the requested team
+    remediation: Confirm the API key belongs to the team that owns the resource; see
+      the multiple-accounts guide
+  - message: Bad params
+    meaning: Missing required parameters, invalid format, out-of-range values, or
+      invalid JSON in the body
+    remediation: Review the endpoint reference and correct the request
+  - message: Bad request
+    meaning: Generic client error — malformed JSON, invalid data types, logically
+      inconsistent data
+    remediation: Validate the payload before sending
+- status: 401
+  title: Unauthorized
+  detail: Authentication is missing or invalid
+  operations_declaring: 141
+  remediation: >-
+    Send Authorization: Basic base64(":YOUR_API_KEY") — empty username, colon
+    required. Bearer tokens are not accepted on the REST API. On the MCP endpoint use
+    an OAuth bearer token or the X-API-Key header.
+- status: 402
+  title: Payment Required
+  detail: Insufficient credits for a credit-bearing operation
+  operations_declaring: 6
+  remediation: Check GET /team/credits and recharge before retrying enrichment, email
+    verification or phone lookup
+- status: 403
+  title: Forbidden
+  detail: User is blocked
+  operations_declaring: 13
+- status: 404
+  title: Not Found
+  detail: Resource does not exist
+  operations_declaring: 76
+- status: 405
+  title: Method Not Allowed
+  detail: HTTP method is not allowed for this endpoint
+  operations_declaring: 67
+- status: 409
+  title: Conflict
+  detail: Resource already exists or conflicts with current state
+  operations_declaring: 7
+- status: 429
+  title: Too Many Requests
+  detail: Rate limit exceeded — 20 requests per 2 seconds per API key
+  operations_declaring: 1
+  remediation: Honor Retry-After; back off exponentially. See rate-limits/lemlist-rate-limits.yml
+  note: Only one operation declares 429 in the spec even though the limit applies on
+    all routes.
+- status: 500
+  title: Internal Server Error
+  detail: An error occurred on the server
+  operations_declaring: 22
+- status: 502
+  title: Bad Gateway
+  operations_declaring: 1
+success_codes:
+- status: 200
+  operations_declaring: 137
+- status: 201
+  operations_declaring: 8
+- status: 202
+  operations_declaring: 1
+  note: asynchronous accept — used by the enrichment surface, which is polled for its
+    result
+retry_guidance:
+  source: https://developer.lemlist.com/cli/output
+  detail: >-
+    lemlist's own CLI always replays a 429 (the server rejected the request, so no
+    write happened) but replays a 5xx or network drop only for idempotent methods
+    (GET, PUT, DELETE). POST and PATCH are never retried on those failures because
+    the write may have landed. lemlist ships no idempotency key, so this is the
+    safest available contract.
+gaps:
+- No RFC 9457 application/problem+json
+- No stable machine-readable error codes
+- Error bodies are largely text/plain, so an agent must string-match

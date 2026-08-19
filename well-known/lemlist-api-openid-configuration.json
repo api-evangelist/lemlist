@@ -1,0 +1,56 @@
+{
+  "issuer": "https://api.lemlist.com",
+  "authorization_endpoint": "https://api.lemlist.com/oauth/authorize",
+  "token_endpoint": "https://api.lemlist.com/oauth/token",
+  "userinfo_endpoint": "https://api.lemlist.com/oauth/userinfo",
+  "jwks_uri": "https://api.lemlist.com/.well-known/jwks.json",
+  "revocation_endpoint": "https://api.lemlist.com/oauth/revoke",
+  "registration_endpoint": "https://api.lemlist.com/oauth/register",
+  "scopes_supported": [
+    "campaigns:read",
+    "campaigns:write",
+    "leads:read",
+    "leads:write",
+    "sequences:read",
+    "sequences:write",
+    "team:read",
+    "webhooks:read",
+    "webhooks:write",
+    "unsubscribes:read",
+    "unsubscribes:write",
+    "full_access",
+    "openid",
+    "email"
+  ],
+  "response_types_supported": [
+    "code"
+  ],
+  "grant_types_supported": [
+    "authorization_code",
+    "refresh_token"
+  ],
+  "subject_types_supported": [
+    "public"
+  ],
+  "id_token_signing_alg_values_supported": [
+    "RS256"
+  ],
+  "token_endpoint_auth_methods_supported": [
+    "none",
+    "client_secret_post"
+  ],
+  "code_challenge_methods_supported": [
+    "S256"
+  ],
+  "claims_supported": [
+    "iss",
+    "sub",
+    "aud",
+    "iat",
+    "exp",
+    "nonce",
+    "email",
+    "email_verified"
+  ],
+  "service_documentation": "https://developer.lemlist.com"
+}

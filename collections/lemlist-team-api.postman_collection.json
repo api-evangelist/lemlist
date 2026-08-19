@@ -1,0 +1,274 @@
+{
+  "item": [
+    {
+      "id": "c5b0922d-9432-4e87-b6f8-265fe18e3c6e",
+      "name": "Team",
+      "description": {
+        "content": "Team-level endpoints (info, senders, credits)",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "da95c8cb-65b3-47b9-91da-04f3a0f1f444",
+          "name": "Get team information",
+          "request": {
+            "name": "Get team information",
+            "description": {},
+            "url": {
+              "path": [
+                "team"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "88b41d06-0125-4e01-9368-6ab7046a74b2",
+              "name": "Team object",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "team"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"_id\": \"string\",\n  \"name\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "11ff6c0f-f0c9-43d5-b252-12880e8650f5",
+          "name": "List team senders across campaigns",
+          "request": {
+            "name": "List team senders across campaigns",
+            "description": {},
+            "url": {
+              "path": [
+                "team",
+                "senders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cee94c4f-b246-4d0a-bd85-73b3c88892dc",
+              "name": "Array of sender objects",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "team",
+                    "senders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2b769a41-97b7-460a-8d0d-a49ea75186b8",
+          "name": "Get team credit balance",
+          "request": {
+            "name": "Get team credit balance",
+            "description": {},
+            "url": {
+              "path": [
+                "team",
+                "credits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c37c3d9d-1b02-4bd1-8383-20c46374dfe7",
+              "name": "Credit balance object",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "team",
+                    "credits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.lemlist.com/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "9d17e156-45fd-4b96-82c8-0f94ca51f9c8",
+    "name": "lemlist Campaigns Team API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for lemlist's cold email outreach and sales engagement\nplatform. All routes live at https://api.lemlist.com/api/. The full\nURL pattern is https://api.lemlist.com/api/{endpoint}.\n\nAuthentication uses HTTP Basic with an empty username and the API\nkey as the password (`:YOUR_API_KEY` base64-encoded into the\nAuthorization header).\n\nSource: https://developer.lemlist.com and the published\nOpenAPI v2 spec at\nhttps://developer.lemlist.com/api-reference/openapi/v2.json\n",
+      "type": "text/plain"
+    }
+  }
+}

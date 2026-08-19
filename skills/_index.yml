@@ -1,0 +1,121 @@
+generated: '2026-08-13'
+method: searched
+source: https://developer.lemlist.com/skill.md
+note: >-
+  lemlist publishes its own Agent Skill. It is saved here verbatim as
+  lemlist-outreach-agent.md — the same body is served from both
+  https://developer.lemlist.com/skill.md and
+  https://developer.lemlist.com/.well-known/agent-skills/default/skill.md, and the
+  A2A agent card's single skill points at the latter. The three
+  lemlist-launch-campaign / lemlist-enrich-and-sync / lemlist-monitor-and-reply skills
+  are API Evangelist-generated and grounded in the operations the published OpenAPI
+  actually declares — they exist because lemlist's own skill lists "API equivalent"
+  paths that its OpenAPI does not declare (POST /people-database/search where the spec
+  has POST /database/people, POST /contacts/push which the spec does not declare at
+  all, and /inbox/conversations/* where the spec has /inbox/*). Both are kept: the
+  provider's is what lemlist tells agents, ours is what the contract supports.
+skills:
+- file: lemlist-outreach-agent.md
+  name: lemlist
+  description: lemlist's own published Agent Skill — MCP-first guidance covering eight
+    workflows (find leads and launch, enrich, monitor, handle replies, CRM sync,
+    deliverability, webhooks, sequence writing) plus its constraints table.
+  method: searched
+  source: https://developer.lemlist.com/skill.md
+  verbatim: true
+  surface: mcp
+- file: lemlist-launch-campaign.md
+  name: Launch a lemlist campaign
+  description: Source leads from the B2B database, create a campaign and sequence,
+    add leads, validate, and start outreach.
+  method: generated
+  api: openapi/lemlist-campaigns-api-openapi.yml
+  operations:
+  - searchPeopleDatabase
+  - POST /campaigns
+  - POST /sequences/{sequenceId}/steps
+  - POST /campaigns/{campaignId}/leads/
+  - GET /campaigns/{campaignId}/statutes
+  - POST /campaigns/{campaignId}/start
+- file: lemlist-enrich-and-sync.md
+  name: Enrich contacts with lemlist
+  description: Run asynchronous enrichment single or bulk, poll or subscribe for the
+    result, land it on a lead or CRM contact, and account for the credits.
+  method: generated
+  api: openapi/lemlist-enrich-api-openapi.yml
+  operations:
+  - POST /enrich
+  - POST /v2/enrichments/bulk
+  - GET /enrich/{enrichId}
+  - GET /team/credits
+  - POST /contacts
+- file: lemlist-monitor-and-reply.md
+  name: Monitor lemlist campaigns and answer replies
+  description: Read campaign stats, subscribe to the right webhook events, and answer
+    replies across email, LinkedIn and WhatsApp from the unified inbox.
+  method: generated
+  api: openapi/lemlist-inbox-api-openapi.yml
+  operations:
+  - POST /v2/campaigns/stats/batch
+  - GET /inbox
+  - POST /inbox/email
+  - POST /hooks
+provider_published_catalog:
+  name: lemlist Claude Skills
+  url: https://www.lemlist.com/claude-skills
+  repository: https://github.com/l3mpire/claude-skills
+  download: https://github.com/l3mpire/claude-skills/archive/refs/heads/main.zip
+  count: 37
+  categories:
+  - writing
+  - analysing
+  - extrapolating
+  - building
+  - calling
+  - moderating
+  note: >-
+    A separate, GTM-strategy-oriented skill library lemlist publishes for Claude —
+    copywriting, ICP definition, pipeline analysis, campaign architecture. These are
+    prompt-level skills about outbound practice, not API operating instructions, so
+    they are catalogued here by reference rather than copied into this repo.
+  skills:
+  - campaign-angle-finder
+  - claap-sales-opportunity-detector
+  - cold-call-script
+  - company-finder
+  - competitor-finder
+  - copywriting-analyzer
+  - copywriting-first-touch
+  - copywriting-follow-up
+  - copywriting-ic-sequence
+  - copywriting-manager-sequence
+  - copywriting-refiner
+  - copywriting-vp-sequence
+  - crm-duplicate-detector
+  - cta-designer
+  - deep-company-analyser
+  - gtm-action-thinker
+  - icp-definer
+  - linkedin-outbound-angle
+  - linkedin-sequence
+  - list-builder
+  - market-research-edp
+  - n8n-debugger
+  - n8n-workflow-builder
+  - niche-data-finder
+  - offer-definer
+  - outbound-analyst
+  - outbound-campaign-architect
+  - pain-identifier
+  - people-finder
+  - persona-definer
+  - persona-insights-analysis
+  - pipeline-analysis
+  - reply-handler
+  - slide-deck-builder
+  - trigger-finder
+  - value-prop-lister
+  - website-scraper
+also_published:
+  claude_code_agent: https://developer.lemlist.com/mcp/lemlist-agent
+  claude_md: https://developer.lemlist.com/CLAUDE.md

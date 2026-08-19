@@ -1,0 +1,124 @@
+generated: '2026-08-13'
+method: searched
+source: https://developer.lemlist.com/cli/overview
+docs:
+- https://developer.lemlist.com/cli/overview
+- https://developer.lemlist.com/cli/authentication
+- https://developer.lemlist.com/cli/commands
+- https://developer.lemlist.com/cli/output
+- https://www.lemlist.com/product/lemlist-cli
+name: lemlist
+binary: lemlist
+package: '@lemlist-official/cli'
+version: 0.3.1
+official: true
+free: true
+requires: Node.js 20 or later
+install:
+- method: npm-global
+  command: npm install -g @lemlist-official/cli
+- method: npx
+  command: npx @lemlist-official/cli endpoints
+design:
+  generated_from_spec: true
+  detail: >-
+    Both the generic `api` command and the named subcommands are generated from the
+    live lemlist OpenAPI spec, cached locally with a one-hour TTL, so an endpoint
+    shipped after the CLI release works without an upgrade. Group and action names
+    are derived from the spec's tags and operation ids with path heuristics as a
+    fallback, so exact subcommand names vary by generated version.
+  agent_oriented: true
+commands:
+- group: auth
+  purpose: credential and profile management
+  actions:
+  - command: lemlist auth login [name]
+    description: Log in through the browser (OAuth) and store tokens under a profile
+  - command: lemlist auth add <name> <key>
+    description: Store an API key under a profile name
+  - command: lemlist auth list
+    description: List stored profiles; * marks the active one
+  - command: lemlist auth list --verbose
+    description: Resolve each profile against GET /team and show team name, id and
+      member count
+  - command: lemlist auth use <name>
+    description: Set the active profile
+  - command: lemlist auth remove <name>
+    description: Delete a profile
+- group: endpoints
+  purpose: discovery of the live API surface
+  actions:
+  - command: lemlist endpoints
+    description: List every endpoint from the live catalog and populate the local
+      spec cache
+  - command: lemlist endpoints --refresh
+    description: Force a re-fetch of the OpenAPI spec
+  - command: lemlist endpoints --json
+    description: Machine-readable array of endpoints
+- group: api
+  purpose: generic escape hatch onto any endpoint in the spec
+  actions:
+  - command: lemlist api <METHOD> <path>
+    description: Call any endpoint the live spec declares; query strings in the path
+      are forwarded, bodies go through --data as JSON
+- group: named subcommands
+  purpose: resource-grouped shortcuts generated from the spec tags
+  actions:
+  - command: lemlist campaigns list
+    description: Example of a generated named subcommand (illustrative — run `lemlist
+      <group> --help` for the exact names your version generated)
+  - command: lemlist campaigns get <campaignId>
+    description: Path parameters become positional arguments
+  - command: lemlist leads add <campaignId> --data '{...}'
+    description: Query parameters become --flags; request bodies always go through
+      --data
+global_flags:
+- flag: --account <name>
+  effect: Use profile <name> for this call
+- flag: --key <key>
+  effect: Use a raw API key, bypassing profiles
+- flag: --json
+  effect: Compact single-line JSON output for pipes and agents
+- flag: --base-url <url>
+  effect: API base URL override, e.g. a staging environment
+credential_resolution_order:
+- --key <key>
+- --account <name>
+- LEMLIST_PROFILE environment variable
+- the active profile set by lemlist auth use
+- the `default` profile
+output_contract:
+  success: JSON on stdout — indented by default, compact single-line with --json
+  failure: 'structured error object on stderr shaped { error, message, status, details
+    }'
+  exit_codes:
+  - code: 0
+    meaning: Success
+  - code: 1
+    meaning: Validation error (bad arguments or malformed --data JSON)
+  - code: 2
+    meaning: Authentication error (missing or invalid credential)
+  - code: 3
+    meaning: Rate limit
+  - code: 4
+    meaning: Network error or timeout
+  - code: 5
+    meaning: Not found (unknown endpoint or missing resource)
+  - code: 6
+    meaning: Unknown error
+retries:
+  automatic: true
+  detail: >-
+    Network errors, 5xx responses and 429 rate limits are retried with exponential
+    backoff, honoring Retry-After. A 429 is always replayed. On a 5xx or network drop
+    only idempotent methods (GET, PUT, DELETE) are replayed; POST and PATCH are never
+    retried on those failures, to avoid double-creating a resource.
+credential_storage:
+  path: ~/.lemlist/config.json
+  mode: '0600'
+scope:
+  in: wires input to an API call and formats the response
+  out:
+  - business logic
+  - local data store or sync engine
+  - automation or scheduling engine
