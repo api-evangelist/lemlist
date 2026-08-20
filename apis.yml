@@ -36,6 +36,19 @@ tags:
 - Deliverability
 - CRM
 - Multichannel Messaging
+- Webhook
+- MCP
+tags_raw:
+- Email Outreach
+- Sales Engagement
+- Cold Email
+- Sales Automation
+- LinkedIn Outreach
+- Lead Generation
+- Data Enrichment
+- Deliverability
+- CRM
+- Multichannel Messaging
 - Webhooks
 - MCP
 url: https://raw.githubusercontent.com/api-evangelist/lemlist/refs/heads/main/apis.yml
@@ -203,6 +216,8 @@ apis:
   humanURL: https://developer.lemlist.com/api-reference/endpoints/webhooks/add-webhook
   baseURL: https://api.lemlist.com/api
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
@@ -237,6 +252,8 @@ apis:
   humanURL: https://developer.lemlist.com/api-reference
   baseURL: https://api.lemlist.com/api
   tags:
+  - Task
+  tags_raw:
   - Tasks
   properties:
   - type: OpenAPI
@@ -269,6 +286,8 @@ apis:
   humanURL: https://developer.lemlist.com/api-reference/endpoints/users/get-user
   baseURL: https://api.lemlist.com/api
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
