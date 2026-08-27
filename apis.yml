@@ -56,44 +56,12 @@ created: '2026-05-11'
 modified: '2026-08-13'
 specificationVersion: '0.23'
 apis:
-- aid: lemlist:rest-api
-  name: lemlist REST API
-  description: >-
-    The full lemlist REST API - 143 operations across campaigns, sequences, leads,
-    contacts, companies, the B2B people database, enrichment, the unified inbox,
-    Signal Agents, unsubscribes, webhooks, lemwarm and deliverability alerts. All
-    routes live under https://api.lemlist.com/api. Authentication is an API key
-    carried as HTTP Basic with an empty username. lemlist publishes the OpenAPI at
-    developer.lemlist.com/api-reference/openapi/v2.json.
-  humanURL: https://developer.lemlist.com
-  baseURL: https://api.lemlist.com/api
-  tags:
-  - Email Outreach
-  - Sales Engagement
-  - Cold Email
-  - Sales Automation
-  properties:
-  - type: OpenAPI
-    url: openapi/_original/lemlist-openapi-v2.json
-  - type: Documentation
-    url: https://developer.lemlist.com
-  - type: APIReference
-    url: https://developer.lemlist.com/api-reference/getting-started/overview
-  - type: GettingStarted
-    url: https://developer.lemlist.com/api-reference/getting-started/overview
-  - type: Examples
-    url: examples/lemlist-examples.yml
-  - type: Overlay
-    url: overlays/lemlist-api-overlay.yaml
-  - type: DataModel
-    url: data-model/lemlist-data-model.yml
 - aid: lemlist:mcp-server
   name: lemlist MCP Server
   description: >-
-    lemlist's hosted remote Model Context Protocol server. An MCP client POSTs to
-    https://app.lemlist.com/mcp and authenticates with OAuth 2.1 (authorization code
-    + PKCE, dynamic client registration) or an X-API-Key header. lemlist advertises
-    roughly 40 tools covering lead search, enrichment, campaign and sequence
+    lemlist's hosted remote Model Context Protocol server. An MCP client POSTs to https://app.lemlist.com/mcp
+    and authenticates with OAuth 2.1 (authorization code + PKCE, dynamic client registration) or an X-API-Key
+    header. lemlist advertises roughly 40 tools covering lead search, enrichment, campaign and sequence
     management, stats, the inbox and webhooks.
   humanURL: https://developer.lemlist.com/mcp/setup
   baseURL: https://app.lemlist.com/mcp
@@ -109,8 +77,9 @@ apis:
     url: https://developer.lemlist.com/mcp/setup
 - aid: lemlist:lemlist-campaigns-api
   name: lemlist Campaigns API
-  description: Campaign CRUD and lifecycle - create, update, duplicate, start, pause,
-    validation statutes, stats, reports and asynchronous exports.
+  description: >-
+    Campaign CRUD and lifecycle - create, update, duplicate, start, pause, validation statutes, stats,
+    reports and asynchronous exports.
   humanURL: https://developer.lemlist.com/api-reference/endpoints/campaigns/get-many-campaigns
   baseURL: https://api.lemlist.com/api
   tags:
@@ -130,8 +99,9 @@ apis:
     url: openapi/lemlist-sequences-api-openapi.yml
 - aid: lemlist:lemlist-leads-api
   name: lemlist Leads API
-  description: Leads inside campaigns - create with optional enrichment, update, pause,
-    resume, mark interested, custom variables, CRM import and unsubscribe.
+  description: >-
+    Leads inside campaigns - create with optional enrichment, update, pause, resume, mark interested,
+    custom variables, CRM import and unsubscribe.
   humanURL: https://developer.lemlist.com/api-reference/endpoints/leads/create-lead-in-campaign
   baseURL: https://api.lemlist.com/api
   tags:
@@ -141,9 +111,10 @@ apis:
     url: openapi/lemlist-leads-api-openapi.yml
 - aid: lemlist:lemlist-people-database-api
   name: lemlist People Database API
-  description: Search the lemlist B2B people and company database, list its filters,
-    and manage saved personas.
-  humanURL: https://developer.lemlist.com/api-reference/endpoints/people-database/search-people-database
+  description: >-
+    Search the lemlist B2B people and company database, list its filters, and manage saved personas.
+  humanURL: >-
+    https://developer.lemlist.com/api-reference/endpoints/people-database/search-people-database
   baseURL: https://api.lemlist.com/api
   tags:
   - People Database
@@ -153,8 +124,9 @@ apis:
     url: openapi/lemlist-people-database-api-openapi.yml
 - aid: lemlist:lemlist-enrich-api
   name: lemlist Enrich API
-  description: Asynchronous enrichment - find and verify emails, phone numbers and
-    LinkedIn data, single or in bulk, then poll for the result. Credit-metered.
+  description: >-
+    Asynchronous enrichment - find and verify emails, phone numbers and LinkedIn data, single or in bulk,
+    then poll for the result. Credit-metered.
   humanURL: https://developer.lemlist.com/api-reference/endpoints/enrich/enrich-data
   baseURL: https://api.lemlist.com/api
   tags:
@@ -165,8 +137,9 @@ apis:
     url: openapi/lemlist-enrich-api-openapi.yml
 - aid: lemlist:lemlist-inbox-api
   name: lemlist Inbox API
-  description: The unified reply inbox - conversations, messages, drafts, labels and
-    sending on email, LinkedIn and WhatsApp.
+  description: >-
+    The unified reply inbox - conversations, messages, drafts, labels and sending on email, LinkedIn and
+    WhatsApp.
   humanURL: https://developer.lemlist.com/api-reference
   baseURL: https://api.lemlist.com/api
   tags:
@@ -199,8 +172,9 @@ apis:
     url: openapi/lemlist-companies-api-openapi.yml
 - aid: lemlist:lemlist-signal-agents-api
   name: lemlist Signal Agents API
-  description: Signal Agents (watch lists) - create and configure watches, list the
-    available signal types and filters, read detected signals, and push external signals.
+  description: >-
+    Signal Agents (watch lists) - create and configure watches, list the available signal types and filters,
+    read detected signals, and push external signals.
   humanURL: https://developer.lemlist.com/api-reference/endpoints/watch-list/list-watch-lists
   baseURL: https://api.lemlist.com/api
   tags:
@@ -211,8 +185,9 @@ apis:
     url: openapi/lemlist-signal-agents-api-openapi.yml
 - aid: lemlist:lemlist-webhooks-api
   name: lemlist Webhooks API
-  description: Webhook subscription management - list, create with an optional shared
-    secret, and delete. 76 event types are documented.
+  description: >-
+    Webhook subscription management - list, create with an optional shared secret, and delete. 76 event
+    types are documented.
   humanURL: https://developer.lemlist.com/api-reference/endpoints/webhooks/add-webhook
   baseURL: https://api.lemlist.com/api
   tags:
@@ -226,8 +201,9 @@ apis:
     url: asyncapi/lemlist-webhooks.yml
 - aid: lemlist:lemlist-unsubscribes-api
   name: lemlist Unsubscribes API
-  description: Suppression management - unsubscribe and re-subscribe contacts and
-    variables, list and export the suppression set, and the legacy email/domain surface.
+  description: >-
+    Suppression management - unsubscribe and re-subscribe contacts and variables, list and export the
+    suppression set, and the legacy email/domain surface.
   humanURL: https://developer.lemlist.com/api-reference
   baseURL: https://api.lemlist.com/api
   tags:
@@ -270,8 +246,7 @@ apis:
     url: openapi/lemlist-activities-api-openapi.yml
 - aid: lemlist:lemlist-team-api
   name: lemlist Team API
-  description: Team-level endpoints - team information, senders, remaining credits and
-    CRM users.
+  description: Team-level endpoints - team information, senders, remaining credits and CRM users.
   humanURL: https://developer.lemlist.com/api-reference/endpoints/team/get-team
   baseURL: https://api.lemlist.com/api
   tags:
@@ -281,8 +256,8 @@ apis:
     url: openapi/lemlist-team-api-openapi.yml
 - aid: lemlist:lemlist-users-api
   name: lemlist Users API
-  description: User endpoints - user detail and the connected channels available to
-    the authenticated user.
+  description: >-
+    User endpoints - user detail and the connected channels available to the authenticated user.
   humanURL: https://developer.lemlist.com/api-reference/endpoints/users/get-user
   baseURL: https://api.lemlist.com/api
   tags:
@@ -295,7 +270,8 @@ apis:
 - aid: lemlist:lemlist-email-accounts-api
   name: lemlist Email Accounts API
   description: Connect, test and disconnect custom SMTP/IMAP sending accounts.
-  humanURL: https://developer.lemlist.com/api-reference/endpoints/email-accounts/connect-email-account
+  humanURL: >-
+    https://developer.lemlist.com/api-reference/endpoints/email-accounts/connect-email-account
   baseURL: https://api.lemlist.com/api
   tags:
   - Email Accounts
@@ -305,8 +281,7 @@ apis:
     url: openapi/lemlist-email-accounts-api-openapi.yml
 - aid: lemlist:lemlist-lemwarm-api
   name: lemlist lemwarm API
-  description: lemwarm mailbox warm-up - start, pause, and read or update warm-up
-    settings per mailbox.
+  description: lemwarm mailbox warm-up - start, pause, and read or update warm-up settings per mailbox.
   humanURL: https://developer.lemlist.com/api-reference
   baseURL: https://api.lemlist.com/api
   tags:
@@ -317,8 +292,7 @@ apis:
     url: openapi/lemlist-lemwarm-api-openapi.yml
 - aid: lemlist:lemlist-deliverability-alerts-api
   name: lemlist Deliverability Alerts API
-  description: Threshold alerts on deliverability metrics - create, read, update and
-    delete.
+  description: Threshold alerts on deliverability metrics - create, read, update and delete.
   humanURL: https://developer.lemlist.com/api-reference
   baseURL: https://api.lemlist.com/api
   tags:
