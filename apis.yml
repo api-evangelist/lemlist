@@ -11,6 +11,18 @@ description: lemlist is a sales engagement and cold outreach platform from lempi
   registration, an official OpenAPI-generated CLI on npm, an llms.txt index, a
   published Agent Skill, and a 76-event webhook catalog.
 type: Index
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: paid
   onboarding: self-serve
