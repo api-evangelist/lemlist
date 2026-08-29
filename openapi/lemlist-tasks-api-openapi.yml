@@ -1,64 +1,28 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: lemlist Tasks API
+  title: Lemlist Tasks API
   version: 1.0.0
-  description: The Tasks operations of the lemlist API, split by tag from the OpenAPI lemlist publishes
-    at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content is carried verbatim
-    from the provider spec.
+  description: 'Operations tagged Tasks across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
-security:
-- basicAuth: []
 tags:
 - name: Tasks
 paths:
   /tasks:
+    parameters: []
     get:
-      summary: Get Many Tasks
-      description: Retrieve tasks with optional filtering and pagination. Tasks marked as `done` are excluded
-        from results.
+      summary: Tasks
       tags:
       - Tasks
-      parameters:
-      - name: page
-        in: query
-        description: Page number for paginated results (0-indexed).
-        required: false
-        schema:
-          type: integer
-          default: 0
-      - name: filters
-        in: query
-        description: "JSON array of filter objects. Each filter has a `filterId` and specific parameters.\n\
-          \n**Available Filters:**\n\n- `fullName`: Filter by contact's full name.\n  - Parameters: `value`\
-          \ (string) or `regex` (string)\n  - Example: `{\"filterId\":\"fullName\",\"value\":\"John Doe\"\
-          }`\n\n- `email`: Filter by contact's email address.\n  - Parameters: `value` (string) or `regex`\
-          \ (string)\n  - Example: `{\"filterId\":\"email\",\"value\":\"john@example.com\"}`\n\n- `phone`:\
-          \ Filter by contact's phone number.\n  - Parameters: `value` (string) or `regex` (string)\n\
-          \  - Example: `{\"filterId\":\"phone\",\"value\":\"+1234567890\"}`\n\n- `linkedin`: Filter by\
-          \ LinkedIn profile URL.\n  - Parameters: `value` (string) or `regex` (string)\n  - Example:\
-          \ `{\"filterId\":\"linkedin\",\"value\":\"linkedin.com/in/johndoe\"}`\n\n- `campaignId`: Filter\
-          \ by campaign IDs (inclusion/exclusion).\n  - Parameters: `in` (array of strings) and/or `out`\
-          \ (array of strings)\n  - Example: `{\"filterId\":\"campaignId\",\"in\":[\"cam_123\"],\"out\"\
-          :[\"cam_456\"]}`\n\n- `campaignState`: Filter by campaign states.\n  - Parameters: `in` (array\
-          \ of strings) and/or `out` (array of strings)\n  - Allowed values: `draft`, `running`, `ended`,\
-          \ `paused`, `errors`, `archived`\n  - Example: `{\"filterId\":\"campaignState\",\"in\":[\"running\"\
-          ,\"paused\"]}`\n\n- `type`: Filter by task type.\n  - Parameters: `in` (array of strings) and/or\
-          \ `out` (array of strings)\n  - Allowed values: `manual`, `phone`, `linkedinInvite`, `linkedinSend`,\
-          \ `linkedinVoiceNote`, `emailsReplied`, `opportunityReplied`, `linkedinReplied`, `opportunityClicked`,\
-          \ `email`, `whatsappMessage`\n  - Example: `{\"filterId\":\"type\",\"in\":[\"phone\",\"email\"\
-          ]}`\n\n- `assignedTo`: Filter by assigned user IDs.\n  - Parameters: `in` (array of strings)\
-          \ and/or `out` (array of strings)\n  - Example: `{\"filterId\":\"assignedTo\",\"in\":[\"usr_123\"\
-          ,\"usr_456\"]}`\n\n- `dueDate`: Filter by due date range.\n  - Parameters: `from` (string, YYYY-MM-DD)\
-          \ and/or `to` (string, YYYY-MM-DD)\n  - Example: `{\"filterId\":\"dueDate\",\"from\":\"2025-01-01\"\
-          ,\"to\":\"2025-12-31\"}`\n\nMultiple filters can be combined in an array."
-        required: false
-        schema:
-          type: string
-        example: '[{"filterId":"dueDate","from":"2025-02-11","to":"2025-02-28"},{"filterId":"type","in":["phone","linkedinSend"]}]'
+      parameters: []
       responses:
-        '200':
-          description: Success
+        default:
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Tasks
           content:
             application/json:
               schema:
@@ -67,281 +31,100 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Task'
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        type:
+                          type: string
+                        leadId:
+                          type: string
+                        campaignId:
+                          type: string
+                        contactId:
+                          type: string
+                        dueDate:
+                          type: string
+                          format: date-time
+                        userId:
+                          type: string
                   page:
-                    type: string
+                    type: integer
               example:
                 results:
-                - _id: opp_LyXDV8KHzctQdLFpG
-                  type: manual
-                  title: Keep an eye on him
-                  priority: 1
-                  leadId: lea_fiDpiGV585wy3Oii2
-                  campaignId: cam_bSn8EORHQxbWPjHvu
-                  contactId: ctc_xW8Ou6C03Csv8vatp
-                  dueDate: '2025-11-10T09:58:57.169Z'
-                  userId: usr_ahfFktBBHUIxbVG5P
-                  content: does he have bandwidth to help us? would be grand
-                - _id: opp_KNQOrrlGnLvEXDDS9
-                  type: manual
-                  title: API Reference Illustration
-                  priority: 2
-                  dueDate: '2025-10-31T07:58:00.000Z'
-                  userId: usr_ahfFktBBHUIxbVG5P
-                  content: ''
-                page: '0'
-        '400':
-          description: Bad team
-          content:
-            text/plain:
-              example: Bad team
-        '401':
-          description: The authentication you supplied is incorrect
-          content:
-            text/plain:
-              example: The authentication you supplied is incorrect
+                - _id: opp_vDuwoqRopZ4ygeApq
+                  type: phone
+                  leadId: lea_4ZnGoytR5uoZs7Bod
+                  campaignId: cam_fX7SwMGyooxFLeeiM
+                  contactId: ctc_iSW6pi7AFnufvhgeS
+                  dueDate: '2025-02-13T10:02:35.209Z'
+                  userId: usr_6Y58qbtsYv2rCHQiJ
+                - _id: opp_22vSBY7pNKskQ9XDX
+                  type: phone
+                  leadId: lea_4QqkLsi3gDawLsRLP
+                  campaignId: cam_fX7SwMGyooxFLeeiM
+                  contactId: ctc_Ak6dK4XGT73kgYoHe
+                  dueDate: '2025-02-13T10:02:35.208Z'
+                  userId: usr_6Y58qbtsYv2rCHQiJ
+                - _id: opp_wa9CizcCzWMyWQMab
+                  type: phone
+                  leadId: lea_T478Y3PBtunxLA3uD
+                  campaignId: cam_ZoNvbA4nnE9T3T3Xp
+                  contactId: ctc_Bpy8KPvJuCkGGbYJ2
+                  dueDate: '2025-02-13T09:08:53.061Z'
+                  userId: usr_6Y58qbtsYv2rCHQiJ
+                - _id: opp_qJFeKB4pdofKAiTpS
+                  type: phone
+                  leadId: lea_fZKPKs29MwsZwruj8
+                  campaignId: cam_ZoNvbA4nnE9T3T3Xp
+                  contactId: ctc_8dKYwwv2pGmupjamP
+                  dueDate: '2025-02-13T09:08:53.061Z'
+                  userId: usr_6Y58qbtsYv2rCHQiJ
+                page: 0
     post:
-      summary: Create Task
-      description: Create a manual task (opportunity) associated with a contact/company or lead.
+      summary: Tasks
       tags:
       - Tasks
+      parameters: []
+      responses:
+        default:
+          headers: {}
+          description: Tasks
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                recordId:
+                leadId:
                   type: string
-                  description: The ID of the contact company or lead associated with the task.
-                type:
-                  type: string
-                  description: The type of task.
-                  enum:
-                  - email
-                  - manual
-                  - phone
-                  - linkedin
-                assignedTo:
-                  type: string
-                  description: The ID of the team member assigned to the task (userId).
-                dueDate:
-                  type: string
-                  format: date-time
-                  description: The due date in ISO 8601 format (e.g., 2025-02-12T00:00:00.000Z).
-                title:
-                  type: string
-                  description: Optional title of the task. Defaults to an empty string if omitted.
-                  default: ''
-                message:
-                  type: string
-                  description: Optional message/description of the task. Defaults to an empty string if
-                    omitted.
-                  default: ''
-                priority:
-                  type: string
-                  description: Priority level of the task.
-                  enum:
-                  - ''
-                  - '0'
-                  - '1'
-                  - '2'
-                  default: ''
-                images:
-                  type: array
-                  items:
-                    type: string
-                    format: uri
-                  description: 'Public HTTPS URLs of images to attach to a `linkedin` task. lemlist downloads
-                    each file and re-hosts it. Ignored when `type` is not `linkedin`. Allowed MIME types:
-                    `image/png`, `image/jpeg`, `image/gif`. Up to 20 MB per file, and up to 6 items total
-                    combined with `videos`.'
-                videos:
-                  type: array
-                  items:
-                    type: string
-                    format: uri
-                  description: 'Public HTTPS URLs of videos to attach to a `linkedin` task. lemlist downloads
-                    each file and re-hosts it. Ignored when `type` is not `linkedin`. Allowed MIME types:
-                    `video/mp4`, `video/quicktime`. Up to 20 MB per file, and up to 6 items total combined
-                    with `images`.'
-              required:
-              - leadId
-              - type
-              - assignedTo
-              - dueDate
             example:
-              type: phone
-              assignedTo: usr_7YzNqVRMCfdeHEzMn
-              dueDate: '2025-02-10T09:58:57.169Z'
-              message: this is my message
-              title: this is my title
-              leadId: lea_zUwSUPSxozD9fLVGw
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Task'
-              example:
-                _id: opp_LyXDV8KHzctQdLFpG
-                type: manual
-                title: Keep an eye on him
-                priority: 1
-                leadId: lea_fiDpiGV585wy3Oii2
-                campaignId: cam_bSn8EORHQxbWPjHvu
-                contactId: ctc_xW8Ou6C03Csv8vatp
-                dueDate: '2025-11-10T09:58:57.169Z'
-                userId: usr_ahfFktBBHUIxbVG5P
-                content: does he have bandwidth to help us? would be grand
-        '400':
-          description: 'Possible errors: Bad team / Bad method'
-          content:
-            text/plain:
-              example: Bad team
-        '401':
-          description: The authentication you supplied is incorrect
-          content:
-            text/plain:
-              example: The authentication you supplied is incorrect
-        '405':
-          description: Method not allowed
-      parameters: []
+              leadId: lea_sMsXBnXd7mG2XdxFR
     patch:
-      summary: Update Task
-      description: Update task details such as assignment, due date, title, message, priority, or completion
-        status.
+      summary: Tasks
       tags:
       - Tasks
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  description: The unique identifier of the task to update
-                assignedTo:
-                  type: string
-                  description: The ID of the team member to assign the task to (userId)
-                dueDate:
-                  type: string
-                  format: date-time
-                  description: Updated due date in ISO 8601 format
-                title:
-                  type: string
-                  description: Updated task title
-                message:
-                  type: string
-                  description: Updated task message/description
-                priority:
-                  type: string
-                  description: Priority level of the task
-                  enum:
-                  - ''
-                  - '0'
-                  - '1'
-                  - '2'
-                done:
-                  type: boolean
-                  description: Mark task as completed
-                images:
-                  type: array
-                  items:
-                    type: string
-                    format: uri
-                  description: 'Public HTTPS URLs of images to attach to a LinkedIn task. Replaces the
-                    task''s current images — pass an empty array to clear them. Returns `400` (`LINKEDIN_MEDIA_INVALID_TYPE`)
-                    when the target task is not a LinkedIn task. Allowed MIME types: `image/png`, `image/jpeg`,
-                    `image/gif`. Up to 20 MB per file, and up to 6 items total combined with `videos`.'
-                videos:
-                  type: array
-                  items:
-                    type: string
-                    format: uri
-                  description: 'Public HTTPS URLs of videos to attach to a LinkedIn task. Replaces the
-                    task''s current videos — pass an empty array to clear them. Returns `400` (`LINKEDIN_MEDIA_INVALID_TYPE`)
-                    when the target task is not a LinkedIn task. Allowed MIME types: `video/mp4`, `video/quicktime`.
-                    Up to 20 MB per file, and up to 6 items total combined with `images`.'
-              required:
-              - id
-            example:
-              id: opp_0Ieq2qRMg5EIeUMFV
-              title: My new title
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Task'
-              example:
-                _id: opp_KNQOrrlGnLvEXDDS9
-                type: manual
-                title: Check him out
-                priority: 2
-                dueDate: '2025-10-31T07:58:00.000Z'
-                userId: usr_ahfFktBBHUIxbVG5P
-                content: Really glad we started using lemlist
-        '400':
-          description: 'Possible errors: Bad team / Bad method'
-          content:
-            text/plain:
-              example: Bad team
-        '401':
-          description: The authentication you supplied is incorrect
-          content:
-            text/plain:
-              example: The authentication you supplied is incorrect
-        '405':
-          description: Method not allowed
       parameters: []
+      responses:
+        default:
+          headers: {}
+          description: Opportunities
+    servers:
+    - url: https://api.lemlist.com/api
   /tasks/ignore:
+    parameters: []
     post:
-      summary: Ignore Tasks
+      summary: Ignore tasks
       tags:
       - Tasks
       parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                ids:
-                  type: array
-                  items:
-                    type: string
-                  description: Array of task IDs to ignore
-              required:
-              - ids
       responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-              example: {}
-        '400':
-          description: 'Possible errors: Bad team / Error message from opportunitiesDone'
-          content:
-            text/plain:
-              example: Bad team
-        '401':
-          description: The authentication you supplied is incorrect
-          content:
-            text/plain:
-              example: The authentication you supplied is incorrect
-        '405':
-          description: Method not allowed
+        default:
+          headers: {}
+          description: Ignore tasks
+    servers:
+    - url: https://api.lemlist.com/api
 components:
-  securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
   schemas:
     Task:
       type: object
@@ -381,3 +164,11 @@ components:
           type: string
           format: date-time
           description: Completion timestamp
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-refined-from:
+- lemlist-openapi-v1-legacy.json
+- lemlist-openapi-v2.json
+- lemlist-openapi.yml

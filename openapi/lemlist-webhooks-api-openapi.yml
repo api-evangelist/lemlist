@@ -1,280 +1,192 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: lemlist Webhooks API
+  title: Lemlist Webhooks API
   version: 1.0.0
-  description: The Webhooks operations of the lemlist API, split by tag from the OpenAPI lemlist publishes
-    at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content is carried verbatim
-    from the provider spec.
+  description: 'Operations tagged Webhooks across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
-security:
-- basicAuth: []
 tags:
 - name: Webhooks
 paths:
   /hooks:
+    parameters: []
     get:
-      summary: Get Many Webhooks
+      summary: Get All webhooks
       tags:
       - Webhooks
+      parameters: []
       responses:
         '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
           description: Success
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Webhook'
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    targetUrl:
+                      type: string
+                      format: uri
+                    createdAt:
+                      type: string
+                      format: date-time
+                    zapId:
+                      type: integer
+                    campaignId:
+                      type: string
               example:
-              - _id: hoo_Ib5jfViX9hn3FzNqr
-                targetUrl: https://hooks.zapier.com/hooks/standard/{accountId}/{webhookId}/
-                createdAt: '2018-06-05T09:07:07.761Z'
-                zapId: 37709957
+              - _id: hoo_3JKlmnOp7qrStuvWx
+                targetUrl: https://hooks.zapier.com/hooks/standard/*your-webhook-id*/
+                createdAt: '2018-08-09T07:45:56.789Z'
+                zapId: 123456780
+                campaignId: cam_A1B2C3D4E5F6G7H8I9
+              - _id: hoo_4LMnopQr8stUvWxYz
+                targetUrl: https://hooks.zapier.com/hooks/standard/*your-webhook-id*/
+                createdAt: '2019-03-15T11:22:33.123Z'
+                zapId: 123456789
                 type: emailsReplied
-                campaignId: cam_FlN1hrYhADZUfspMs
-                isFirst: true
-              - _id: hoo_SDRr2w4JigZDL7OB2
-                targetUrl: https://hooks.zapier.com/hooks/standard/{accountId}/{webhookId}/
-                createdAt: '2019-06-05T14:38:56.535Z'
-                zapId: 59825555
-                type: emailsReplied
-                campaignId: cam_h3jptAEeqFFpve5mr
-              - _id: hoo_IYAPP4HnSyU7UTH3E
-                targetUrl: https://hooks.zapier.com/hooks/standard/{accountId}/{webhookId}/
-                createdAt: '2019-06-05T15:49:36.624Z'
-                zapId: 59831776
-                type: emailsReplied
-                campaignId: cam_qBNYaIFXA77eXM1Ey
-                isFirst: true
-              - _id: hoo_OQ1eCPucttlQV6uB4
-                targetUrl: https://hooks.zapier.com/hooks/standard/{accountId}/{webhookId}/
-                createdAt: '2019-06-05T19:28:49.130Z'
-                zapId: 59852716
-                type: emailsReplied
-                campaignId: cam_vRotI1zB0rgqEe0Hg
-                isFirst: true
-              - _id: hoo_bOucNGG13uJhhIQ8g
-                targetUrl: https://hooks.zapier.com/hooks/standard/{accountId}/{webhookId}/
-                createdAt: '2019-10-15T09:53:50.839Z'
-                zapId: 47004696
-                type: emailsOpened
-                campaignId: cam_K6XNvvamP9QTotBC3
-              - _id: hoo_hZSI1GetoYUKu76TX
-                targetUrl: https://hooks.zapier.com/hooks/standard/{accountId}/{webhookId}/
-                createdAt: '2019-10-15T09:56:24.197Z'
-                zapId: 47004696
-                type: emailsOpened
-                campaignId: cam_K6XNvvamP9QTotBC3
-              - _id: hoo_anErg4PUSFTd3r3dX
-                targetUrl: https://hooks.zapier.com/hooks/standard/{accountId}/{webhookId}/
-                createdAt: '2020-04-27T14:04:33.424Z'
-                zapId: 85466371
-                type: emailsReplied
-                campaignId: cam_rpejDXyLkA2TSbXyC
-              - _id: hoo_Y3nL7UuQn85hIFTRV
-                targetUrl: https://hooks.zapier.com/hooks/standard/{accountId}/{webhookId}/
-                createdAt: '2020-04-27T14:06:38.375Z'
-                zapId: 85466371
-                type: emailsReplied
-                campaignId: cam_rpejDXyLkA2TSbXyC
-              - _id: hoo_UAtwcPAd0tK9U6hKG
-                targetUrl: https://example.com/webhooks/{id}
-                createdAt: '2022-02-10T16:45:28.216Z'
-                campaignId: cam_7BE8IZRaqahU44Wp6
-        '400':
-          description: Bad team
-          content:
-            text/plain:
-              example: Bad team
-        '401':
-          description: Unauthorized
-        '404':
-          description: Webhook not found
-          content:
-            text/plain:
-              example: Webhook not found
-      parameters: []
+                campaignId: cam_K9L8M7N6O5P4Q3R2S1
+              - _id: hoo_5NOqrsTu9vwXyZAbC
+                targetUrl: https://webhook.site/*your-webhook-id*/
+                createdAt: '2020-01-27T16:55:41.902Z'
+                type: linkedinSent
+                campaignId: cam_T3U4V5W6X7Y8Z9A1B2
+              - _id: hoo_6PQrstUv0xyZaBcDe
+                targetUrl: https://enlb9b4ykqu67a7.m.pipedream.net/1a2b3c4d
+                createdAt: '2021-10-04T20:18:29.504Z'
+                campaignId: cam_M5N4O3P2Q1R9S8T7U6
+              - _id: hoo_7RSTuvWx1yzAbCdEf
+                targetUrl: https://enlb9b4ykqu67a7.m.pipedream.net/2b3c4d5e
+                createdAt: '2022-05-21T02:34:17.678Z'
+                type: linkedinInterested
+                campaignId: cam_T3U4V5W6X7Y8Z9A1B2
     post:
-      summary: Add Webhook
+      summary: Add a webhook
       tags:
       - Webhooks
       parameters:
       - name: campaignId
         in: query
         required: false
-        description: Webhook for specific campaign
-        example: cam_123
+        description: (Optional) We'll call this hook only for this campaignId.
+        example: '{{campaignId}}'
         schema:
           type: string
       - name: isFirst
         in: query
         required: false
-        description: Webhook for first activity only
-        example: 'true'
+        description: (Optional) We'll call this hook only the first time this activity happened.
         schema:
-          type: boolean
+          type: string
       - name: zapId
         in: query
         required: false
-        description: Zapier ID
-        example: '123456789'
+        description: (Optional) Zapier ID
         schema:
           type: string
+      - name: Content
+        in: header
+        required: false
+        example: application/json
+        schema:
+          type: string
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success with specific data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  targetUrl:
+                    type: string
+                    format: uri
+                  createdAt:
+                    type: string
+                    format: date-time
+                  type:
+                    type: string
+                  campaignId:
+                    type: string
+              example:
+                _id: hoo_orQP33YrZgeKkswJK
+                targetUrl: https://webhook.site/*your-webhook-id*/
+                createdAt: '2024-07-11T13:55:06.276Z'
+                type: linkedinInterested
+                campaignId: cam_A1B2C3D4E5F6G7H8I9
+        default:
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  targetUrl:
+                    type: string
+                    format: uri
+                  createdAt:
+                    type: string
+                    format: date-time
+              example:
+                _id: hoo_dJt787EqeEmo7yxab
+                targetUrl: https://webhook.site/*your-webhook-id*/
+                createdAt: '2024-07-11T13:51:44.918Z'
       requestBody:
         content:
           application/json:
             schema:
               type: object
-              properties:
-                targetUrl:
-                  type: string
-                  format: uri
-                  description: The URL that will receive webhook POST requests.
-                type:
-                  type: string
-                  description: Optional event type to subscribe to. When omitted, all events are sent.
-                    See the full categorized list in the endpoint documentation.
-                  enum:
-                  - contacted
-                  - hooked
-                  - attracted
-                  - warmed
-                  - interested
-                  - notInterested
-                  - emailsSent
-                  - emailsOpened
-                  - emailsClicked
-                  - emailsReplied
-                  - emailsBounced
-                  - emailsFailed
-                  - emailsInterested
-                  - emailsNotInterested
-                  - emailsUnsubscribed
-                  - linkedinSent
-                  - linkedinOpened
-                  - linkedinReplied
-                  - linkedinInterested
-                  - linkedinNotInterested
-                  - linkedinSendFailed
-                  - linkedinVisitDone
-                  - linkedinVisitFailed
-                  - linkedinFollowDone
-                  - linkedinFollowFailed
-                  - linkedinFollowSkipped
-                  - linkedinInviteDone
-                  - linkedinInviteFailed
-                  - linkedinInviteAccepted
-                  - linkedinEndorseDone
-                  - linkedinEndorseFailed
-                  - linkedinEndorseSkipped
-                  - linkedinVoiceNoteDone
-                  - linkedinVoiceNoteFailed
-                  - linkedinLikeLastPostDone
-                  - linkedinLikeLastPostNoPost
-                  - linkedinLikeLastPostFailed
-                  - linkedinWithdrawInvitationDone
-                  - linkedinWithdrawInvitationFailed
-                  - whatsappMessageSent
-                  - whatsappMessageDelivered
-                  - whatsappMessageOpened
-                  - whatsappReplied
-                  - whatsappMessageFailed
-                  - smsSent
-                  - smsDelivered
-                  - smsReplied
-                  - smsFailed
-                  - aircallCreated
-                  - aircallEnded
-                  - aircallDone
-                  - aircallInterested
-                  - aircallNotInterested
-                  - apiDone
-                  - apiInterested
-                  - apiNotInterested
-                  - apiFailed
-                  - manualInterested
-                  - manualNotInterested
-                  - paused
-                  - resumed
-                  - stopped
-                  - campaignComplete
-                  - customDomainErrors
-                  - connectionIssue
-                  - sendLimitReached
-                  - lemwarmPaused
-                  - annotated
-                  - enrichmentDone
-                  - enrichmentError
-                  - callRecordingDone
-                  - callTranscriptDone
-                  - inboxLabelUpdated
-                  - signalRegistered
-                  - deliverabilityAlertTriggered
-                secret:
-                  type: string
-                  description: Optional shared secret. Stored encrypted, never returned by GET, and immutable
-                    once set. Sent back to your endpoint as a `secret` field in the body of every webhook
-                    call so you can verify the request originated from lemlist.
-              required:
-              - targetUrl
-            example:
-              targetUrl: https://webhook.site/00000000-0000-0000-0000-000000000000
-              type: linkedinInterested
-              secret: s3cret-shared-with-my-endpoint
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  _id:
-                    type: string
-                    description: Unique identifier for the webhook
-                  targetUrl:
-                    type: string
-                    description: The URL where the webhook will send data
-                  createdAt:
-                    type: string
-                    format: date-time
-                    description: Timestamp when the webhook was created
-                  type:
-                    type: string
-                    description: Type of webhook event
-              example:
-                _id: hoo_GvYkkWIcdPf2WsBDY
-                targetUrl: https://n8n.example.com/webhook/lemlist-webhook-surprise
-                createdAt: '2025-10-29T00:47:42.035Z'
-                type: linkedinInterested
-        '400':
-          description: Bad team
-          content:
-            text/plain:
-              example: Bad team
-        '401':
-          description: Unauthorized
-        '404':
-          description: Webhook not found
-          content:
-            text/plain:
-              example: Webhook not found
+            example: null
+    servers:
+    - url: https://api.lemlist.com/api
   /hooks/{hookId}:
+    parameters:
+    - name: hookId
+      in: path
+      required: true
+      example: '{{hookId}}'
+      schema:
+        type: string
     delete:
-      summary: Delete Webhook
+      summary: Delete a webhook
       tags:
       - Webhooks
       parameters:
-      - name: hookId
-        in: path
-        required: true
-        description: Unique webhook ID
-        example: hoo_123
+      - name: Content
+        in: header
+        required: false
+        example: application/json
         schema:
           type: string
       responses:
         '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
           description: Success
           content:
             application/json:
@@ -283,48 +195,38 @@ paths:
                 properties:
                   _id:
                     type: string
-                    description: Unique identifier for the webhook
                   targetUrl:
                     type: string
-                    description: The URL where the webhook will send data
+                    format: uri
                   createdAt:
                     type: string
                     format: date-time
-                    description: Timestamp when the webhook was created
                   type:
                     type: string
-                    description: Type of webhook event
                   campaignId:
                     type: string
-                    description: Associated campaign ID, if applicable
               example:
-                _id: hoo_fmpVMoBhrEHtw3cgy
-                targetUrl: https://n8n.example.com/webhook/lemlist-webhook-surprise
+                _id: hoo_orQP33YrZgeKkswJK
+                targetUrl: https://webhook.site/*your-webhook-id*/
                 createdAt: '2024-07-11T13:55:06.276Z'
                 type: linkedinInterested
                 campaignId: cam_A1B2C3D4E5F6G7H8I9
-        '400':
-          description: Bad team
-          content:
-            text/plain:
-              example: Bad team
-        '401':
-          description: Unauthorized
         '404':
-          description: Webhook not found
-          content:
-            text/plain:
-              example: Webhook not found
+          headers: {}
+          description: Not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            example: {}
+    servers:
+    - url: https://api.lemlist.com/api
 components:
-  securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
   schemas:
     Webhook:
       type: object
-      description: Webhooks send real-time HTTP notifications upon campaign events (opens, clicks, replies,
-        etc.).
+      description: Webhooks send real-time HTTP notifications upon campaign events (opens, clicks, replies, etc.).
       properties:
         _id:
           type: string
@@ -335,8 +237,7 @@ components:
           description: Destination URL for event notifications
         type:
           type: string
-          description: Event type to listen for. Events are grouped by category — see the endpoint docs
-            for a full breakdown.
+          description: Event type to listen for. Events are grouped by category — see the endpoint docs for a full breakdown.
           enum:
           - contacted
           - hooked
@@ -423,3 +324,11 @@ components:
         zapId:
           type: integer
           description: Zapier integration ID (if the destination is a Zapier webhook)
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-refined-from:
+- lemlist-openapi-v1-legacy.json
+- lemlist-openapi-v2.json
+- lemlist-openapi.yml

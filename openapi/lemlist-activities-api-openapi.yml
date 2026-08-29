@@ -1,17 +1,370 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: lemlist Activities API
+  title: Lemlist Activities API
   version: 1.0.0
-  description: The Activities operations of the lemlist API, split by tag from the OpenAPI lemlist publishes
-    at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content is carried verbatim
-    from the provider spec.
+  description: 'Operations tagged Activities across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
-security:
-- basicAuth: []
 tags:
 - name: Activities
 paths:
+  /activities/:
+    parameters: []
+    get:
+      summary: Retrieve Activities
+      tags:
+      - Activities
+      parameters:
+      - name: type
+        in: query
+        required: false
+        description: (Optional)
+        example: paused
+        schema:
+          type: string
+      - name: campaignId
+        in: query
+        required: false
+        description: (Optional)
+        example: '{{campaignId}}'
+        schema:
+          type: string
+      - name: isFirst
+        in: query
+        required: false
+        description: (Optional)
+        example: 'true'
+        schema:
+          type: boolean
+      - name: offset
+        in: query
+        required: false
+        description: (Optional)
+        example: '0'
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        required: false
+        description: '(Optional) Default: 100 | Max: 100'
+        example: '2'
+        schema:
+          type: integer
+      - name: leadId
+        in: query
+        required: false
+        description: (Optional) Get activities for a lead when provided
+        example: '{{leadId}}'
+        schema:
+          type: string
+      - name: version
+        in: query
+        required: false
+        description: '(Optional) Default: v1'
+        example: v2
+        schema:
+          type: string
+      - name: Content
+        in: header
+        required: false
+        example: application/json
+        schema:
+          type: string
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    type:
+                      type: string
+                    emailId:
+                      type: string
+                    messageId:
+                      type: string
+                    emailTemplateId:
+                      type: string
+                    isFirst:
+                      type: boolean
+                    stopped:
+                      type: boolean
+                    createdAt:
+                      type: string
+                      format: date-time
+                    bot:
+                      type: boolean
+                    teamId:
+                      type: string
+                    leadId:
+                      type: string
+                    campaignId:
+                      type: string
+                    sequenceId:
+                      type: string
+                    sequenceStep:
+                      type: integer
+                    createdBy:
+                      type: string
+                    sendUserId:
+                      type: string
+                    totalSequenceStep:
+                      type: integer
+                    name:
+                      type: string
+                    sendUserName:
+                      type: string
+                    sendUserEmail:
+                      type: string
+                      format: email
+                    sendUserMailboxId:
+                      type: string
+                    sendUserMailboxProviderId:
+                      type: string
+                      format: email
+                    leadFirstName:
+                      type: string
+                    leadLastName:
+                      type: string
+                    leadEmail:
+                      type: string
+                      format: email
+                    leadPhone:
+                      type: string
+                    leadPicture:
+                      type: string
+                    leadCompanyName:
+                      type: string
+                    metaData:
+                      type: object
+                      properties:
+                        teamId:
+                          type: string
+                        campaignId:
+                          type: string
+                        leadId:
+                          type: string
+                        type:
+                          type: string
+                        createdBy:
+                          type: string
+                    email:
+                      type: string
+                      format: email
+                    phone:
+                      type: string
+                    firstName:
+                      type: string
+                    lastName:
+                      type: string
+                    sendUserLoginEmail:
+                      type: string
+                      format: email
+                    campaignName:
+                      type: string
+                    emailTemplateName:
+                      type: string
+                    companyName:
+                      type: string
+                    companyDomain:
+                      type: string
+                    picture:
+                      type: string
+                    isPremium:
+                      type: string
+                    locationName:
+                      type: string
+                    occupation:
+                      type: string
+                    industry:
+                      type: string
+                    summary:
+                      type: string
+                    certification:
+                      type: string
+                    certification1:
+                      type: string
+                    certification2:
+                      type: string
+                    certification3:
+                      type: string
+                    certification4:
+                      type: string
+                    certification5:
+                      type: string
+                    certification6:
+                      type: string
+                    certification7:
+                      type: string
+                    certification8:
+                      type: string
+                    certification9:
+                      type: string
+                    certification10:
+                      type: string
+                    certification11:
+                      type: string
+                    certification12:
+                      type: string
+                    certification13:
+                      type: string
+                    certification14:
+                      type: string
+                    certification15:
+                      type: string
+                    certification16:
+                      type: string
+                    certification17:
+                      type: string
+                    certification18:
+                      type: string
+                    certification19:
+                      type: string
+                    school:
+                      type: string
+                    school1:
+                      type: string
+                    school2:
+                      type: string
+                    school3:
+                      type: string
+                    school4:
+                      type: string
+                    school5:
+                      type: string
+                    languages:
+                      type: string
+                    skills:
+                      type: string
+                    companyProfileUrl:
+                      type: string
+                    companyTagline:
+                      type: string
+                    companyHeadQuarter:
+                      type: string
+                    companySpecialities:
+                      type: string
+                    companyDescription:
+                      type: string
+                    companyFoundedOn:
+                      type: string
+                    companyEmployeesOnLinkedin:
+                      type: string
+                    companyIndustry:
+                      type: string
+                    companyLogo:
+                      type: string
+                    companyType:
+                      type: string
+                    sequenceTested:
+                      type: string
+                    recording:
+                      type: string
+                    transcription:
+                      type: string
+              example:
+              - _id: act_xXR99r2dyRedXb8pc
+                type: emailsSent
+                emailId: eml_8BdDtmtTJPzXTiMTL
+                messageId: <CADzbc6WBrJ0Dv1QRLaADAeffAAKMGMCjWQw=UFyazhDqxryoHw@mail.gmail.com>
+                emailTemplateId: etp_Tds8DjFk7cumowE8B
+                isFirst: true
+                stopped: false
+                createdAt: '2024-07-22T15:25:13.610Z'
+                bot: false
+                teamId: tea_KAiTn2K9RoYA85MuY
+                leadId: lea_u2H5qeBCGWKDdaj6B
+                campaignId: cam_6mKKdaC5PNQiBu2jT
+                sequenceId: seq_zNK94gqDakNmcRuGy
+                sequenceStep: 1
+                createdBy: usr_QAucgYReK6EmMB3Cz
+                sendUserId: usr_QAucgYReK6EmMB3Cz
+                totalSequenceStep: 1
+                name: Campaign example
+                sendUserName: John Doe
+                sendUserEmail: john.doe@lemlist.co
+                sendUserMailboxId: usm_im9fnaYmKKQaixa9d
+                sendUserMailboxProviderId: john.doe@lemlist.co
+                leadFirstName: ''
+                leadLastName: ''
+                leadEmail: john.doe@lempire.co
+                leadPhone: ''
+                leadPicture: ''
+                leadCompanyName: ''
+                metaData:
+                  teamId: tea_KAiTn2K9RoYA85MuY
+                  campaignId: cam_6mKKdaC5PNQiBu2jT
+                  leadId: lea_u2H5qeBCGWKDdaj6B
+                  type: emailsSent
+                  createdBy: usr_QAucgYReK6EmMB3Cz
+                email: john.doe@lempire.co
+                phone: ''
+                firstName: ''
+                lastName: ''
+                sendUserLoginEmail: john.doe@lempire.co
+                campaignName: Example's campaign
+                emailTemplateName: Blank
+                companyName: ''
+                companyDomain: ''
+                picture: ''
+                isPremium: ''
+                locationName: ''
+                occupation: ''
+                industry: ''
+                summary: ''
+                certification: ''
+                certification1: ''
+                certification2: ''
+                certification3: ''
+                certification4: ''
+                certification5: ''
+                certification6: ''
+                certification7: ''
+                certification8: ''
+                certification9: ''
+                certification10: ''
+                certification11: ''
+                certification12: ''
+                certification13: ''
+                certification14: ''
+                certification15: ''
+                certification16: ''
+                certification17: ''
+                certification18: ''
+                certification19: ''
+                school: ''
+                school1: ''
+                school2: ''
+                school3: ''
+                school4: ''
+                school5: ''
+                languages: ''
+                skills: ''
+                companyProfileUrl: ''
+                companyTagline: ''
+                companyHeadQuarter: ''
+                companySpecialities: ''
+                companyDescription: ''
+                companyFoundedOn: ''
+                companyEmployeesOnLinkedin: ''
+                companyIndustry: ''
+                companyLogo: ''
+                companyType: ''
+                sequenceTested: A
+                recording: <recording url>
+                transcription: <transcription url>
+    servers:
+    - url: https://api.lemlist.com/api
   /activities:
     get:
       summary: Get Many Activities
@@ -51,9 +404,7 @@ paths:
       - name: offset
         in: query
         required: false
-        description: 'Number of records to skip. Note: This is not traditional cursor-based pagination.
-          To retrieve all activities, increment offset by the limit value on each request (e.g., offset=0,
-          then offset=100, then offset=200, etc.).'
+        description: 'Number of records to skip. Note: This is not traditional cursor-based pagination. To retrieve all activities, increment offset by the limit value on each request (e.g., offset=0, then offset=100, then offset=200, etc.).'
         example: '0'
         schema:
           type: integer
@@ -74,38 +425,28 @@ paths:
       - name: minDate
         in: query
         required: false
-        description: Filter activities by `createdAt >= minDate`. Accepts either a Unix timestamp in seconds
-          (e.g. `1715385600`) or an ISO 8601 datetime (e.g. `2026-05-11T00:00:00Z`). `minDate` is the
-          primary name; `startDate` is accepted as an alias and `minDate` takes precedence when both are
-          provided.
+        description: Filter activities by `createdAt >= minDate`. Accepts either a Unix timestamp in seconds (e.g. `1715385600`) or an ISO 8601 datetime (e.g. `2026-05-11T00:00:00Z`). `minDate` is the primary name; `startDate` is accepted as an alias and `minDate` takes precedence when both are provided.
         example: '2026-05-01T00:00:00Z'
         schema:
           type: string
       - name: maxDate
         in: query
         required: false
-        description: Filter activities by `createdAt <= maxDate`. Accepts either a Unix timestamp in seconds
-          (e.g. `1715385600`) or an ISO 8601 datetime (e.g. `2026-05-11T00:00:00Z`). Must be strictly
-          greater than `minDate` when both are provided. `maxDate` is the primary name; `endDate` is accepted
-          as an alias and `maxDate` takes precedence when both are provided.
+        description: Filter activities by `createdAt <= maxDate`. Accepts either a Unix timestamp in seconds (e.g. `1715385600`) or an ISO 8601 datetime (e.g. `2026-05-11T00:00:00Z`). Must be strictly greater than `minDate` when both are provided. `maxDate` is the primary name; `endDate` is accepted as an alias and `maxDate` takes precedence when both are provided.
         example: '2026-05-31T23:59:59Z'
         schema:
           type: string
       - name: startDate
         in: query
         required: false
-        description: Alias for `minDate`, provided for consistency with sibling endpoints (e.g. `/campaigns/{campaignId}/stats`).
-          Accepts either a Unix timestamp in seconds or an ISO 8601 datetime. Ignored when `minDate` is
-          also provided.
+        description: Alias for `minDate`, provided for consistency with sibling endpoints (e.g. `/campaigns/{campaignId}/stats`). Accepts either a Unix timestamp in seconds or an ISO 8601 datetime. Ignored when `minDate` is also provided.
         example: '2026-05-01T00:00:00Z'
         schema:
           type: string
       - name: endDate
         in: query
         required: false
-        description: Alias for `maxDate`, provided for consistency with sibling endpoints (e.g. `/campaigns/{campaignId}/stats`).
-          Accepts either a Unix timestamp in seconds or an ISO 8601 datetime. Ignored when `maxDate` is
-          also provided.
+        description: Alias for `maxDate`, provided for consistency with sibling endpoints (e.g. `/campaigns/{campaignId}/stats`). Accepts either a Unix timestamp in seconds or an ISO 8601 datetime. Ignored when `maxDate` is also provided.
         example: '2026-05-31T23:59:59Z'
         schema:
           type: string
@@ -346,6 +687,10 @@ paths:
               example: Bad team
         '401':
           description: Unauthorized
+      security:
+      - basicAuth: []
+    servers:
+    - url: https://api.lemlist.com/api
   /activities/{activityId}/recording-transcript:
     delete:
       summary: Delete Activity Recording & Transcript
@@ -381,11 +726,11 @@ paths:
           description: Method not allowed
         '500':
           description: Error while deleting recording or transcript
+      security:
+      - basicAuth: []
+    servers:
+    - url: https://api.lemlist.com/api
 components:
-  securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
   schemas:
     Activity:
       type: object
@@ -408,13 +753,10 @@ components:
           description: Sequence ID
         stepId:
           type: string
-          description: Stable identifier of the sequence step that produced this activity. Present on
-            every activity created from now on; older activities gain it progressively as historical records
-            are backfilled, so treat it as optional when reading history.
+          description: Stable identifier of the sequence step that produced this activity. Present on every activity created from now on; older activities gain it progressively as historical records are backfilled, so treat it as optional when reading history.
         sequenceStep:
           type: number
-          description: 0-based position of the step within the sequence. Still emitted on every activity,
-            unchanged. Prefer `stepId` for a reference that survives steps being reordered.
+          description: 0-based position of the step within the sequence. Still emitted on every activity, unchanged. Prefer `stepId` for a reference that survives steps being reordered.
         totalSequenceStep:
           type: number
           description: 0-based count of the sequence steps already delivered to this lead.
@@ -422,3 +764,11 @@ components:
           type: string
           format: date-time
           description: When the activity occurred
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-refined-from:
+- lemlist-openapi-v1-legacy.json
+- lemlist-openapi-v2.json
+- lemlist-openapi.yml

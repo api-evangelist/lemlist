@@ -1,241 +1,68 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: lemlist Companies API
+  title: Lemlist Companies API
   version: 1.0.0
-  description: The Companies operations of the lemlist API, split by tag from the OpenAPI lemlist publishes
-    at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content is carried verbatim
-    from the provider spec.
+  description: 'Operations tagged Companies across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
-security:
-- basicAuth: []
 tags:
 - name: Companies
 paths:
   /companies:
+    parameters: []
     get:
-      summary: Get Many Companies
+      summary: Retrieve Companies
       tags:
       - Companies
       parameters:
-      - name: idsOrDomains
+      - name: page
         in: query
         required: false
-        description: Comma-separated list of company IDs or domains to fetch. When provided, returns only
-          matching companies (no pagination). Each value is classified as a company ID (e.g. `cpn_xxx`)
-          or a domain (e.g. `example.com`). URLs are normalized automatically (e.g. `https://example.com/path`
-          → `example.com`). Invalid values are silently skipped. Maximum 100 values.
-        example: cpn_gG7PsmZFpEAnpMCHO,persana.ai
-        schema:
-          type: string
-      - name: offset
-        in: query
-        required: false
-        description: Number of companies to skip for pagination. Defaults to 0. Ignored when `idsOrDomains`
-          is provided.
+        description: (Optional) Page to show
+        example: '1'
         schema:
           type: integer
-          minimum: 0
-          default: 0
       - name: sortBy
         in: query
         required: false
-        description: The field by which to sort. Currently, only 'createdAt' is supported.
+        description: '(Optional): The field by which to sort the schedules. Currently, only "createdAt" is supported'
         example: createdAt
         schema:
           type: string
-          enum:
-          - createdAt
       - name: sortOrder
         in: query
         required: false
-        description: The sort direction. Use 'desc' for descending order; any other value (or omission)
-          will sort in ascending order.
+        description: '(Optional): The sort direction. Use "desc" for descending order; any other value (or omission) will sort in ascending order'
         example: desc
         schema:
           type: string
-          enum:
-          - asc
-          - desc
       - name: search
         in: query
         required: false
-        description: Search by company name (case insensitive)
+        description: '(Optional): Search by company name, case insensitive'
         example: lemlist
         schema:
           type: string
       - name: fields
         in: query
         required: false
-        description: Returns selected fields. Returns all fields if empty. Each field is separated by
-          a comma (e.g., '_id,fields.name,domain')
+        description: "(Optional): Returns selected fields, returns all fields if empty, each field is separated by a coma. \n"
         example: _id,fields.name,domain
         schema:
           type: string
       - name: limit
         in: query
         required: false
-        description: 'Number of companies to retrieve. Default: 100. Maximum: 500'
+        description: (Optional) Number of companies to retrieve. 100 per default ( and 100 max ).
         example: '10'
         schema:
           type: integer
-          minimum: 1
-          maximum: 500
-          default: 100
-      - name: crmSyncStatus
-        in: query
-        required: false
-        description: 'Filter companies by their CRM sync state against the team''s active CRM provider.
-          Requires a CRM (Hubspot, Salesforce, or Pipedrive) to be connected — otherwise the request returns
-          `400 NO_CRM_CONNECTED`. Common values:
-
-          - `synced` — the company has a CRM record and no sync errors.
-
-          - `not_synced` — the company has no CRM record yet.
-
-          - `error` — at least one sync error is currently raised.
-
-          - A specific error reason (lowercase form), to filter by root cause: `unique_index_error_company`,
-          `property_doesnt_exist`, `required_field_missing`, `company_already_exists_with_name`, `company_already_exists_with_linkedin_url`.
-
-
-          For each returned company, see `crmSync.errors[].metadata.alreadyExistingCompanyId` to identify
-          the lemlist company that already occupies the conflicting CRM record (useful to remap contacts
-          before deleting the duplicate).'
-        example: unique_index_error_company
-        schema:
-          type: string
-          enum:
-          - synced
-          - not_synced
-          - error
-          - unique_index_error_company
-          - property_doesnt_exist
-          - required_field_missing
-          - company_already_exists_with_name
-          - company_already_exists_with_linkedin_url
-      - name: fieldRejectionReason
-        in: query
-        required: false
-        description: 'Filter companies to those carrying a field rejection with this reason — a value
-          lemlist refused to write, raised during CRM sync (`crm_sync_*`). Returns an empty list (`total:
-          0`) when no company matches. Each returned company exposes the full detail under `fieldRejections[]`
-          (which field, why, and `conflictingRecordId` for duplicates). Independent of `crmSyncStatus`
-          (which keys off the live provider errors); this filter reads the stored field rejections. Only
-          applies to the paginated list — ignored when `idsOrDomains` is provided (that path returns the
-          exact companies requested, unfiltered).'
-        example: crm_sync_duplicate_company
-        schema:
-          type: string
-          enum:
-          - crm_sync_duplicate_company
-          - crm_sync_invalid_domain
-          - crm_sync_company_not_found
-          - crm_sync_update_failed
-          - crm_sync_duplicate_linkedin_url
-          - crm_sync_invalid_linkedin_url
-          - crm_sync_value_oscillating
-          - crm_sync_owner_sync_loop
-          - crm_sync_unmapped_user
-          - crm_sync_value_incompatible
-          - crm_sync_unknown_error
       responses:
         '200':
           description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Company'
-                  total:
-                    type: integer
-                  limit:
-                    type: integer
-                  offset:
-                    type: integer
-                required:
-                - data
-                - total
-                - limit
-                - offset
-              example:
-                data:
-                - _id: cpn_gG7PsmZFpEAnpMCHO
-                  createdAt: '2025-10-26T11:54:27.387Z'
-                  createdBy: usr_iGBmhLaxZmL0s7k1G
-                  domain: persana.ai
-                  fields:
-                    name: Persana AI
-                    picture: https://example.com/logos/company-1.png
-                  ownerId: usr_iGBmhLaxZmL0s7k1G
-                - _id: cpn_FEWCjzMWXo5StjpDa
-                  createdAt: '2025-10-26T11:45:18.773Z'
-                  createdBy: usr_iGBmhLaxZmL0s7k1G
-                  domain: duno.ai
-                  fields:
-                    industry: IT Services and IT Consulting
-                    name: Duno.ai
-                    picture: https://example.com/logos/company-2.png
-                  ownerId: usr_iGBmhLaxZmL0s7k1G
-                - _id: cpn_2STz8x5Bexmd0nvIz
-                  createdAt: '2025-10-25T21:37:45.741Z'
-                  createdBy: usr_iGBmhLaxZmL0s7k1G
-                  domain: tally.so
-                  fields:
-                    industry: Computer Software
-                    name: lemlist family
-                    picture: https://example.com/logos/lemlist.png
-                  ownerId: usr_iGBmhLaxZmL0s7k1G
-                - _id: cpn_Qf4CJuUrNUNmHm6uZ
-                  createdAt: '2025-10-24T07:26:34.956Z'
-                  createdBy: usr_ahfFktBBHUIxbVG5P
-                  domain: example.com
-                  fields:
-                    name: Growth & GTM Engineering
-                  ownerId: usr_ahfFktBBHUIxbVG5P
-                - _id: cpn_A1B2C3D4E5F6G7H8I
-                  createdAt: '2025-11-02T09:14:08.512Z'
-                  createdBy: usr_A1B2C3D4E5F6G7H8I
-                  domain: acme.com
-                  fields:
-                    name: Acme Inc
-                  ownerId: usr_A1B2C3D4E5F6G7H8I
-                  crmSync:
-                    provider: hubspot
-                    crmRecordId: null
-                    syncDisabled: false
-                    errors:
-                    - type: CONNECT_FAILED
-                      reason: UNIQUE_INDEX_ERROR_COMPANY
-                      raisedAt: '2025-11-02T09:14:12.034Z'
-                      metadata:
-                        alreadyExistingCompanyId: cpn_J1K2L3M4N5O6P7Q8R
-                total: 59310
-                limit: 100
-                offset: 0
-        '400':
-          description: Bad team
-          content:
-            text/plain:
-              example: Bad team
-        '401':
-          description: The authentication you supplied is incorrect
-          content:
-            text/plain:
-              example: The authentication you supplied is incorrect
-        '405':
-          description: Method not allowed
     post:
       summary: Add and update company
-      description: Creates a new company or updates an existing one (upsert). If a company with the same
-        domain, LinkedIn URL, or Sales Navigator URL already exists, it will be updated with the provided
-        non-empty fields. Null or empty values are ignored during updates to preserve existing data. You
-        can target an existing company directly by providing `companyId`, bypassing domain/LinkedIn matching
-        — in that case `name` and `domain` become optional.
+      description: Creates a new company or updates an existing one (upsert). If a company with the same domain, LinkedIn URL, or Sales Navigator URL already exists, it will be updated with the provided non-empty fields. Null or empty values are ignored during updates to preserve existing data. You can target an existing company directly by providing `companyId`, bypassing domain/LinkedIn matching — in that case `name` and `domain` become optional.
       tags:
       - Companies
       requestBody:
@@ -247,29 +74,22 @@ paths:
               properties:
                 companyId:
                   type: string
-                  description: Existing company ID. Updates a specific company by ID, bypassing domain/LinkedIn
-                    matching. Can only be used to update an existing company, not to create a new one.
-                    When provided, `name` and `domain` become optional.
+                  description: Existing company ID. Updates a specific company by ID, bypassing domain/LinkedIn matching. Can only be used to update an existing company, not to create a new one. When provided, `name` and `domain` become optional.
                 name:
                   type: string
                   description: Company name. Required unless `companyId` is provided.
                 domain:
                   type: string
-                  description: Company website domain (e.g. `lemlist.com`). Used as a unique key for upsert
-                    matching. Required unless `companyId` is provided.
+                  description: Company website domain (e.g. `lemlist.com`). Used as a unique key for upsert matching. Required unless `companyId` is provided.
                 linkedinUrl:
                   type: string
-                  description: LinkedIn company page URL. Used as an alternative unique key for upsert
-                    matching.
+                  description: LinkedIn company page URL. Used as an alternative unique key for upsert matching.
                 linkedinUrlSalesNav:
                   type: string
-                  description: LinkedIn Sales Navigator company URL. Used as an alternative unique key
-                    for upsert matching.
+                  description: LinkedIn Sales Navigator company URL. Used as an alternative unique key for upsert matching.
                 companyOwner:
                   type: string
-                  description: Owner of the company. Can be a user ID (e.g. `usr_...`) or a team member's
-                    email address. If the provided value does not match a team member, the owner defaults
-                    to the API key owner.
+                  description: Owner of the company. Can be a user ID (e.g. `usr_...`) or a team member's email address. If the provided value does not match a team member, the owner defaults to the API key owner.
                 industry:
                   type: string
                   description: Industry sector of the company.
@@ -302,12 +122,10 @@ paths:
                   description: URL of the company logo or picture.
                 source:
                   type: string
-                  description: Origin of the company record. Set on creation only and cannot be updated
-                    afterwards. Defaults to `api`.
+                  description: Origin of the company record. Set on creation only and cannot be updated afterwards. Defaults to `api`.
                   default: api
               additionalProperties:
-                description: Any additional key is treated as a custom field. Custom fields must be registered
-                  in the team's CRM field registry beforehand.
+                description: Any additional key is treated as a custom field. Custom fields must be registered in the team's CRM field registry beforehand.
             example:
               name: Acme Corp
               domain: acme.com
@@ -341,8 +159,7 @@ paths:
                         description: LinkedIn URL
                       fields:
                         type: object
-                        description: Key/value fields (name, picture, industry, location, custom fields,
-                          etc.)
+                        description: Key/value fields (name, picture, industry, location, custom fields, etc.)
                         additionalProperties: true
                       ownerId:
                         type: string
@@ -359,12 +176,10 @@ paths:
                         description: User ID who created the record
                       created:
                         type: boolean
-                        description: '`true` when a new company was created, `false` when an existing
-                          company was updated.'
+                        description: '`true` when a new company was created, `false` when an existing company was updated.'
                       updated:
                         type: boolean
-                        description: Present and set to `true` only when an existing company was updated
-                          (i.e. `created` is `false`).
+                        description: Present and set to `true` only when an existing company was updated (i.e. `created` is `false`).
                   warnings:
                     type: array
                     description: Optional warnings (e.g. owner resolution issues).
@@ -402,8 +217,7 @@ paths:
                     type: boolean
                   data:
                     type: object
-                    description: 'Same shape as the 201 response, with `created: false` and `updated:
-                      true`.'
+                    description: 'Same shape as the 201 response, with `created: false` and `updated: true`.'
               example:
                 success: true
                 data:
@@ -434,8 +248,7 @@ paths:
                     properties:
                       code:
                         type: string
-                        description: 'Error code: `MISSING_REQUIRED_FIELD`, `INVALID_COMPANY_ID`, `COMPANY_NOT_FOUND_BY_ID`,
-                          `INVALID_DOMAIN`, `INVALID_LINKEDIN_URL`, or `INVALID_FIELD`.'
+                        description: 'Error code: `MISSING_REQUIRED_FIELD`, `INVALID_COMPANY_ID`, `COMPANY_NOT_FOUND_BY_ID`, `INVALID_DOMAIN`, `INVALID_LINKEDIN_URL`, or `INVALID_FIELD`.'
                       message:
                         type: string
               example:
@@ -449,17 +262,79 @@ paths:
             text/plain:
               example: The authentication you supplied is incorrect
       parameters: []
+    servers:
+    - url: https://api.lemlist.com/api
+  /companies/{companyId}/notes:
+    parameters:
+    - name: companyId
+      in: path
+      required: true
+      example: '{{companyId}}'
+      schema:
+        type: string
+    post:
+      summary: Create company note
+      tags:
+      - Companies
+      parameters: []
+      responses:
+        '200':
+          description: Success
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                note:
+                  type: string
+            example:
+              note: Note created from the Api !
+    get:
+      summary: Retrieve company notes
+      tags:
+      - Companies
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        description: (Optional) Number of notes to retrieve. 100 per default ( and 100 max ).
+        example: '2'
+        schema:
+          type: integer
+      - name: page
+        in: query
+        required: false
+        description: (Optional) Page to show
+        example: '1'
+        schema:
+          type: integer
+      - name: sortBy
+        in: query
+        required: false
+        description: '(Optional): The field by which to sort the schedules. Currently, only "createdAt" is supported'
+        example: createdAt
+        schema:
+          type: string
+      - name: sortOrder
+        in: query
+        required: false
+        description: '(Optional): The sort direction. Use "desc" for descending order; any other value (or omission) will sort in ascending order'
+        example: desc
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+    servers:
+    - url: https://api.lemlist.com/api
   /companies/{companyId}:
     delete:
       summary: Delete Company
-      description: 'Deletes a lemlist company. Refuses by default when contacts are still attached — pass
-        `force=true` to detach them (the `companyId` field is unset on each contact) before deleting the
-        company.
+      description: 'Deletes a lemlist company. Refuses by default when contacts are still attached — pass `force=true` to detach them (the `companyId` field is unset on each contact) before deleting the company.
 
 
-        **No CRM-side propagation:** only the lemlist record is removed. Designed for the contact-to-company
-        remapping workflow: after reassigning the contacts of a duplicate company to the canonical one
-        (via `POST /contacts/{idOrEmail}`), call this endpoint to drop the now-empty duplicate.'
+        **No CRM-side propagation:** only the lemlist record is removed. Designed for the contact-to-company remapping workflow: after reassigning the contacts of a duplicate company to the canonical one (via `POST /contacts/{idOrEmail}`), call this endpoint to drop the now-empty duplicate.'
       tags:
       - Companies
       parameters:
@@ -474,9 +349,7 @@ paths:
       - name: force
         in: query
         required: false
-        description: When `true`, detaches contacts attached to this company (unsets their `companyId`)
-          before deleting it. When omitted or `false`, the request fails with `400 COMPANY_HAS_CONTACTS`
-          if any contact is still attached.
+        description: When `true`, detaches contacts attached to this company (unsets their `companyId`) before deleting it. When omitted or `false`, the request fails with `400 COMPANY_HAS_CONTACTS` if any contact is still attached.
         example: 'true'
         schema:
           type: boolean
@@ -496,8 +369,7 @@ paths:
                     description: ID of the deleted lemlist company.
                   unlinkedContacts:
                     type: integer
-                    description: Number of contacts whose `companyId` was unset before deletion. Only
-                      present when `force=true`.
+                    description: Number of contacts whose `companyId` was unset before deletion. Only present when `force=true`.
                 required:
                 - success
                 - deletedCompanyId
@@ -512,8 +384,7 @@ paths:
                     deletedCompanyId: cpn_A1B2C3D4E5F6G7H8I
                     unlinkedContacts: 3
         '400':
-          description: 'Invalid request. Possible error codes: `INVALID_COMPANY_ID` (malformed ID), `COMPANY_HAS_CONTACTS`
-            (contacts still attached and `force` not set).'
+          description: 'Invalid request. Possible error codes: `INVALID_COMPANY_ID` (malformed ID), `COMPANY_HAS_CONTACTS` (contacts still attached and `force` not set).'
           content:
             application/json:
               schema:
@@ -535,8 +406,7 @@ paths:
                 success: false
                 error:
                   code: COMPANY_HAS_CONTACTS
-                  message: Company still has contacts attached. Pass ?force=true to detach them before
-                    deletion. (3 contacts attached)
+                  message: Company still has contacts attached. Pass ?force=true to detach them before deletion. (3 contacts attached)
                   contactCount: 3
         '401':
           description: The authentication you supplied is incorrect.
@@ -554,248 +424,12 @@ paths:
                   message: Company not found by ID
         '405':
           description: Method not allowed.
-  /companies/{companyId}/notes:
-    get:
-      summary: Get Company Notes
-      tags:
-      - Companies
-      parameters:
-      - name: limit
-        in: query
-        required: false
-        description: 'Number of notes to retrieve. Default: 100. Maximum: 100'
-        example: '2'
-        schema:
-          type: integer
-      - name: page
-        in: query
-        required: false
-        description: Page number to retrieve
-        example: '1'
-        schema:
-          type: integer
-      - name: sortBy
-        in: query
-        required: false
-        description: The field by which to sort. Currently, only 'createdAt' is supported.
-        example: createdAt
-        schema:
-          type: string
-          enum:
-          - createdAt
-      - name: sortOrder
-        in: query
-        required: false
-        description: The sort direction. Use 'desc' for descending order; any other value (or omission)
-          will sort in ascending order.
-        example: desc
-        schema:
-          type: string
-          enum:
-          - asc
-          - desc
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/CompanyNote'
-                  total:
-                    type: integer
-                required:
-                - data
-                - total
-              example:
-                data:
-                - _id: act_j0NrG6rYEPP9TMmWC
-                  teamId: tea_8QvkOiBfPdb2ZRhHi
-                  companyId: cpn_Qf4CJuUrNUNmHm6uZ
-                  createdAt: '2025-10-28T04:25:00.653Z'
-                  note: could help our GTM team be more productive
-                  userId: usr_ahfFktBBHUIxbVG5P
-                - _id: act_BYF2j06u0wgeLncub
-                  teamId: tea_8QvkOiBfPdb2ZRhHi
-                  companyId: cpn_Qf4CJuUrNUNmHm6uZ
-                  createdAt: '2025-10-24T12:42:40.605Z'
-                  note: Note created from the API!
-                  userId: usr_ahfFktBBHUIxbVG5P
-                total: 2
-        '400':
-          description: Bad team
-          content:
-            text/plain:
-              example: Bad team
-        '401':
-          description: The authentication you supplied is incorrect
-          content:
-            text/plain:
-              example: The authentication you supplied is incorrect
-        '404':
-          description: Company not found
-          content:
-            text/plain:
-              example: Company not found
-        '405':
-          description: Method not allowed
-    parameters:
-    - name: companyId
-      in: path
-      required: true
-      description: The unique identifier of the company
-      example: cmp_ABC123
-      schema:
-        type: string
-    post:
-      summary: Create Company Note
-      tags:
-      - Companies
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                note:
-                  type: string
-                  description: The note content
-              required:
-              - note
-            example:
-              note: Note created from the API!
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CompanyNote'
-              example:
-                _id: act_j0NrG6rYEPP9TMmWC
-                teamId: tea_8QvkOiBfPdb2ZRhHi
-                companyId: cpn_Qf4CJuUrNUNmHm6uZ
-                type: annotated
-                createdAt: '2025-10-28T04:25:00.653Z'
-                note: could help our GTM team be more productive
-                sendUserId: usr_ahfFktBBHUIxbVG5P
-                userId: usr_ahfFktBBHUIxbVG5P
-        '400':
-          description: Bad team
-          content:
-            text/plain:
-              example: Bad team
-        '401':
-          description: The authentication you supplied is incorrect
-          content:
-            text/plain:
-              example: The authentication you supplied is incorrect
-        '404':
-          description: Company not found
-          content:
-            text/plain:
-              example: Company not found
-        '405':
-          description: Method not allowed
-      parameters: []
+      security:
+      - basicAuth: []
+    servers:
+    - url: https://api.lemlist.com/api
 components:
-  securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
   schemas:
-    Company:
-      type: object
-      description: An organization record in your CRM.
-      properties:
-        _id:
-          type: string
-          description: Unique company identifier
-        name:
-          type: string
-          description: Company name (may also be present under fields.name)
-        domain:
-          type: string
-          description: Website domain
-        industry:
-          type: string
-          description: Industry sector
-        size:
-          type: string
-          description: Company size
-        location:
-          type: string
-          description: Geographic location
-        fields:
-          type: object
-          description: Flexible key/value fields of the company (e.g., name, picture, industry, location,
-            size, foundedOn)
-          additionalProperties: true
-        createdBy:
-          type: string
-          description: User ID who created the company
-        ownerId:
-          type: string
-          description: User ID of the owner of the company
-        createdAt:
-          type: string
-          format: date-time
-          description: Creation timestamp
-        fieldRejections:
-          type: array
-          description: Values lemlist refused to write on this company, each with its reason. Empty when
-            none. Filter the list endpoint to only flagged companies via `GET /companies?fieldRejectionReason=...`.
-          items:
-            $ref: '#/components/schemas/FieldRejection'
-        crmSync:
-          type: object
-          nullable: true
-          description: CRM sync status for the company, resolved against the team's active CRM provider
-            (Hubspot, Salesforce, or Pipedrive). Only present when a CRM is connected. Use this block
-            to monitor sync state and resolve duplicates (e.g. via `GET /companies?crmSyncStatus=unique_index_error_company`).
-          properties:
-            provider:
-              type: string
-              enum:
-              - hubspot
-              - salesforce
-              - pipedrive
-              description: Active CRM provider for the team.
-            crmRecordId:
-              type: string
-              nullable: true
-              description: Identifier of the company record on the CRM side. `null` when the lemlist company
-                has not been synced yet.
-            syncDisabled:
-              type: boolean
-              description: When `true`, automatic sync is paused for this company.
-            errors:
-              type: array
-              description: List of recent sync errors. Empty when the company is synced cleanly.
-              items:
-                type: object
-                properties:
-                  type:
-                    type: string
-                    description: Coarse error category (e.g. `CONNECT_FAILED`, `CREATE_FAILED`, `UPDATE_FAILED`).
-                  reason:
-                    type: string
-                    description: Specific error reason. Matches the lowercase form accepted by the `crmSyncStatus`
-                      query param (e.g. `UNIQUE_INDEX_ERROR_COMPANY`, `PROPERTY_DOESNT_EXIST`, `REQUIRED_FIELD_MISSING`).
-                  raisedAt:
-                    type: string
-                    format: date-time
-                    description: Timestamp when the error was last raised.
-                  metadata:
-                    type: object
-                    additionalProperties: true
-                    description: Extra context. For `UNIQUE_INDEX_ERROR_COMPANY`, contains `alreadyExistingCompanyId`
-                      — the lemlist company that already occupies the conflicting CRM record. Use it to
-                      remap contacts onto the right lemlist company before deleting the duplicate.
     CompanyNote:
       type: object
       description: A text note attached to a company record to store information.
@@ -829,28 +463,104 @@ components:
           type: string
           format: date-time
           description: Last update timestamp
+    Company:
+      type: object
+      description: An organization record in your CRM.
+      properties:
+        _id:
+          type: string
+          description: Unique company identifier
+        name:
+          type: string
+          description: Company name (may also be present under fields.name)
+        domain:
+          type: string
+          description: Website domain
+        industry:
+          type: string
+          description: Industry sector
+        size:
+          type: string
+          description: Company size
+        location:
+          type: string
+          description: Geographic location
+        fields:
+          type: object
+          description: Flexible key/value fields of the company (e.g., name, picture, industry, location, size, foundedOn)
+          additionalProperties: true
+        createdBy:
+          type: string
+          description: User ID who created the company
+        ownerId:
+          type: string
+          description: User ID of the owner of the company
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        fieldRejections:
+          type: array
+          description: Values lemlist refused to write on this company, each with its reason. Empty when none. Filter the list endpoint to only flagged companies via `GET /companies?fieldRejectionReason=...`.
+          items:
+            $ref: '#/components/schemas/FieldRejection'
+        crmSync:
+          type:
+          - object
+          - 'null'
+          description: CRM sync status for the company, resolved against the team's active CRM provider (Hubspot, Salesforce, or Pipedrive). Only present when a CRM is connected. Use this block to monitor sync state and resolve duplicates (e.g. via `GET /companies?crmSyncStatus=unique_index_error_company`).
+          properties:
+            provider:
+              type: string
+              enum:
+              - hubspot
+              - salesforce
+              - pipedrive
+              description: Active CRM provider for the team.
+            crmRecordId:
+              type:
+              - string
+              - 'null'
+              description: Identifier of the company record on the CRM side. `null` when the lemlist company has not been synced yet.
+            syncDisabled:
+              type: boolean
+              description: When `true`, automatic sync is paused for this company.
+            errors:
+              type: array
+              description: List of recent sync errors. Empty when the company is synced cleanly.
+              items:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: Coarse error category (e.g. `CONNECT_FAILED`, `CREATE_FAILED`, `UPDATE_FAILED`).
+                  reason:
+                    type: string
+                    description: Specific error reason. Matches the lowercase form accepted by the `crmSyncStatus` query param (e.g. `UNIQUE_INDEX_ERROR_COMPANY`, `PROPERTY_DOESNT_EXIST`, `REQUIRED_FIELD_MISSING`).
+                  raisedAt:
+                    type: string
+                    format: date-time
+                    description: Timestamp when the error was last raised.
+                  metadata:
+                    type: object
+                    additionalProperties: true
+                    description: Extra context. For `UNIQUE_INDEX_ERROR_COMPANY`, contains `alreadyExistingCompanyId` — the lemlist company that already occupies the conflicting CRM record. Use it to remap contacts onto the right lemlist company before deleting the duplicate.
     FieldRejection:
       type: object
-      description: A value lemlist refused to write on a Contact or Company, with the reason why. Surfaced
-        under `fieldRejections[]` on those objects; filter a list endpoint to only flagged records via
-        the `fieldRejectionReason` query param.
+      description: A value lemlist refused to write on a Contact or Company, with the reason why. Surfaced under `fieldRejections[]` on those objects; filter a list endpoint to only flagged records via the `fieldRejectionReason` query param.
       properties:
         field:
           type: string
           description: The record field the rejected value targeted (e.g. `emails`, `linkedinUrl`, `domain`).
         reason:
           type: string
-          description: Why the value was rejected, prefixed by its origin — `enrichment_*` (raised while
-            enriching) or `crm_sync_*` (raised during CRM sync). Same values accepted by the `fieldRejectionReason`
-            query param.
+          description: Why the value was rejected, prefixed by its origin — `enrichment_*` (raised while enriching) or `crm_sync_*` (raised during CRM sync). Same values accepted by the `fieldRejectionReason` query param.
         source:
           type: string
-          description: Where the rejection came from — an enrichment source (`lemrich`) or a CRM provider
-            (`hubspot`, `salesforce`, `pipedrive`).
+          description: Where the rejection came from — an enrichment source (`lemrich`) or a CRM provider (`hubspot`, `salesforce`, `pipedrive`).
         conflictingRecordId:
           type: string
-          description: For duplicate reasons, the id of the record that already holds the value — use
-            it to merge or remap before resolving the duplicate. Omitted for non-duplicate reasons.
+          description: For duplicate reasons, the id of the record that already holds the value — use it to merge or remap before resolving the duplicate. Omitted for non-duplicate reasons.
         rejectedValue:
           type: string
           description: The value that was refused.
@@ -858,3 +568,11 @@ components:
           type: string
           format: date-time
           description: When the rejection was recorded.
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-refined-from:
+- lemlist-openapi-v1-legacy.json
+- lemlist-openapi-v2.json
+- lemlist-openapi.yml

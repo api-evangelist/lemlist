@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: lemlist Deliverability alerts API
+  title: Lemlist Deliverability alerts API
   version: 1.0.0
-  description: The Deliverability alerts operations of the lemlist API, split by tag from the OpenAPI
-    lemlist publishes at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content
-    is carried verbatim from the provider spec.
+  description: 'Operations tagged Deliverability alerts across 2 of this provider''s published API definitions: lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
 security:
@@ -115,9 +113,7 @@ paths:
                   - domain
                 scopeEntities:
                   type: array
-                  description: Required when `scope` is `mailbox` or `domain` and you want to target specific
-                    entities. Mailbox entries use the format `userId|email|mailboxId`. Domain entries
-                    are bare domains (e.g. `acme.com`).
+                  description: Required when `scope` is `mailbox` or `domain` and you want to target specific entities. Mailbox entries use the format `userId|email|mailboxId`. Domain entries are bare domains (e.g. `acme.com`).
                   items:
                     type: string
                 threshold:
@@ -143,8 +139,7 @@ paths:
                   $ref: '#/components/schemas/DeliverabilityAlert/properties/channelConfig'
                 recheckDelayHours:
                   type: integer
-                  description: Cool-down between re-evaluations after the alert triggers, in hours. Defaults
-                    to 12.
+                  description: Cool-down between re-evaluations after the alert triggers, in hours. Defaults to 12.
             examples:
               outreachBounceRate:
                 summary: Critical alert on outreach bounce rate
@@ -216,17 +211,15 @@ paths:
                 lastTriggeredAt: '2026-05-06T18:42:11.000Z'
                 recheckDelayHours: 12
         '400':
-          description: Validation error. The `error` field identifies which input was rejected — e.g.
-            `DELIVERABILITY_ALERT_INVALID_WIDGET`, `DELIVERABILITY_ALERT_INVALID_METRIC`, `DELIVERABILITY_ALERT_INVALID_SCOPE`,
-            `DELIVERABILITY_ALERT_INVALID_THRESHOLD`, `DELIVERABILITY_ALERT_INVALID_PERIOD_DAYS`, `DELIVERABILITY_ALERT_NO_CHANNEL_ENABLED`,
-            `DELIVERABILITY_ALERT_EMAIL_REQUIRED`, `DELIVERABILITY_ALERT_INVALID_EMAIL`, `DELIVERABILITY_ALERT_INVALID_SCOPE_ENTITY_FORMAT`.
+          description: Validation error. The `error` field identifies which input was rejected — e.g. `DELIVERABILITY_ALERT_INVALID_WIDGET`, `DELIVERABILITY_ALERT_INVALID_METRIC`, `DELIVERABILITY_ALERT_INVALID_SCOPE`, `DELIVERABILITY_ALERT_INVALID_THRESHOLD`, `DELIVERABILITY_ALERT_INVALID_PERIOD_DAYS`, `DELIVERABILITY_ALERT_NO_CHANNEL_ENABLED`, `DELIVERABILITY_ALERT_EMAIL_REQUIRED`, `DELIVERABILITY_ALERT_INVALID_EMAIL`, `DELIVERABILITY_ALERT_INVALID_SCOPE_ENTITY_FORMAT`.
         '401':
           description: Unauthorized
         '403':
           description: Beta feature not enabled for this team
         '409':
-          description: An alert with the same widget, metric, severity, scope, scopeEntities, threshold,
-            comparisonOperator, periodDays and periodMode already exists
+          description: An alert with the same widget, metric, severity, scope, scopeEntities, threshold, comparisonOperator, periodDays and periodMode already exists
+    servers:
+    - url: https://api.lemlist.com/api
   /deliverability/alerts/{alertId}:
     get:
       summary: Get Deliverability Alert
@@ -298,9 +291,7 @@ paths:
           type: string
       requestBody:
         required: true
-        description: All fields are optional. Only the supplied fields are updated. `widget`, `metric`,
-          `severity`, and `scope` cannot be changed after creation — create a new alert if you need different
-          dimensions.
+        description: All fields are optional. Only the supplied fields are updated. `widget`, `metric`, `severity`, and `scope` cannot be changed after creation — create a new alert if you need different dimensions.
         content:
           application/json:
             schema:
@@ -329,8 +320,7 @@ paths:
                   $ref: '#/components/schemas/DeliverabilityAlert/properties/channelConfig'
                 scopeEntities:
                   type: array
-                  description: Same format as on creation. Only meaningful when the alert's `scope` is
-                    `mailbox` or `domain`.
+                  description: Same format as on creation. Only meaningful when the alert's `scope` is `mailbox` or `domain`.
                   items:
                     type: string
                 enabled:
@@ -417,17 +407,13 @@ paths:
           description: Unauthorized
         '404':
           description: Alert not found
+    servers:
+    - url: https://api.lemlist.com/api
 components:
-  securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
   schemas:
     DeliverabilityAlert:
       type: object
-      description: A deliverability alert configuration. The alert is evaluated periodically against your
-        warm-up or outreach metrics and triggers notifications through the configured channels (in-app,
-        email, webhook, Slack) when the threshold is breached.
+      description: A deliverability alert configuration. The alert is evaluated periodically against your warm-up or outreach metrics and triggers notifications through the configured channels (in-app, email, webhook, Slack) when the threshold is breached.
       properties:
         _id:
           type: string
@@ -448,15 +434,13 @@ components:
           description: Last update timestamp.
         widget:
           type: string
-          description: Data source the alert evaluates. `warmup` checks lemwarm metrics; `outreach` checks
-            campaign-sending metrics.
+          description: Data source the alert evaluates. `warmup` checks lemwarm metrics; `outreach` checks campaign-sending metrics.
           enum:
           - warmup
           - outreach
         metric:
           type: string
-          description: 'Metric being monitored. Valid combinations depend on `widget`: `warmup` supports
-            `inboxRate`, `spamRate`, `score`; `outreach` supports `deliveryRate`, `bounceRate`.'
+          description: 'Metric being monitored. Valid combinations depend on `widget`: `warmup` supports `inboxRate`, `spamRate`, `score`; `outreach` supports `deliveryRate`, `bounceRate`.'
           enum:
           - inboxRate
           - spamRate
@@ -471,31 +455,24 @@ components:
           - critical
         scope:
           type: string
-          description: Aggregation level the metric is computed at. `global` covers all of the workspace's
-            mailboxes (warm-up only); `mailbox` evaluates each mailbox individually; `domain` groups mailboxes
-            by their sending domain.
+          description: Aggregation level the metric is computed at. `global` covers all of the workspace's mailboxes (warm-up only); `mailbox` evaluates each mailbox individually; `domain` groups mailboxes by their sending domain.
           enum:
           - global
           - mailbox
           - domain
         scopeEntities:
           type: array
-          description: Restricts the alert to a subset of entities matching `scope`. When empty, all entities
-            of that scope are checked. For `scope=mailbox`, each entry is a composite string `userId|email|mailboxId`.
-            For `scope=domain`, each entry is a domain (e.g. `acme.com`). Ignored when `scope=global`.
+          description: Restricts the alert to a subset of entities matching `scope`. When empty, all entities of that scope are checked. For `scope=mailbox`, each entry is a composite string `userId|email|mailboxId`. For `scope=domain`, each entry is a domain (e.g. `acme.com`). Ignored when `scope=global`.
           items:
             type: string
         threshold:
           type: number
-          description: Threshold value the metric is compared against (0–100, expressed as a percentage
-            for rate metrics).
+          description: Threshold value the metric is compared against (0–100, expressed as a percentage for rate metrics).
           minimum: 0
           maximum: 100
         comparisonOperator:
           type: string
-          description: How `threshold` is compared to the current value. `below` triggers when the value
-            drops under the threshold; `above` triggers when it exceeds it; `equal` triggers on exact
-            match.
+          description: How `threshold` is compared to the current value. `below` triggers when the value drops under the threshold; `above` triggers when it exceeds it; `equal` triggers on exact match.
           enum:
           - equal
           - below
@@ -507,15 +484,13 @@ components:
           maximum: 30
         periodMode:
           type: string
-          description: How the metric is computed over `periodDays`. `rolling` averages the metric across
-            the window; `consecutive` requires the condition to hold on every one of the most recent `periodDays`.
+          description: How the metric is computed over `periodDays`. `rolling` averages the metric across the window; `consecutive` requires the condition to hold on every one of the most recent `periodDays`.
           enum:
           - rolling
           - consecutive
         channelConfig:
           type: object
-          description: Notification channels triggered when the alert fires. At least one channel must
-            be enabled. If omitted on creation, defaults to `inapp` only.
+          description: Notification channels triggered when the alert fires. At least one channel must be enabled. If omitted on creation, defaults to `inapp` only.
           properties:
             email:
               type: object
@@ -539,15 +514,13 @@ components:
               properties:
                 enabled:
                   type: boolean
-                  description: Send a webhook callback. Requires a webhook subscribed to the `deliverabilityAlertTriggered`
-                    event (see [Add Webhook](/api-reference/endpoints/webhooks/add-webhook)).
+                  description: Send a webhook callback. Requires a webhook subscribed to the `deliverabilityAlertTriggered` event (see [Add Webhook](/api-reference/endpoints/webhooks/add-webhook)).
             slack:
               type: object
               properties:
                 enabled:
                   type: boolean
-                  description: Send a Slack message. Requires a Slack integration to be connected on the
-                    team.
+                  description: Send a Slack message. Requires a Slack integration to be connected on the team.
         enabled:
           type: boolean
           description: Whether the alert is currently active. Disabled alerts are not evaluated.
@@ -561,5 +534,11 @@ components:
           description: Last time the alert fired.
         recheckDelayHours:
           type: integer
-          description: Cool-down between re-evaluations after the alert has triggered, in hours. Defaults
-            to 12.
+          description: Cool-down between re-evaluations after the alert has triggered, in hours. Defaults to 12.
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-refined-from:
+- lemlist-openapi-v2.json
+- lemlist-openapi.yml

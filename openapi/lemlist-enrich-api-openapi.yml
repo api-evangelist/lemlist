@@ -1,530 +1,317 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: lemlist Enrich API
+  title: Lemlist Enrich API
   version: 1.0.0
-  description: The Enrich operations of the lemlist API, split by tag from the OpenAPI lemlist publishes
-    at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content is carried verbatim
-    from the provider spec.
+  description: 'Operations tagged Enrich across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
-security:
-- basicAuth: []
 tags:
 - name: Enrich
 paths:
   /enrich/{enrichId}:
+    parameters:
+    - name: enrichId
+      in: path
+      required: true
+      example: '{{enrichId}}'
+      schema:
+        type: string
     get:
-      summary: Get Enrichment Result
+      summary: Enrich
       tags:
       - Enrich
       parameters:
-      - name: enrichId
-        in: path
-        required: true
-        description: Unique enrichment ID
-        example: enr_123
+      - name: Content
+        in: header
+        required: false
+        example: application/json
         schema:
           type: string
       responses:
         '200':
+          headers:
+            Date:
+              schema:
+                type: string
+              example: Thu, 25 Jul 2024 12:43:46 GMT
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+            Transfer-Encoding:
+              schema:
+                type: string
+              example: chunked
+            Connection:
+              schema:
+                type: string
+              example: keep-alive
+            alt-svc:
+              schema:
+                type: string
+              example: h3=":443"; ma=86400
+            retry-after:
+              schema:
+                type: integer
+              example: '2'
+            strict-transport-security:
+              schema:
+                type: string
+              example: max-age=31536000;
+            x-cache-debug:
+              schema:
+                type: string
+              example: api.lemlist.com.main
+            x-ratelimit-limit:
+              schema:
+                type: integer
+              example: '20'
+            x-ratelimit-remaining:
+              schema:
+                type: integer
+              example: '19'
+            x-ratelimit-reset:
+              schema:
+                type: string
+              example: Thu Jul 25 2024 14:43:48 GMT+0200 (Central European Summer Time)
+            CF-Cache-Status:
+              schema:
+                type: string
+              example: DYNAMIC
+            Report-To:
+              schema:
+                type: string
+              example: '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=DQ1KfiXbkGxHGj7Z7KRjPRGp1%2BchU%2B4NBnZh1gGrfjVi7MYzfE4PxdmrJ6Ms2BqbDg1Wyp7rFPrpcgzyvSz73zdSKNAL0wFT3YO6ouBfcPweCzJ05%2FTn8jPI%2FFDv7bpXOf4%3D"}],"group":"cf-nel","max_age":604800}'
+            NEL:
+              schema:
+                type: string
+              example: '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+            Server:
+              schema:
+                type: string
+              example: cloudflare
+            CF-RAY:
+              schema:
+                type: integer
+              example: 8a8c3ccbb83ac991-IAD
+            Content-Encoding:
+              schema:
+                type: string
+              example: br
           description: Success
           content:
             application/json:
               schema:
                 type: object
+                properties:
+                  enrichmentId:
+                    type: string
+                  enrichmentStatus:
+                    type: string
+                  input:
+                    type: object
+                    properties:
+                      firstName:
+                        type: string
+                      lastName:
+                        type: string
+                      linkedinUrl:
+                        type: string
+                        format: uri
+                      companyName:
+                        type: string
+                      companyDomain:
+                        type: string
+                  data:
+                    type: object
+                    properties:
+                      email:
+                        type: object
+                        properties:
+                          email:
+                            type: string
+                            format: email
+                          notFound:
+                            type: boolean
               example:
-                enrichmentId: enr_FPgMU8ZUVBnOZBuZ6
+                enrichmentId: enr_Peve9ExBG9XqwrmeM
                 enrichmentStatus: done
                 input:
                   firstName: John
-                  lastName: lemlist
-                  linkedinUrl: https://www.linkedin.com/in/lemlist
-                  companyName: lemlist
-                  companyDomain: lemlist.com
+                  lastName: Lempire
+                  linkedinUrl: https://www.linkedin.com/in/lempire
+                  companyName: lempire
+                  companyDomain: lempire.com
                 data:
                   email:
-                    email: john@lemlist.co
+                    email: john@lempire.co
                     notFound: false
         '202':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
           description: In progress
-        '400':
-          description: Bad team
           content:
-            text/plain:
-              example: Bad team
-        '401':
-          description: Unauthorized
+            application/json:
+              schema:
+                type: object
+                properties:
+                  enrichmentId:
+                    type: string
+                  enrichmentStatus:
+                    type: string
+                  input:
+                    type: object
+                    properties:
+                      firstName:
+                        type: string
+                      lastName:
+                        type: string
+                      linkedinUrl:
+                        type: string
+                        format: uri
+                      companyName:
+                        type: string
+                      companyDomain:
+                        type: string
+                  data:
+                    type: object
+              example:
+                enrichmentId: enr_rPAyaF4ASG9YWL3wk
+                enrichmentStatus: in-progress
+                input:
+                  firstName: John
+                  lastName: Lempire
+                  linkedinUrl: https://www.linkedin.com/in/lempire
+                  companyName: lempire
+                  companyDomain: lempire.com
+                data: {}
         '404':
-          description: Enrichment not found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Not found
           content:
-            text/plain:
-              example: Enrichment not found
-        '405':
-          description: Method not allowed
+            application/json:
+              schema:
+                type: object
+                properties:
+                  enrichmentId:
+                    type: string
+                  enrichmentStatus:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    type: object
+              example:
+                enrichmentId: enr_t3WsF23sActKexff
+                enrichmentStatus: not-found
+                error: Enrichment not found
+                data: {}
+    servers:
+    - url: https://api.lemlist.com/api
   /enrich:
+    parameters: []
     post:
-      summary: Enrich Data
+      summary: Enrich
       tags:
       - Enrich
       parameters:
       - name: findEmail
         in: query
         required: false
-        description: Find verified email
+        description: 'Boolean | Find verified email | Default: false'
         example: 'true'
         schema:
           type: boolean
       - name: verifyEmail
         in: query
         required: false
-        description: Verify existing email
+        description: 'Boolean | Verify existing email (debounce) | Default: false'
         example: 'true'
         schema:
           type: boolean
       - name: linkedinEnrichment
         in: query
         required: false
-        description: Run LinkedIn enrichment
+        description: 'Boolean | Run the LinkedIn enrichment | Default: false'
         example: 'true'
         schema:
           type: boolean
       - name: email
         in: query
         required: false
-        description: Email address
-        example: john@example.com
+        description: (Optional) Email
+        example: john.doe@fake.com
         schema:
           type: string
       - name: linkedinUrl
         in: query
         required: false
-        description: LinkedIn URL
+        description: (Optional) LinkedIn URL
         example: https://www.linkedin.com/in/john-doe
         schema:
           type: string
       - name: firstName
         in: query
         required: false
-        description: First name
+        description: (Optional) First name
         example: John
         schema:
           type: string
       - name: lastName
         in: query
         required: false
-        description: Last name
+        description: (Optional) Last name
         example: Doe
         schema:
           type: string
       - name: companyDomain
         in: query
         required: false
-        description: Company domain
-        example: example.com
+        description: (Optional) Prospect company's domain
+        example: https://www.fakecompany.com
         schema:
           type: string
       - name: companyName
         in: query
         required: false
-        description: Company name
-        example: Acme Inc
-        schema:
-          type: string
-      - name: jobTitle
-        in: query
-        required: false
-        description: Job title of the person. Optional hint that improves the find rate when matching
-          the right person.
-        example: Marketing Manager
+        description: (Optional) Prospect company's name
+        example: Fake company
         schema:
           type: string
       - name: findPhone
         in: query
         required: false
-        description: Find phone number
+        description: 'Boolean | Find phone number | Default: false'
         example: 'true'
         schema:
           type: boolean
       - name: webhookUrl
         in: query
         required: false
-        description: Webhook URL for enrichment events
-        example: https://webhook.site/*your-webhook-id*/
+        description: (Optional) Webhook URL for enrichment events
+        example: https:/webhook.site/*your-webhook-id*/
+        schema:
+          type: string
+      - name: Content
+        in: header
+        required: false
+        example: application/json
         schema:
           type: string
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
+          headers:
+            Content-Type:
               schema:
-                type: object
-              example:
-                id: enr_CzQDYYcS5vDG1ZvQi
-        '400':
-          description: 'Possible errors: Bad team / Bad request / No enrichment requested (findEmail,
-            findPhone, linkedinEnrichment or verifyEmail required) / Invalid webhookUrl'
-          content:
-            text/plain:
-              example: Bad team
-        '401':
-          description: The authentication you supplied is incorrect
-          content:
-            text/plain:
-              example: The authentication you supplied is incorrect
-        '405':
-          description: Method not allowed
-  /v2/enrichments/bulk:
-    post:
-      summary: Bulk Enrich Data
-      tags:
-      - Enrich
-      description: Send a batch of enrichment requests for multiple entities. Maximum 500 enrichment requests
-        per call.
-      parameters:
-      - name: webhookUrl
-        in: query
-        required: false
-        description: Webhook URL for enrichment events
-        example: https://n8n.example.com/webhook/lemlist-webhook-surprise
-        schema:
-          type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              maxItems: 500
-              items:
-                type: object
-                required:
-                - enrichmentRequests
-                properties:
-                  input:
-                    type: object
-                    description: Input data for enrichment. Required fields depend on enrichmentRequests.
-                    properties:
-                      linkedinUrl:
-                        type: string
-                        description: The LinkedIn URL of the person
-                        example: https://www.linkedin.com/in/john-doe
-                      email:
-                        type: string
-                        description: The email of the person
-                        example: john.doe@example.com
-                      companyName:
-                        type: string
-                        description: The name of the company associated with the person
-                        example: Example Company
-                      companyDomain:
-                        type: string
-                        description: The domain of the company associated with the person. Recommended
-                          for better find rate
-                        example: example.com
-                      firstName:
-                        type: string
-                        description: The first name of the person
-                        example: John
-                      lastName:
-                        type: string
-                        description: The last name of the person
-                        example: Doe
-                      jobTitle:
-                        type: string
-                        description: The job title of the person. Optional hint that improves the find
-                          rate when matching the right person.
-                        example: Marketing Manager
-                  enrichmentRequests:
-                    type: array
-                    description: 'Array of enrichment types to perform. Must contain at least one of:
-                      find_email, find_phone, verify, linkedin_enrichment'
-                    items:
-                      type: string
-                      enum:
-                      - find_email
-                      - find_phone
-                      - verify
-                      - linkedin_enrichment
-                    example:
-                    - find_email
-                    - verify
-                  metadata:
-                    description: Custom data to be returned in the response and webhook. Can be a string
-                      or an object
-                    oneOf:
-                    - type: string
-                    - type: object
-                    example:
-                      id: some_id
-            examples:
-              find_email:
-                summary: Find email enrichment
-                value:
-                - input:
-                    companyName: Example Ets
-                    companyDomain: example.com
-                    firstName: John
-                    lastName: Doe
-                  enrichmentRequests:
-                  - find_email
-                  metadata:
-                    id: some_id
-                - input:
-                    linkedinUrl: https://www.linkedin.com/in/john-doe
-                  enrichmentRequests:
-                  - find_email
-                  metadata: some_id
-              find_phone:
-                summary: Find phone enrichment
-                value:
-                - input:
-                    linkedinUrl: https://www.linkedin.com/in/john-doe
-                  enrichmentRequests:
-                  - find_phone
-                  metadata:
-                    id: some_id
-              verify:
-                summary: Verify email
-                value:
-                - input:
-                    email: john.doe@example.com
-                  enrichmentRequests:
-                  - verify
-                  metadata:
-                    id: some_id
-              linkedin_enrichment:
-                summary: LinkedIn enrichment
-                value:
-                - input:
-                    linkedinUrl: https://www.linkedin.com/in/john-doe
-                  enrichmentRequests:
-                  - linkedin_enrichment
-                  metadata:
-                    id: some_id
-              multiple:
-                summary: Multiple enrichments
-                value:
-                - input:
-                    linkedinUrl: https://www.linkedin.com/in/john-doe
-                    email: john.doe@example.com
-                    companyName: Example Company
-                    companyDomain: example.com
-                    firstName: John
-                    lastName: Doe
-                    jobTitle: Marketing Manager
-                  enrichmentRequests:
-                  - find_email
-                  - find_phone
-                  - verify
-                  - linkedin_enrichment
-                  metadata:
-                    some_id: some_id
-      responses:
-        '200':
-          description: Success - Returns enrichment IDs and metadata for each request
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  oneOf:
-                  - type: object
-                    properties:
-                      id:
-                        type: string
-                        description: Enrichment ID
-                        example: enr_KzCb0f9dbIjtRqyEO
-                      metadata:
-                        description: The metadata provided in the request
-                        oneOf:
-                        - type: string
-                        - type: object
-                  - type: object
-                    properties:
-                      error:
-                        type: string
-                        description: Error code for failed enrichment
-                        example: MISSING_INPUTS
-                      metadata:
-                        description: The metadata provided in the request
-                        oneOf:
-                        - type: string
-                        - type: object
-              examples:
-                find_email:
-                  summary: Find email response
-                  value:
-                  - id: enr_rt3yG1uvSOAmNgsOm
-                    metadata:
-                      id: some_id
-                  - id: enr_KdG7p3VNyiCgmcYTv
-                    metadata: some_id
-                  - error: MISSING_INPUTS
-                    metadata: some_id
-                find_phone:
-                  summary: Find phone response
-                  value:
-                  - id: enr_bPawymIrM37F6yHBe
-                    metadata:
-                      id: some_id
-                  - error: MISSING_INPUTS
-                    metadata: some_id
-                verify:
-                  summary: Verify email response
-                  value:
-                  - id: enr_N84uOiUB0RYx5LIEb
-                    metadata:
-                      id: some_id
-                  - error: MISSING_EMAIL
-                    metadata: some_id
-                linkedin_enrichment:
-                  summary: LinkedIn enrichment response
-                  value:
-                  - id: enr_zsHo0j5j6HNC0MXgQ
-                    metadata:
-                      id: some_id
-                  - error: MISSING_LINKEDIN_URL
-                    metadata: some_id
-        '400':
-          description: Bad Request - Invalid input format or parameters
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    enum:
-                    - WRONG_INPUT_FORMAT
-                    - WRONG_METADATA_FORMAT
-                    - NO_WORKFLOW_REQUESTED
-                    - WRONG_ENRICHMENT_REQUEST_FORMAT
-                    - UNAUTHORIZED_WORKFLOW_REQUESTED
-                    - TOO_MANY_ENRICHMENTS_REQUESTED
-                    - NO_ENRICHMENTS_REQUESTED
-                    - WRONG_BODY_FORMAT
-              examples:
-                wrong_input_format:
-                  summary: Wrong input format
-                  description: The input of each enrichment must be an object containing at least one
-                    of the required fields
-                  value:
-                    error: WRONG_INPUT_FORMAT
-                wrong_metadata_format:
-                  summary: Wrong metadata format
-                  description: The metadata field must be a string or an object
-                  value:
-                    error: WRONG_METADATA_FORMAT
-                no_workflow_requested:
-                  summary: No workflow requested
-                  description: The enrichment request must contain at least one of the authorized workflows
-                    (find_email, find_phone, verify, linkedin_enrichment)
-                  value:
-                    error: NO_WORKFLOW_REQUESTED
-                wrong_enrichment_request_format:
-                  summary: Wrong enrichment request format
-                  description: The enrichment request must be an array
-                  value:
-                    error: WRONG_ENRICHMENT_REQUEST_FORMAT
-                unauthorized_workflow_requested:
-                  summary: Unauthorized workflow requested
-                  description: The enrichmentRequests contained invalid request types
-                  value:
-                    error: UNAUTHORIZED_WORKFLOW_REQUESTED
-                too_many_enrichments_requested:
-                  summary: Too many enrichments requested
-                  description: There is a limit of 500 enrichments per request
-                  value:
-                    error: TOO_MANY_ENRICHMENTS_REQUESTED
-                no_enrichments_requested:
-                  summary: No enrichments requested
-                  description: The body must contain at least one enrichment request
-                  value:
-                    error: NO_ENRICHMENTS_REQUESTED
-                wrong_body_format:
-                  summary: Wrong body format
-                  description: The body must be a valid array
-                  value:
-                    error: WRONG_BODY_FORMAT
-        '401':
-          description: Unauthorized - The authentication you supplied is incorrect
-          content:
-            text/plain:
-              example: The authentication you supplied is incorrect
-        '405':
-          description: Method not allowed
-  /leads/{leadId}/enrich:
-    post:
-      summary: Enrich Lead
-      tags:
-      - Enrich
-      parameters:
-      - name: leadId
-        in: path
-        required: true
-        description: Unique lead ID
-        example: lea_123
-        schema:
-          type: string
-      - name: findEmail
-        in: query
-        required: false
-        description: Search email address in another campaign
-        example: 'true'
-        schema:
-          type: boolean
-      - name: verifyEmail
-        in: query
-        required: false
-        description: Find verified email
-        example: 'true'
-        schema:
-          type: boolean
-      - name: linkedinEnrichment
-        in: query
-        required: false
-        description: Run LinkedIn enrichment
-        example: 'true'
-        schema:
-          type: boolean
-      - name: findPhone
-        in: query
-        required: false
-        description: Find phone number
-        example: 'true'
-        schema:
-          type: boolean
-      - name: webhookUrl
-        in: query
-        required: false
-        description: Webhook URL for enrichment events
-        example: https://n8n.example.com/webhook/lemlist-webhook-surprise
-        schema:
-          type: string
-      - name: force
-        in: query
-        required: false
-        description: 'Re-run an enrichment that would otherwise be skipped. Bypasses skips caused by data
-          already present on the contact: existing email, existing phone, LinkedIn enrichment already
-          done for the same `linkedinUrl` / `linkedinUrlSalesNav`, or email already having a deliverability
-          status.
-
-
-          Does **not** bypass:
-
-          - **Enrichment currently in progress** — if another enrichment is already running for this contact,
-          the request is still skipped (no parallel enrichments, no double billing).
-
-          - **Previously returned not-found** — for `findEmail` and `findPhone`, if a prior enrichment
-          with the same inputs (`linkedinUrl`, `linkedinUrlSalesNav`, first / last name, company name
-          / domain / LinkedIn URL) already returned not-found, the request is still skipped. Changing
-          any of those inputs on the lead lifts the block without needing `force`.'
-        example: 'true'
-        schema:
-          type: boolean
-      responses:
-        '200':
+                type: string
+              example: application/json
           description: Success
           content:
             application/json:
@@ -533,56 +320,230 @@ paths:
                 properties:
                   id:
                     type: string
-                    description: Enrichment ID
               example:
-                id: enr_Ohbs0mEsWmDjTnxTi
+                id: enr_pRSGEaMP7rrCfFPx5
         '400':
-          description: Bad team
-          content:
-            text/plain:
-              example: Bad team
-        '401':
-          description: Unauthorized
-        '404':
-          description: Lead or contact not found
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Missing enrichment params
           content:
             application/json:
-              examples:
-                leadNotFound:
-                  summary: Lead does not exist
-                  value:
-                    error: Lead not found
-                    code: LEAD_NOT_FOUND
-                contactNotFound:
-                  summary: Lead exists but its underlying contact is missing
-                  value:
-                    error: Contact not found for this lead
-                    code: CONTACT_NOT_FOUND
-        '405':
-          description: Method not allowed
-        '409':
-          description: Enrichment cannot proceed because of the current state of the lead/contact
-          content:
-            application/json:
-              examples:
-                alreadyEnriched:
-                  summary: Contact already has the requested data — retry with ?force=true to override
-                  value:
-                    error: 'Enrichment skipped: contact already has the requested data or was recently
-                      enriched'
-                    code: ALREADY_ENRICHED
-                inProgress:
-                  summary: An enrichment is already running for this lead — wait for it to complete
-                  value:
-                    error: lead is already being enriched
-        '500':
-          description: Enrichment failed
-          content:
-            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
               example:
-                error: Failed to enrich lead
+                error: No enrichment requested (findEmail, findPhone, linkedinEnrichment or verifyEmail required)
+    servers:
+    - url: https://api.lemlist.com/api
+  /leads/{leadId}/enrich:
+    parameters:
+    - name: leadId
+      in: path
+      required: true
+      example: '{{leadId}}'
+      schema:
+        type: string
+    post:
+      summary: Enrich Lead
+      tags:
+      - Enrich
+      parameters:
+      - name: findEmail
+        in: query
+        required: false
+        description: "Boolean | Search email address in another campaign, will not insert the lead if email address already inserted\n | Default: false"
+        example: 'true'
+        schema:
+          type: boolean
+      - name: verifyEmail
+        in: query
+        required: false
+        description: "Boolean | Find verified email\n | Default: false"
+        example: 'true'
+        schema:
+          type: boolean
+      - name: linkedinEnrichment
+        in: query
+        required: false
+        description: "Boolean | Run the LinkedIn enrichment\n | Default: false"
+        example: 'true'
+        schema:
+          type: boolean
+      - name: findPhone
+        in: query
+        required: false
+        description: 'Boolean | Find phone number | Default: false'
+        example: 'true'
+        schema:
+          type: boolean
+      - name: webhookUrl
+        in: query
+        required: false
+        description: (Optional) Webhook URL for enrichment events
+        example: https:/webhook.site/*your-webhook-id*/
+        schema:
+          type: string
+      - name: Content
+        in: header
+        required: false
+        example: application/json
+        schema:
+          type: string
+      responses:
+        '400':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Error Invalid leadId
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: Invalid leadId
+        default:
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+              example:
+                id: enr_gLpC97CBdER2kpn7z
+    servers:
+    - url: https://api.lemlist.com/api
+  /v2/enrichments/bulk:
+    parameters: []
+    post:
+      summary: Bulk enrichments
+      tags:
+      - Enrich
+      parameters:
+      - name: webhookUrl
+        in: query
+        required: false
+        description: (Optional) Webhook URL for enrichment events
+        example: https:/webhook.site/*your-webhook-id*/
+        schema:
+          type: string
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: find_email
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    metadata:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+              example:
+              - id: enr_7y2vszPS5F6C9qLEg
+                metadata:
+                  id: some_id
+              - id: enr_4e1vEfOA3F7D9dJHd
+                metadata: some_id
+              - error: MISSING_INPUTS
+                metadata: some_id
+        '400':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: WRONG_INPUT_FORMAT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  input:
+                    type: object
+                    properties:
+                      linkedinUrl:
+                        type: string
+                      email:
+                        type: string
+                      companyName:
+                        type: string
+                      companyDomain:
+                        type: string
+                      firstName:
+                        type: string
+                      lastName:
+                        type: string
+                  enrichmentRequests:
+                    type: array
+                    items:
+                      type: string
+                  metadata:
+                    type: object
+                    properties:
+                      some_id:
+                        type: string
+            example:
+            - input:
+                linkedinUrl: '{{input_linkedin_url}}'
+                email: '{{input_email}}'
+                companyName: '{{input_company_name}}'
+                companyDomain: '{{input_company_domain}}'
+                firstName: '{{input_first_name}}'
+                lastName: '{{input_last_name}}'
+              enrichmentRequests:
+              - find_email
+              - find_phone
+              - verify
+              - linkedin_enrichment
+              metadata:
+                some_id: some_id
+    servers:
+    - url: https://api.lemlist.com/api
 components:
   securitySchemes:
     basicAuth:
       type: http
       scheme: basic
+x-refined-from:
+- lemlist-openapi-v1-legacy.json
+- lemlist-openapi-v2.json
+- lemlist-openapi.yml

@@ -1,10 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: lemlist Signal Agents API
+  title: Lemlist Signal Agents API
   version: 1.0.0
-  description: The Signal Agents operations of the lemlist API, split by tag from the OpenAPI lemlist
-    publishes at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content is carried
-    verbatim from the provider spec.
+  description: 'Operations tagged Signal Agents across 2 of this provider''s published API definitions: lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
 security:
@@ -58,8 +56,7 @@ paths:
       - name: type
         in: query
         required: false
-        description: Filter by signal type(s). Can be a single value or array using type[] notation. Valid
-          values from WATCH_LIST_SIGNAL_CONFIGURATIONS_TYPES_STANDARD_KEYS
+        description: Filter by signal type(s). Can be a single value or array using type[] notation. Valid values from WATCH_LIST_SIGNAL_CONFIGURATIONS_TYPES_STANDARD_KEYS
         example: jobChange
         schema:
           oneOf:
@@ -70,8 +67,7 @@ paths:
       - name: status
         in: query
         required: false
-        description: Filter by signal status(es). Can be a single value or array using status[] notation.
-          Valid values from WATCH_LIST_SIGNAL_COMPUTED_STATUSES
+        description: Filter by signal status(es). Can be a single value or array using status[] notation. Valid values from WATCH_LIST_SIGNAL_COMPUTED_STATUSES
         example: new
         schema:
           oneOf:
@@ -90,8 +86,7 @@ paths:
       - name: receivedAtTo
         in: query
         required: false
-        description: Filter signals received on or before this date (ISO date string). Must be greater
-          than receivedAtFrom if both are provided
+        description: Filter signals received on or before this date (ISO date string). Must be greater than receivedAtFrom if both are provided
         example: '2024-12-31T23:59:59.999Z'
         schema:
           type: string
@@ -112,8 +107,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/WatchListApiFetchSignalsResponse'
         '400':
-          description: Validation error - invalid query parameters, pagination conflict, or invalid date
-            range
+          description: Validation error - invalid query parameters, pagination conflict, or invalid date range
           content:
             text/plain:
               examples:
@@ -151,6 +145,8 @@ paths:
           content:
             text/plain:
               example: Internal server error
+    servers:
+    - url: https://api.lemlist.com/api
   /watchlist/{watchListId}/external-signals:
     post:
       summary: Push external signals
@@ -160,8 +156,7 @@ paths:
       - name: watchListId
         in: path
         required: true
-        description: Id of the Signal Agent to push the signal to. Must be an externalSignalContact or
-          externalSignalCompany agent.
+        description: Id of the Signal Agent to push the signal to. Must be an externalSignalContact or externalSignalCompany agent.
         example: wli_ExAmPlE1234567890a
         schema:
           type: string
@@ -174,8 +169,7 @@ paths:
               properties:
                 contact:
                   type: object
-                  description: The contact the signal is about. Required for externalSignalContact agents;
-                    ignored otherwise.
+                  description: The contact the signal is about. Required for externalSignalContact agents; ignored otherwise.
                   required:
                   - linkedinUrl
                   properties:
@@ -197,8 +191,7 @@ paths:
                       example: Doe
                 company:
                   type: object
-                  description: The company the signal is about. Required for externalSignalCompany agents;
-                    ignored otherwise.
+                  description: The company the signal is about. Required for externalSignalCompany agents; ignored otherwise.
                   required:
                   - domain
                   - name
@@ -217,8 +210,7 @@ paths:
                       example: https://www.linkedin.com/company/acme
                 customFields:
                   type: object
-                  description: Optional key/value metadata stored on the signal. Max 20 keys; all values
-                    must be strings.
+                  description: Optional key/value metadata stored on the signal. Max 20 keys; all values must be strings.
                   additionalProperties:
                     type: string
                   example:
@@ -226,9 +218,7 @@ paths:
                     source: webinar
       responses:
         '200':
-          description: Signal processed or ignored. `status` is `processed` when a signal was created,
-            or `ignored` when no matching entity was found or the agent's daily limit was reached. External
-            signals are free, so `creditsConsumed` is always 0.
+          description: Signal processed or ignored. `status` is `processed` when a signal was created, or `ignored` when no matching entity was found or the agent's daily limit was reached. External signals are free, so `creditsConsumed` is always 0.
           content:
             application/json:
               schema:
@@ -261,8 +251,7 @@ paths:
                 invalidContact:
                   value: Contact must have a valid LinkedIn profile URL (e.g. https://www.linkedin.com/in/...)
                 invalidCompany:
-                  value: Company must have a domain and a name; linkedinUrl (when provided) must be a
-                    valid LinkedIn company URL (e.g. https://www.linkedin.com/company/...)
+                  value: Company must have a domain and a name; linkedinUrl (when provided) must be a valid LinkedIn company URL (e.g. https://www.linkedin.com/company/...)
                 invalidCustomFields:
                   value: Custom fields must have 20 keys or less with string values
         '401':
@@ -280,6 +269,8 @@ paths:
           content:
             text/plain:
               example: Internal server error
+    servers:
+    - url: https://api.lemlist.com/api
   /watchlist:
     get:
       summary: List Signal Agents
@@ -313,8 +304,7 @@ paths:
       - name: status
         in: query
         required: false
-        description: Filter by lifecycle status(es). Comma-separated list. Defaults to every status except
-          `delete`.
+        description: Filter by lifecycle status(es). Comma-separated list. Defaults to every status except `delete`.
         schema:
           type: string
         example: active
@@ -390,8 +380,7 @@ paths:
                   description: Emoji shown next to the agent name (defaults to a random emoji)
                 segmentType:
                   type: string
-                  description: Entity sourcing. Only `all` is supported via the API. Required together
-                    with signalProcessingType when activate is true.
+                  description: Entity sourcing. Only `all` is supported via the API. Required together with signalProcessingType when activate is true.
                   enum:
                   - all
                 signalProcessingType:
@@ -403,8 +392,7 @@ paths:
                   - push_to_campaign
                 signalOpportunityTemplate:
                   type: object
-                  description: Task/opportunity template applied to each signal when signalProcessingType
-                    is create_opportunity.
+                  description: Task/opportunity template applied to each signal when signalProcessingType is create_opportunity.
                   properties:
                     ownerType:
                       type: string
@@ -593,6 +581,8 @@ paths:
           content:
             text/plain:
               example: Internal server error
+    servers:
+    - url: https://api.lemlist.com/api
   /watchlist/history:
     get:
       summary: Get Signal Agent configuration history
@@ -651,6 +641,8 @@ paths:
           content:
             text/plain:
               example: Internal server error
+    servers:
+    - url: https://api.lemlist.com/api
   /watchlist/library:
     get:
       summary: List available signal types
@@ -673,6 +665,8 @@ paths:
           content:
             text/plain:
               example: Internal server error
+    servers:
+    - url: https://api.lemlist.com/api
   /watchlist/filters:
     get:
       summary: List allowed filters per signal type
@@ -728,6 +722,8 @@ paths:
           content:
             text/plain:
               example: Internal server error
+    servers:
+    - url: https://api.lemlist.com/api
   /watchlist/filter-values:
     get:
       summary: Autocomplete filter values
@@ -815,12 +811,432 @@ paths:
           content:
             text/plain:
               example: Internal server error
+    servers:
+    - url: https://api.lemlist.com/api
 components:
-  securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
   schemas:
+    WatchListSchema:
+      type: object
+      description: A Signal Agent (watch list) configuration.
+      properties:
+        _id:
+          type: string
+          description: Unique Signal Agent identifier
+        name:
+          type: string
+          description: Display name
+        type:
+          type: string
+          description: Signal type monitored by this Signal Agent
+          enum:
+          - companyIsHiring
+          - companyRaisedFunds
+          - recruitmentCampaign
+          - jobChange
+          - newHire
+          - companyEmployeeVisitedMyWebsite
+          - customSignals
+          - competitorConnections
+          - competitorReactions
+          - companyFollowers
+          - technologyChange
+          - linkedinPeopleProfile
+          - linkedinCompanyProfile
+          - mergersAcquisitions
+          - promotion
+          - linkedinKeywords
+          - externalSignalContact
+          - externalSignalCompany
+          - buyingIntent
+        status:
+          type: string
+          description: Lifecycle status
+          enum:
+          - active
+          - inactive
+          - draft
+          - insufficient_credits
+          - empty_crm_lists
+          - error
+          - delete
+        entity:
+          type: string
+          description: Entity kind the agent tracks
+          enum:
+          - contact
+          - company
+        segmentType:
+          type: string
+          description: How the monitored entities are sourced
+          enum:
+          - all
+          - list
+          - csv
+        signalProcessingType:
+          type: string
+          description: How detected signals are processed
+          enum:
+          - manual
+          - create_opportunity
+          - push_to_campaign
+        signalOpportunityTemplate:
+          type: object
+          description: Task/opportunity template applied to each signal when signalProcessingType is create_opportunity.
+          properties:
+            ownerType:
+              type: string
+              description: Who the created opportunity is assigned to
+              enum:
+              - contact_owner
+              - specific_owner
+            ownerId:
+              type: string
+              description: Owner user id, when ownerType is specific_owner
+            type:
+              type: string
+              description: Opportunity channel
+              enum:
+              - email
+              - phone
+              - linkedinSend
+              - whatsappMessage
+              - manual
+            priority:
+              type: integer
+              description: Opportunity priority
+              enum:
+              - 0
+              - 1
+              - 2
+            data:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Opportunity title
+                subject:
+                  type: string
+                  description: Email subject (email channel)
+                emailTemplateId:
+                  type: string
+                  description: Email template id
+                message:
+                  type: string
+                  description: Message body
+        filters:
+          type: array
+          description: Filters narrowing which entities/events are tracked
+          items:
+            $ref: '#/components/schemas/WatchListFilter'
+        emoji:
+          type: string
+          description: Emoji shown next to the agent name
+    WatchListConfigHistoryEntry:
+      type: object
+      description: A past configuration version of a Signal Agent, active during [startDate, endDate).
+      properties:
+        _id:
+          type: string
+          description: History entry identifier
+        startDate:
+          type: string
+          description: When this configuration version became active
+          format: date-time
+        endDate:
+          type: string
+          description: When this configuration version was replaced
+          format: date-time
+        createdBy:
+          type: string
+          description: User id that made the change
+        name:
+          type: string
+          description: Signal Agent name at capture time
+        emoji:
+          type: string
+          description: Emoji at capture time
+        type:
+          type: string
+          description: Signal type
+          enum:
+          - companyIsHiring
+          - companyRaisedFunds
+          - recruitmentCampaign
+          - jobChange
+          - newHire
+          - companyEmployeeVisitedMyWebsite
+          - customSignals
+          - competitorConnections
+          - competitorReactions
+          - companyFollowers
+          - technologyChange
+          - linkedinPeopleProfile
+          - linkedinCompanyProfile
+          - mergersAcquisitions
+          - promotion
+          - linkedinKeywords
+          - externalSignalContact
+          - externalSignalCompany
+          - buyingIntent
+        entity:
+          type: string
+          description: Entity kind
+          enum:
+          - contact
+          - company
+        segmentType:
+          type: string
+          description: Segment sourcing
+          enum:
+          - all
+          - list
+          - csv
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/WatchListFilter'
+        signalProcessingType:
+          type: string
+          description: Signal processing type
+          enum:
+          - manual
+          - create_opportunity
+          - push_to_campaign
+        stats:
+          type: object
+          description: Signal/campaign stats computed for the window [startDate, endDate).
+          properties:
+            signalsCount:
+              type: integer
+              description: Number of signals detected in the window
+            campaigns:
+              type: array
+              description: Per-campaign breakdown (push_to_campaign agents only)
+              items:
+                type: object
+    WatchListListMeta:
+      type: object
+      properties:
+        pagination:
+          type: object
+          properties:
+            page:
+              type: integer
+              description: Current page number
+            limit:
+              type: integer
+              description: Number of records per page
+            totalRecords:
+              type: integer
+              description: Total records matching the filter
+            totalPages:
+              type: integer
+              description: Total number of pages
+    WatchListApiListWatchListsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WatchListSchema'
+        meta:
+          $ref: '#/components/schemas/WatchListListMeta'
+    WatchListApiFilterValuesResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            filterId:
+              type: string
+              description: Resolved filter identifier
+            results:
+              type:
+              - array
+              - 'null'
+              description: Resolved values, or null when the filter resolves nothing
+              items:
+                type: string
+    WatchListApiFiltersResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          description: Allowed filters keyed by signal type
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/WatchListFilterDescriptor'
+    WatchListApiHistoryResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WatchListConfigHistoryEntry'
+        meta:
+          $ref: '#/components/schemas/WatchListListMeta'
+    WatchListApiFetchSignalsResponse:
+      type: object
+      description: Paginated response containing signals detected by Signal Agents
+      properties:
+        data:
+          type: array
+          description: Signals matching the query parameters
+          items:
+            $ref: '#/components/schemas/SignalSchema'
+        meta:
+          $ref: '#/components/schemas/WatchListListMeta'
+    WatchListApiDeleteWatchListResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            _id:
+              type: string
+              description: Deleted Signal Agent id
+            deleted:
+              type: boolean
+              description: Whether a document was removed
+            deletedCount:
+              type: integer
+              description: Number of documents removed
+    WatchListApiWatchListResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/WatchListSchema'
+    WatchListFilterDescriptor:
+      type: object
+      description: Describes a filter that can be set on a Signal Agent of a given type.
+      properties:
+        filterId:
+          type: string
+          description: Filter identifier
+        name:
+          type: string
+          description: Human-readable filter name
+        properties:
+          type: array
+          description: Filter sides supported by this filter
+          items:
+            type: string
+            enum:
+            - in
+            - out
+        required:
+          type: array
+          description: Filter sides that must be non-empty
+          items:
+            type: string
+            enum:
+            - in
+            - out
+        default:
+          description: Default value, when the filter has one
+        min:
+          type: number
+          description: Minimum value (numeric filters)
+        max:
+          type: number
+          description: Maximum value (numeric filters)
+    WatchListLibraryEntry:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Signal type identifier
+          enum:
+          - companyIsHiring
+          - companyRaisedFunds
+          - recruitmentCampaign
+          - jobChange
+          - newHire
+          - companyEmployeeVisitedMyWebsite
+          - customSignals
+          - competitorConnections
+          - competitorReactions
+          - companyFollowers
+          - technologyChange
+          - linkedinPeopleProfile
+          - linkedinCompanyProfile
+          - mergersAcquisitions
+          - promotion
+          - linkedinKeywords
+          - externalSignalContact
+          - externalSignalCompany
+          - buyingIntent
+        title:
+          type: string
+          description: Display title
+        description:
+          type: string
+          description: What this signal detects
+    WatchListFilter:
+      type: object
+      description: A filter narrowing which entities or events a Signal Agent tracks. `in` includes matching values, `out` excludes them.
+      required:
+      - filterId
+      properties:
+        filterId:
+          type: string
+          description: Filter identifier
+          enum:
+          - title
+          - description
+          - location
+          - visitLocation
+          - website
+          - pagesTracked
+          - minVisitDuration
+          - minPageViewed
+          - internalTraffic
+          - linkedinUrls
+          - companyLinkedinUrls
+          - companyNames
+          - companyLocation
+          - companyIndustries
+          - companySizes
+          - maxIdentificationsPerDay
+          - excludedVisitorIps
+          - reactionTypes
+          - linkedinTopics
+          - bomboraTopics
+          - watcherWatchKey
+          - questions
+          - fundraisingMinAmount
+          - fundraisingMaxAmount
+          - fundraisingInvestmentTypes
+          - fundraisingInvestors
+          - technologies
+          - detectionMode
+          - maDealTypes
+          - maMinAmount
+          - persona
+          - externalSignalFieldMapping
+          - externalSignalCustomFieldMapping
+          - seniority
+          - crmListIds
+          - minJobCount
+          - timeframe
+        in:
+          type: array
+          description: Values to include
+          items:
+            type: string
+        out:
+          type: array
+          description: Values to exclude
+          items:
+            type: string
+    WatchListApiLibraryResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WatchListLibraryEntry'
     ExternalSignalPushResponse:
       type: object
       properties:
@@ -862,8 +1278,7 @@ components:
               description: Whether the entity was enriched from lemlist data
     SignalSchema:
       type: object
-      description: A signal detected by a Signal Agent representing a tracked event (hiring, LinkedIn
-        activity, website visit, etc.)
+      description: A signal detected by a Signal Agent representing a tracked event (hiring, LinkedIn activity, website visit, etc.)
       required:
       - _id
       - teamId
@@ -977,8 +1392,7 @@ components:
               description: Company logo URL
         signalData:
           type: object
-          description: Signal-specific data that varies by signal type. Each field is prefixed with the
-            signal type(s) that populate it.
+          description: Signal-specific data that varies by signal type. Each field is prefixed with the signal type(s) that populate it.
           properties:
             jobTitle:
               type: string
@@ -1021,8 +1435,7 @@ components:
               description: '[companyEmployeeVisitedMyWebsite] Visit duration in seconds (session-cumulative)'
             startDate:
               type: string
-              description: '[jobChange/newHire/competitorConnections/companyFollowers] Start date at the
-                tracked company'
+              description: '[jobChange/newHire/competitorConnections/companyFollowers] Start date at the tracked company'
             previousCompany:
               type: string
               description: '[jobChange] Previous company name'
@@ -1235,425 +1648,10 @@ components:
               description: '[externalSignalContact/externalSignalCompany] Custom fields map'
               additionalProperties:
                 type: string
-    WatchListApiDeleteWatchListResponse:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            _id:
-              type: string
-              description: Deleted Signal Agent id
-            deleted:
-              type: boolean
-              description: Whether a document was removed
-            deletedCount:
-              type: integer
-              description: Number of documents removed
-    WatchListApiFetchSignalsResponse:
-      type: object
-      description: Paginated response containing signals detected by Signal Agents
-      properties:
-        data:
-          type: array
-          description: Signals matching the query parameters
-          items:
-            $ref: '#/components/schemas/SignalSchema'
-        meta:
-          $ref: '#/components/schemas/WatchListListMeta'
-    WatchListApiFilterValuesResponse:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            filterId:
-              type: string
-              description: Resolved filter identifier
-            results:
-              type: array
-              nullable: true
-              description: Resolved values, or null when the filter resolves nothing
-              items:
-                type: string
-    WatchListApiFiltersResponse:
-      type: object
-      properties:
-        data:
-          type: object
-          description: Allowed filters keyed by signal type
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/WatchListFilterDescriptor'
-    WatchListApiHistoryResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/WatchListConfigHistoryEntry'
-        meta:
-          $ref: '#/components/schemas/WatchListListMeta'
-    WatchListApiLibraryResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/WatchListLibraryEntry'
-    WatchListApiListWatchListsResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/WatchListSchema'
-        meta:
-          $ref: '#/components/schemas/WatchListListMeta'
-    WatchListApiWatchListResponse:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/WatchListSchema'
-    WatchListConfigHistoryEntry:
-      type: object
-      description: A past configuration version of a Signal Agent, active during [startDate, endDate).
-      properties:
-        _id:
-          type: string
-          description: History entry identifier
-        startDate:
-          type: string
-          description: When this configuration version became active
-          format: date-time
-        endDate:
-          type: string
-          description: When this configuration version was replaced
-          format: date-time
-        createdBy:
-          type: string
-          description: User id that made the change
-        name:
-          type: string
-          description: Signal Agent name at capture time
-        emoji:
-          type: string
-          description: Emoji at capture time
-        type:
-          type: string
-          description: Signal type
-          enum:
-          - companyIsHiring
-          - companyRaisedFunds
-          - recruitmentCampaign
-          - jobChange
-          - newHire
-          - companyEmployeeVisitedMyWebsite
-          - customSignals
-          - competitorConnections
-          - competitorReactions
-          - companyFollowers
-          - technologyChange
-          - linkedinPeopleProfile
-          - linkedinCompanyProfile
-          - mergersAcquisitions
-          - promotion
-          - linkedinKeywords
-          - externalSignalContact
-          - externalSignalCompany
-          - buyingIntent
-        entity:
-          type: string
-          description: Entity kind
-          enum:
-          - contact
-          - company
-        segmentType:
-          type: string
-          description: Segment sourcing
-          enum:
-          - all
-          - list
-          - csv
-        filters:
-          type: array
-          items:
-            $ref: '#/components/schemas/WatchListFilter'
-        signalProcessingType:
-          type: string
-          description: Signal processing type
-          enum:
-          - manual
-          - create_opportunity
-          - push_to_campaign
-        stats:
-          type: object
-          description: Signal/campaign stats computed for the window [startDate, endDate).
-          properties:
-            signalsCount:
-              type: integer
-              description: Number of signals detected in the window
-            campaigns:
-              type: array
-              description: Per-campaign breakdown (push_to_campaign agents only)
-              items:
-                type: object
-    WatchListFilter:
-      type: object
-      description: A filter narrowing which entities or events a Signal Agent tracks. `in` includes matching
-        values, `out` excludes them.
-      required:
-      - filterId
-      properties:
-        filterId:
-          type: string
-          description: Filter identifier
-          enum:
-          - title
-          - description
-          - location
-          - visitLocation
-          - website
-          - pagesTracked
-          - minVisitDuration
-          - minPageViewed
-          - internalTraffic
-          - linkedinUrls
-          - companyLinkedinUrls
-          - companyNames
-          - companyLocation
-          - companyIndustries
-          - companySizes
-          - maxIdentificationsPerDay
-          - excludedVisitorIps
-          - reactionTypes
-          - linkedinTopics
-          - bomboraTopics
-          - watcherWatchKey
-          - questions
-          - fundraisingMinAmount
-          - fundraisingMaxAmount
-          - fundraisingInvestmentTypes
-          - fundraisingInvestors
-          - technologies
-          - detectionMode
-          - maDealTypes
-          - maMinAmount
-          - persona
-          - externalSignalFieldMapping
-          - externalSignalCustomFieldMapping
-          - seniority
-          - crmListIds
-          - minJobCount
-          - timeframe
-        in:
-          type: array
-          description: Values to include
-          items:
-            type: string
-        out:
-          type: array
-          description: Values to exclude
-          items:
-            type: string
-    WatchListFilterDescriptor:
-      type: object
-      description: Describes a filter that can be set on a Signal Agent of a given type.
-      properties:
-        filterId:
-          type: string
-          description: Filter identifier
-        name:
-          type: string
-          description: Human-readable filter name
-        properties:
-          type: array
-          description: Filter sides supported by this filter
-          items:
-            type: string
-            enum:
-            - in
-            - out
-        required:
-          type: array
-          description: Filter sides that must be non-empty
-          items:
-            type: string
-            enum:
-            - in
-            - out
-        default:
-          description: Default value, when the filter has one
-        min:
-          type: number
-          description: Minimum value (numeric filters)
-        max:
-          type: number
-          description: Maximum value (numeric filters)
-    WatchListLibraryEntry:
-      type: object
-      properties:
-        type:
-          type: string
-          description: Signal type identifier
-          enum:
-          - companyIsHiring
-          - companyRaisedFunds
-          - recruitmentCampaign
-          - jobChange
-          - newHire
-          - companyEmployeeVisitedMyWebsite
-          - customSignals
-          - competitorConnections
-          - competitorReactions
-          - companyFollowers
-          - technologyChange
-          - linkedinPeopleProfile
-          - linkedinCompanyProfile
-          - mergersAcquisitions
-          - promotion
-          - linkedinKeywords
-          - externalSignalContact
-          - externalSignalCompany
-          - buyingIntent
-        title:
-          type: string
-          description: Display title
-        description:
-          type: string
-          description: What this signal detects
-    WatchListListMeta:
-      type: object
-      properties:
-        pagination:
-          type: object
-          properties:
-            page:
-              type: integer
-              description: Current page number
-            limit:
-              type: integer
-              description: Number of records per page
-            totalRecords:
-              type: integer
-              description: Total records matching the filter
-            totalPages:
-              type: integer
-              description: Total number of pages
-    WatchListSchema:
-      type: object
-      description: A Signal Agent (watch list) configuration.
-      properties:
-        _id:
-          type: string
-          description: Unique Signal Agent identifier
-        name:
-          type: string
-          description: Display name
-        type:
-          type: string
-          description: Signal type monitored by this Signal Agent
-          enum:
-          - companyIsHiring
-          - companyRaisedFunds
-          - recruitmentCampaign
-          - jobChange
-          - newHire
-          - companyEmployeeVisitedMyWebsite
-          - customSignals
-          - competitorConnections
-          - competitorReactions
-          - companyFollowers
-          - technologyChange
-          - linkedinPeopleProfile
-          - linkedinCompanyProfile
-          - mergersAcquisitions
-          - promotion
-          - linkedinKeywords
-          - externalSignalContact
-          - externalSignalCompany
-          - buyingIntent
-        status:
-          type: string
-          description: Lifecycle status
-          enum:
-          - active
-          - inactive
-          - draft
-          - insufficient_credits
-          - empty_crm_lists
-          - error
-          - delete
-        entity:
-          type: string
-          description: Entity kind the agent tracks
-          enum:
-          - contact
-          - company
-        segmentType:
-          type: string
-          description: How the monitored entities are sourced
-          enum:
-          - all
-          - list
-          - csv
-        signalProcessingType:
-          type: string
-          description: How detected signals are processed
-          enum:
-          - manual
-          - create_opportunity
-          - push_to_campaign
-        signalOpportunityTemplate:
-          type: object
-          description: Task/opportunity template applied to each signal when signalProcessingType is create_opportunity.
-          properties:
-            ownerType:
-              type: string
-              description: Who the created opportunity is assigned to
-              enum:
-              - contact_owner
-              - specific_owner
-            ownerId:
-              type: string
-              description: Owner user id, when ownerType is specific_owner
-            type:
-              type: string
-              description: Opportunity channel
-              enum:
-              - email
-              - phone
-              - linkedinSend
-              - whatsappMessage
-              - manual
-            priority:
-              type: integer
-              description: Opportunity priority
-              enum:
-              - 0
-              - 1
-              - 2
-            data:
-              type: object
-              properties:
-                title:
-                  type: string
-                  description: Opportunity title
-                subject:
-                  type: string
-                  description: Email subject (email channel)
-                emailTemplateId:
-                  type: string
-                  description: Email template id
-                message:
-                  type: string
-                  description: Message body
-        filters:
-          type: array
-          description: Filters narrowing which entities/events are tracked
-          items:
-            $ref: '#/components/schemas/WatchListFilter'
-        emoji:
-          type: string
-          description: Emoji shown next to the agent name
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-refined-from:
+- lemlist-openapi-v2.json
+- lemlist-openapi.yml

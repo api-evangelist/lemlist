@@ -1,23 +1,32 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: lemlist Users API
+  title: Lemlist Users API
   version: 1.0.0
-  description: The Users operations of the lemlist API, split by tag from the OpenAPI lemlist publishes
-    at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content is carried verbatim
-    from the provider spec.
+  description: 'Operations tagged Users across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
-security:
-- basicAuth: []
 tags:
 - name: Users
 paths:
   /users/{userId}:
+    parameters:
+    - name: userId
+      in: path
+      required: true
+      example: '{{userId}}'
+      schema:
+        type: string
     get:
-      summary: Get User
+      summary: Get user
       tags:
       - Users
-      parameters: []
+      parameters:
+      - name: Content
+        in: header
+        required: false
+        example: application/json
+        schema:
+          type: string
       responses:
         '200':
           headers:
@@ -29,19 +38,61 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  role:
+                    type: string
+                  linkedIn:
+                    type: object
+                    properties:
+                      status:
+                        type: boolean
+                      inviteLimit:
+                        type: integer
+                      sendLimit:
+                        type: integer
+                      visitLimit:
+                        type: integer
+                  mailboxes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        email:
+                          type: string
+                          format: email
+                        provider:
+                          type: string
+                        status:
+                          type: string
+                        lemlist:
+                          type: object
+                          properties:
+                            emailLimit:
+                              type: integer
+                        lemwarm:
+                          type: object
+                          properties:
+                            active:
+                              type: boolean
               example:
-                _id: usr_eSrHPSoL9QVPUOsho
-                email: example@lemlist.co
+                _id: usr_QAucgYReK6EmMB3Cz
+                email: example@lempire.co
                 role: admin
                 linkedIn:
-                  linkedinUrl: https://www.linkedin.com/in/john-doe
                   status: true
                   inviteLimit: 25
                   sendLimit: 33
                   visitLimit: 36
                 mailboxes:
-                - _id: usm_2mkqJNUjnJQiyVBht
+                - _id: usm_bsdepN6jb8zftK9Ns
                   email: example@gmail.com
                   provider: google
                   status: ERROR
@@ -49,31 +100,18 @@ paths:
                     emailLimit: 50
                   lemwarm:
                     active: false
-                - _id: usm_gqlN3jKWoGo1Je8El
+                - _id: usm_gPKrqoNxaXxScTpPh
                   email: example@outlook.com
                   status: ERROR
                   lemlist:
                     emailLimit: 50
                   lemwarm:
                     active: false
-        '400':
-          description: 'Possible errors: Bad team / Endpoint not available'
-          content:
-            text/plain:
-              example: Bad team
         '401':
-          description: The authentication you supplied is incorrect
-          content:
-            text/plain:
-              example: The authentication you supplied is incorrect
-    parameters:
-    - name: userId
-      in: path
-      required: true
-      description: The unique identifier of the user
-      example: usr_eSrHPSoL9QVPUOsho
-      schema:
-        type: string
+          headers: {}
+          description: Unauthorized
+    servers:
+    - url: https://api.lemlist.com/api
   /user/channels:
     get:
       summary: Get User Channels
@@ -89,8 +127,9 @@ paths:
                 type: object
                 properties:
                   plan:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                     description: Current billing plan name
                   email:
                     type: object
@@ -181,45 +220,12 @@ paths:
           content:
             text/plain:
               example: Bad method
+      security:
+      - basicAuth: []
+    servers:
+    - url: https://api.lemlist.com/api
 components:
-  securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
   schemas:
-    Mailbox:
-      type: object
-      description: An email account connected to a user for sending campaigns.
-      properties:
-        _id:
-          type: string
-          description: Unique mailbox identifier
-        email:
-          type: string
-          format: email
-          description: Mailbox email address
-        provider:
-          type: string
-          description: Email provider (google, microsoft, etc.)
-        status:
-          type: string
-          description: Connection status
-          enum:
-          - CONNECTED
-          - ERROR
-          - DISCONNECTED
-        lemlist:
-          type: object
-          properties:
-            emailLimit:
-              type: integer
-              description: Daily send limit
-        lemwarm:
-          type: object
-          properties:
-            active:
-              type: boolean
-              description: Lemwarm activation status
     User:
       type: object
       description: A team member account with connected email and/or LinkedIn sending capabilities.
@@ -258,3 +264,44 @@ components:
           description: Email mailboxes connected to this user
           items:
             $ref: '#/components/schemas/Mailbox'
+    Mailbox:
+      type: object
+      description: An email account connected to a user for sending campaigns.
+      properties:
+        _id:
+          type: string
+          description: Unique mailbox identifier
+        email:
+          type: string
+          format: email
+          description: Mailbox email address
+        provider:
+          type: string
+          description: Email provider (google, microsoft, etc.)
+        status:
+          type: string
+          description: Connection status
+          enum:
+          - CONNECTED
+          - ERROR
+          - DISCONNECTED
+        lemlist:
+          type: object
+          properties:
+            emailLimit:
+              type: integer
+              description: Daily send limit
+        lemwarm:
+          type: object
+          properties:
+            active:
+              type: boolean
+              description: Lemwarm activation status
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-refined-from:
+- lemlist-openapi-v1-legacy.json
+- lemlist-openapi-v2.json
+- lemlist-openapi.yml

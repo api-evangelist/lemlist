@@ -1,261 +1,246 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: lemlist Contacts API
+  title: Lemlist Contacts API
   version: 1.0.0
-  description: The Contacts operations of the lemlist API, split by tag from the OpenAPI lemlist publishes
-    at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content is carried verbatim
-    from the provider spec.
+  description: 'Operations tagged Contacts across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
-security:
-- basicAuth: []
 tags:
 - name: Contacts
 paths:
-  /contacts:
+  /contacts/{idOrEmail}:
+    parameters:
+    - name: idOrEmail
+      in: path
+      required: true
+      example: '{{idOrEmail}}'
+      schema:
+        type: string
     get:
-      summary: Get Many Contacts
-      description: 'Retrieves contacts by IDs/emails, or searches/lists contacts by name, email, contact
-        list, campaign membership, or company link.
-
-
-        When using `idsOrEmails`, returns an array of matching contacts directly.
-
-
-        When using `search`, `email`, `listId`, `notInAnyCampaign`, any of the `company*` filters, or
-        no filter at all, returns a paginated response with `data`, `total`, `limit`, and `offset` fields.
-        You can combine filters together to narrow results (e.g. `listId` with `search`, or `notInAnyCampaign`
-        with `companyId`). Calling the endpoint without any filter returns all contacts of the team, paginated.
-
-
-        The `company*` filters (`companyId`, `companyDomain`, `companyLinkedinUrl`, `companySalesnavUrl`)
-        are mutually exclusive — use only one at a time. `companyDomain` / `companyLinkedinUrl` / `companySalesnavUrl`
-        are resolved to a `companyId` through the Companies collection; if no matching company exists,
-        the endpoint returns an empty list with `total: 0` (not an error), which keeps automation flows
-        simple.'
+      summary: Get contact
       tags:
       - Contacts
       parameters:
-      - name: idsOrEmails
-        in: query
+      - name: Content
+        in: header
         required: false
-        description: A comma separated string of either valid contact IDs (MongoDB ObjectId) or valid
-          email addresses. Optional — when omitted, returns the paginated list of all contacts of the
-          team. Maximum 100 values.
-        example: ctc_xW8Ou6C03Csv8vatp,riley@example.com
+        example: application/json
         schema:
           type: string
-        style: form
-        explode: false
-      - name: search
-        in: query
-        required: false
-        description: Search contacts by name or other text fields. Must be at least 2 characters.
-        schema:
-          type: string
-      - name: email
-        in: query
-        required: false
-        description: Search contacts by exact email address.
-        schema:
-          type: string
-          format: email
-      - name: listId
-        in: query
-        required: false
-        description: Filter contacts by contact list ID (`clt_xxx` format). Can be combined with `search`
-          or `email`, or used alone to list all contacts in a list. Get valid IDs from `GET /contacts/lists`.
-        example: clt_abc123def456ghi78
-        schema:
-          type: string
-          pattern: ^clt_[a-zA-Z0-9]+$
-      - name: notInAnyCampaign
-        in: query
-        required: false
-        description: When set to `true`, only returns contacts that are not part of any campaign (orphan
-          contacts). Can be used alone or combined with other filters such as `search`, `email`, or `listId`.
-        schema:
-          type: boolean
-      - name: companyId
-        in: query
-        required: false
-        description: Filter contacts by attached company ID (`cpn_xxx` format). Use this when you already
-          know the lemlist company id (for example after fetching `GET /companies?crmSyncStatus=unique_index_error_company`).
-          Mutually exclusive with `companyDomain`, `companyLinkedinUrl`, and `companySalesnavUrl`.
-        example: cpn_A1B2C3D4E5F6G7H8I
-        schema:
-          type: string
-          pattern: ^cpn_[a-zA-Z0-9]+$
-      - name: companyDomain
-        in: query
-        required: false
-        description: 'Filter contacts by their company''s website domain. Resolved to a `companyId` against
-          the Companies collection. If no company matches, the endpoint returns an empty list (`total:
-          0`). Mutually exclusive with the other `company*` filters.'
-        example: acme.com
-        schema:
-          type: string
-      - name: companyLinkedinUrl
-        in: query
-        required: false
-        description: 'Filter contacts by their company''s LinkedIn URL. Resolved to a `companyId` against
-          the Companies collection. If no company matches, the endpoint returns an empty list (`total:
-          0`). Mutually exclusive with the other `company*` filters.'
-        example: https://www.linkedin.com/company/acme
-        schema:
-          type: string
-      - name: companySalesnavUrl
-        in: query
-        required: false
-        description: 'Filter contacts by their company''s LinkedIn Sales Navigator URL. Resolved to a
-          `companyId` against the Companies collection. If no company matches, the endpoint returns an
-          empty list (`total: 0`). Mutually exclusive with the other `company*` filters.'
-        example: https://www.linkedin.com/sales/company/12345678
-        schema:
-          type: string
-      - name: fieldRejectionReason
-        in: query
-        required: false
-        description: 'Filter contacts to those carrying a field rejection with this reason — a value lemlist
-          refused to write, prefixed by its origin (`enrichment_*` while enriching, `crm_sync_*` during
-          CRM sync). Returns an empty list (`total: 0`) when no contact matches. Each returned contact
-          exposes the full detail under `fieldRejections[]` (which field, why, and `conflictingRecordId`
-          for duplicates). Only applies to the paginated list — ignored when `idsOrEmails` is provided
-          (that path returns the exact contacts requested, unfiltered).'
-        example: enrichment_duplicate_linkedin_url
-        schema:
-          type: string
-          enum:
-          - enrichment_duplicate_linkedin_url
-          - enrichment_duplicate_email
-          - crm_sync_duplicate_linkedin_url
-          - crm_sync_invalid_linkedin_url
-          - crm_sync_invalid_phone
-          - crm_sync_duplicate_contact_blocked
-          - crm_sync_duplicate_company_blocked
-          - crm_sync_company_not_in_lemlist
-          - crm_sync_custom_field_creation_failed
-          - crm_sync_value_oscillating
-          - crm_sync_owner_sync_loop
-          - crm_sync_unmapped_user
-          - crm_sync_value_incompatible
-          - crm_sync_unknown_error
-      - name: limit
-        in: query
-        required: false
-        description: Maximum number of contacts to return (1–500). Defaults to 100.
-        schema:
-          type: integer
-          minimum: 1
-          maximum: 500
-          default: 100
-      - name: offset
-        in: query
-        required: false
-        description: Number of contacts to skip for pagination. Defaults to 0.
-        schema:
-          type: integer
-          minimum: 0
-          default: 0
       responses:
         '200':
-          description: Success. When using `idsOrEmails`, returns an array of contacts. Otherwise, returns
-            a paginated object with `data`, `total`, `limit`, and `offset`.
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
           content:
             application/json:
               schema:
-                oneOf:
-                - type: array
-                  items:
-                    $ref: '#/components/schemas/Contact'
-                - type: object
-                  properties:
-                    data:
-                      type: array
-                      items:
-                        $ref: '#/components/schemas/Contact'
-                    total:
-                      type: integer
-                    limit:
-                      type: integer
-                    offset:
-                      type: integer
-                  required:
-                  - data
-                  - total
-                  - limit
-                  - offset
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  teamId:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  fullName:
+                    type: string
+                  fields:
+                    type: object
+                    properties:
+                      firstName:
+                        type: string
+                      lastName:
+                        type: string
+                      company:
+                        type: string
+                  campaigns:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        campaignId:
+                          type: string
+                        campaignState:
+                          type: string
+                        leadState:
+                          type: string
+                  ownerId:
+                    type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+                  createdBy:
+                    type: string
               example:
-              - _id: ctc_xW8Ou6C03Csv8vatp
-                teamId: tea_8QvkOiBfPdb2ZRhHi
-                fullName: John Doe
-                email: support@lemlist.com
+                _id: ctc_Ri5gMtaeDGufRQ3M2
+                teamId: tea_8GdMrBZ3gf4p2rj2h
+                email: chafik@lempire.co
+                fullName: Chafik Gharbi
                 fields:
-                  firstName: John
-                  jobTitle: Growth Engineer
-                  lastName: Doe
-                  industry: Technology
-                  isActiveInCampaigns: false
-                  lastCampaign: NEW TO DELETE
-                  lastLeadMarkedAsInterestedDate: '2025-10-28T02:12:31.971Z'
-                  leadStatus: Marked as not Interested by api
+                  firstName: Chafik
+                  lastName: Gharbi
+                  company: lempire
                 campaigns:
-                - campaignId: cam_bSn8EORHQxbWPjHvu
+                - campaignId: cam_C7BW5Z5ycSiRRWef6
                   campaignState: running
                   leadState: review
-                  leadId: lea_fiDpiGV585wy3Oii2
-                ownerId: usr_ahfFktBBHUIxbVG5P
-                createdAt: '2025-10-28T00:40:37.917Z'
-                createdBy: usr_ahfFktBBHUIxbVG5P
-                unsubscribed: false
-              - _id: ctc_a9RxJNa7pmMd85H9b
-                teamId: tea_8QvkOiBfPdb2ZRhHi
-                fullName: Casey
-                email: riley@example.com
-                fields:
-                  firstName: Casey
-                  isActiveInCampaigns: false
-                campaigns:
-                - campaignId: cam_jwm7THjgGFE3ylR85
-                  campaignState: running
-                  leadState: done
-                  leadId: lea_XKjAytuJhBKZhxhWh
-                - campaignId: cam_eF4DlNERV0CW1TwRd
-                  campaignState: running
-                  leadState: done
-                  leadId: lea_fJcS9D3UtEqZcDcAG
-                - campaignId: cam_UBbMt30jHq0vNJKJr
-                  campaignState: running
-                  leadState: done
-                  leadId: lea_GlaMfjxlUYuwEDL0w
-                - campaignId: cam_pijDVnytN5S7frriD
-                  campaignState: running
-                  leadState: review
-                  leadId: lea_Bs9aMGCcjdzTDvixY
-                ownerId: usr_Emu1g29BMtBixhMSP
-                createdAt: '2024-10-01T09:00:13.831Z'
-                createdBy: usr_Emu1g29BMtBixhMSP
-                unsubscribed: true
-        '400':
-          description: 'Possible errors: Bad team / search query too short / invalid listId format'
+                ownerId: usr_h47tiJr87Zn7XtQHi
+                createdAt: '2025-07-18T10:03:41.612Z'
+                createdBy: usr_h47tiJr87Zn7XtQHi
+    delete:
+      summary: Delete Contact
+      description: Deletes a lemlist contact resolved by its id (`ctc_xxx`) or email. Cascades to the contact's leads, opportunities, list associations, inbox conversations and activities. **No CRM-side propagation** — only the lemlist record is removed. Fails with `409 CONTACT_DELETE_BLOCKED` when the contact cannot be deleted right now — for example while an enrichment is still running (retry once it finishes); the response `error.message` states the specific reason.
+      tags:
+      - Contacts
+      responses:
+        '200':
+          description: Contact deleted.
           content:
-            text/plain:
-              example: Search query must be at least 2 characters
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  deletedContactId:
+                    type: string
+                    description: ID of the deleted lemlist contact.
+                required:
+                - success
+                - deletedContactId
+              example:
+                success: true
+                deletedContactId: ctc_xW8Ou6C03Csv8vatp
         '401':
-          description: The authentication you supplied is incorrect
+          description: The authentication you supplied is incorrect.
           content:
             text/plain:
               example: The authentication you supplied is incorrect
+        '404':
+          description: Contact not found (`CONTACT_NOT_FOUND`).
+          content:
+            application/json:
+              example:
+                success: false
+                error:
+                  code: CONTACT_NOT_FOUND
+                  message: No contact found with the provided id or email
+        '409':
+          description: The contact cannot be deleted right now (`CONTACT_DELETE_BLOCKED`) — for example while an enrichment is in progress. The `error.message` states the specific reason; retry once it clears.
+          content:
+            application/json:
+              example:
+                success: false
+                error:
+                  code: CONTACT_DELETE_BLOCKED
+                  message: Contact cannot be removed if an enrichment is in progress
         '405':
-          description: Method not allowed
+          description: Method not allowed.
+    servers:
+    - url: https://api.lemlist.com/api
+  /contacts:
+    parameters: []
+    get:
+      summary: Get contacts
+      tags:
+      - Contacts
+      parameters:
+      - name: Content
+        in: header
+        required: false
+        example: application/json
+        schema:
+          type: string
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    teamId:
+                      type: string
+                    email:
+                      type: string
+                      format: email
+                    fullName:
+                      type: string
+                    fields:
+                      type: object
+                      properties:
+                        firstName:
+                          type: string
+                        lastName:
+                          type: string
+                        company:
+                          type: string
+                    campaigns:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          campaignId:
+                            type: string
+                          campaignState:
+                            type: string
+                          leadState:
+                            type: string
+                    ownerId:
+                      type: string
+                    createdAt:
+                      type: string
+                      format: date-time
+                    createdBy:
+                      type: string
+              example:
+              - _id: ctc_Ri5gMtaeDGufRQ3M2
+                teamId: tea_8GdMrBZ3gf4p2rj2h
+                email: chafik@lempire.co
+                fullName: Chafik Gharbi
+                fields:
+                  firstName: Chafik
+                  lastName: Gharbi
+                  company: lempire
+                campaigns:
+                - campaignId: cam_C7BW5Z5ycSiRRWef6
+                  campaignState: running
+                  leadState: review
+                ownerId: usr_h47tiJr87Zn7XtQHi
+                createdAt: '2025-07-18T10:03:41.612Z'
+                createdBy: usr_h47tiJr87Zn7XtQHi
+              - _id: ctc_Lznm3LZ8DMR4WS3r8
+                teamId: tea_8GdMrBZ3gf4p2rj2h
+                email: chafik2@lempire.co
+                fullName: Chafik Gharbi
+                fields:
+                  firstName: Chafik
+                  lastName: Gharbi
+                  company: lempire
+                campaigns:
+                - campaignId: cam_C7BW5Z5ycSiRRWef6
+                  campaignState: running
+                  leadState: review
+                ownerId: usr_h47tiJr87Zn7XtQHi
+                createdAt: '2025-07-18T10:03:41.612Z'
+                createdBy: usr_h47tiJr87Zn7XtQHi
     post:
       summary: Add and update contact
-      description: Creates a new contact or updates an existing one (upsert). If a contact with the same
-        email, LinkedIn URL, or Sales Navigator URL already exists, it will be updated with the provided
-        non-empty fields. Null or empty values are ignored during updates to preserve existing data. You
-        can target an existing contact directly by providing `contactId`, bypassing email/LinkedIn matching.
-        You can optionally link the contact to a company by providing `companyId`, `companyDomain`, or
-        `companyLinkedinUrl`.
+      description: Creates a new contact or updates an existing one (upsert). If a contact with the same email, LinkedIn URL, or Sales Navigator URL already exists, it will be updated with the provided non-empty fields. Null or empty values are ignored during updates to preserve existing data. You can target an existing contact directly by providing `contactId`, bypassing email/LinkedIn matching. You can optionally link the contact to a company by providing `companyId`, `companyDomain`, or `companyLinkedinUrl`.
       tags:
       - Contacts
       requestBody:
@@ -267,28 +252,21 @@ paths:
               properties:
                 contactId:
                   type: string
-                  description: Existing contact ID. Updates a specific contact by ID, bypassing email/LinkedIn
-                    matching. Can only be used to update an existing contact, not to create a new one.
-                    When provided, `email` and `linkedinUrl` are not required. At least one of `contactId`,
-                    `email`, `linkedinUrl`, or `linkedinUrlSalesNav` is required.
+                  description: Existing contact ID. Updates a specific contact by ID, bypassing email/LinkedIn matching. Can only be used to update an existing contact, not to create a new one. When provided, `email` and `linkedinUrl` are not required. At least one of `contactId`, `email`, `linkedinUrl`, or `linkedinUrlSalesNav` is required.
                 email:
                   type: string
-                  description: Contact email address. Used as a unique key for upsert matching. At least
-                    one of `contactId`, `email`, `linkedinUrl`, or `linkedinUrlSalesNav` is required.
+                  description: Contact email address. Used as a unique key for upsert matching. At least one of `contactId`, `email`, `linkedinUrl`, or `linkedinUrlSalesNav` is required.
                 linkedinUrl:
                   type: string
-                  description: LinkedIn profile URL. Used as an alternative unique key for upsert matching.
-                    At least one of `contactId`, `email`, `linkedinUrl`, or `linkedinUrlSalesNav` is required.
+                  description: LinkedIn profile URL. Used as an alternative unique key for upsert matching. At least one of `contactId`, `email`, `linkedinUrl`, or `linkedinUrlSalesNav` is required.
                 linkedinUrlSalesNav:
                   type: string
-                  description: LinkedIn Sales Navigator profile URL. Used as an alternative unique key
-                    for upsert matching.
+                  description: LinkedIn Sales Navigator profile URL. Used as an alternative unique key for upsert matching.
                 additionalEmails:
                   type: array
                   items:
                     type: string
-                  description: Additional email addresses for the contact. Each must be a valid email
-                    address.
+                  description: Additional email addresses for the contact. Each must be a valid email address.
                 firstName:
                   type: string
                   description: Contact first name.
@@ -300,12 +278,10 @@ paths:
                   description: Contact phone number.
                 jobTitle:
                   type: string
-                  description: Contact job title. If a company is linked, this is saved as part of the
-                    job data.
+                  description: Contact job title. If a company is linked, this is saved as part of the job data.
                 jobDescription:
                   type: string
-                  description: Contact job description. If a company is linked, this is saved as part
-                    of the job data.
+                  description: Contact job description. If a company is linked, this is saved as part of the job data.
                 picture:
                   type: string
                   description: URL of the contact's profile picture.
@@ -332,29 +308,22 @@ paths:
                   description: Contact tagline.
                 contactOwner:
                   type: string
-                  description: Owner of the contact. Can be a user ID (e.g. `usr_...`) or a team member's
-                    email address. If the provided value does not match a team member, the owner defaults
-                    to the API key owner.
+                  description: Owner of the contact. Can be a user ID (e.g. `usr_...`) or a team member's email address. If the provided value does not match a team member, the owner defaults to the API key owner.
                 source:
                   type: string
-                  description: Origin of the contact record. Set on creation only and cannot be updated
-                    afterwards. Defaults to `api`.
+                  description: Origin of the contact record. Set on creation only and cannot be updated afterwards. Defaults to `api`.
                   default: api
                 companyId:
                   type: string
-                  description: ID of a company already existing in lemlist to link to this contact. Takes
-                    priority over `companyDomain` and `companyLinkedinUrl`.
+                  description: ID of a company already existing in lemlist to link to this contact. Takes priority over `companyDomain` and `companyLinkedinUrl`.
                 companyDomain:
                   type: string
-                  description: Domain of a company already existing in lemlist to link to this contact
-                    (e.g. `lemlist.com`). Used if `companyId` is not provided.
+                  description: Domain of a company already existing in lemlist to link to this contact (e.g. `lemlist.com`). Used if `companyId` is not provided.
                 companyLinkedinUrl:
                   type: string
-                  description: LinkedIn URL of a company already existing in lemlist to link to this contact.
-                    Used if `companyId` and `companyDomain` are not provided.
+                  description: LinkedIn URL of a company already existing in lemlist to link to this contact. Used if `companyId` and `companyDomain` are not provided.
               additionalProperties:
-                description: Any additional key is treated as a custom field. Custom fields must be registered
-                  in the team's CRM field registry beforehand.
+                description: Any additional key is treated as a custom field. Custom fields must be registered in the team's CRM field registry beforehand.
             example:
               email: jane.smith@example.com
               firstName: Jane
@@ -397,8 +366,7 @@ paths:
                         description: LinkedIn Sales Navigator URL
                       fields:
                         type: object
-                        description: Key/value fields (firstName, lastName, phone, jobTitle, custom fields,
-                          etc.)
+                        description: Key/value fields (firstName, lastName, phone, jobTitle, custom fields, etc.)
                         additionalProperties: true
                       ownerId:
                         type: string
@@ -421,12 +389,10 @@ paths:
                         description: Whether the contact is unsubscribed
                       created:
                         type: boolean
-                        description: '`true` when a new contact was created, `false` when an existing
-                          contact was updated.'
+                        description: '`true` when a new contact was created, `false` when an existing contact was updated.'
                       updated:
                         type: boolean
-                        description: Present and set to `true` only when an existing contact was updated
-                          (i.e. `created` is `false`).
+                        description: Present and set to `true` only when an existing contact was updated (i.e. `created` is `false`).
                       companyLinked:
                         type: boolean
                         description: Whether a company was successfully linked to the contact.
@@ -471,8 +437,7 @@ paths:
                     type: boolean
                   data:
                     type: object
-                    description: 'Same shape as the 201 response, with `created: false` and `updated:
-                      true`.'
+                    description: 'Same shape as the 201 response, with `created: false` and `updated: true`.'
               example:
                 success: true
                 data:
@@ -506,9 +471,7 @@ paths:
                     properties:
                       code:
                         type: string
-                        description: 'Error code: `MISSING_IDENTIFIER`, `INVALID_CONTACT_ID`, `CONTACT_NOT_FOUND_BY_ID`,
-                          `INVALID_EMAIL`, `INVALID_ADDITIONAL_EMAILS`, `INVALID_LINKEDIN_URL`, `INVALID_FIELD`,
-                          or `CONTACT_VALIDATION_FAILED`.'
+                        description: 'Error code: `MISSING_IDENTIFIER`, `INVALID_CONTACT_ID`, `CONTACT_NOT_FOUND_BY_ID`, `INVALID_EMAIL`, `INVALID_ADDITIONAL_EMAILS`, `INVALID_LINKEDIN_URL`, `INVALID_FIELD`, or `CONTACT_VALIDATION_FAILED`.'
                       message:
                         type: string
               example:
@@ -522,117 +485,8 @@ paths:
             text/plain:
               example: The authentication you supplied is incorrect
       parameters: []
-  /contacts/{idOrEmail}:
-    delete:
-      summary: Delete Contact
-      description: Deletes a lemlist contact resolved by its id (`ctc_xxx`) or email. Cascades to the
-        contact's leads, opportunities, list associations, inbox conversations and activities. **No CRM-side
-        propagation** — only the lemlist record is removed. Fails with `409 CONTACT_DELETE_BLOCKED` when
-        the contact cannot be deleted right now — for example while an enrichment is still running (retry
-        once it finishes); the response `error.message` states the specific reason.
-      tags:
-      - Contacts
-      responses:
-        '200':
-          description: Contact deleted.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  deletedContactId:
-                    type: string
-                    description: ID of the deleted lemlist contact.
-                required:
-                - success
-                - deletedContactId
-              example:
-                success: true
-                deletedContactId: ctc_xW8Ou6C03Csv8vatp
-        '401':
-          description: The authentication you supplied is incorrect.
-          content:
-            text/plain:
-              example: The authentication you supplied is incorrect
-        '404':
-          description: Contact not found (`CONTACT_NOT_FOUND`).
-          content:
-            application/json:
-              example:
-                success: false
-                error:
-                  code: CONTACT_NOT_FOUND
-                  message: No contact found with the provided id or email
-        '409':
-          description: The contact cannot be deleted right now (`CONTACT_DELETE_BLOCKED`) — for example
-            while an enrichment is in progress. The `error.message` states the specific reason; retry
-            once it clears.
-          content:
-            application/json:
-              example:
-                success: false
-                error:
-                  code: CONTACT_DELETE_BLOCKED
-                  message: Contact cannot be removed if an enrichment is in progress
-        '405':
-          description: Method not allowed.
-    parameters:
-    - name: idOrEmail
-      in: path
-      required: true
-      description: The unique identifier or email of the contact
-      example: ctc_XXBXpAxmxwg24IzBI
-      schema:
-        type: string
-    get:
-      summary: Get Contact
-      tags:
-      - Contacts
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Contact'
-              example:
-                _id: ctc_xW8Ou6C03Csv8vatp
-                teamId: tea_8QvkOiBfPdb2ZRhHi
-                fullName: John Doe
-                email: support@lemlist.com
-                fields:
-                  firstName: John
-                  jobTitle: Growth Engineer
-                  lastName: Doe
-                  industry: Technology
-                  isActiveInCampaigns: false
-                  lastCampaign: NEW TO DELETE
-                  lastLeadMarkedAsInterestedDate: '2025-10-28T02:12:31.971Z'
-                  leadStatus: Marked as not Interested by api
-                campaigns:
-                - campaignId: cam_bSn8EORHQxbWPjHvu
-                  campaignState: running
-                  leadState: review
-                  leadId: lea_fiDpiGV585wy3Oii2
-                ownerId: usr_ahfFktBBHUIxbVG5P
-                createdAt: '2025-10-28T00:40:37.917Z'
-                createdBy: usr_ahfFktBBHUIxbVG5P
-                unsubscribed: false
-        '400':
-          description: Bad team
-          content:
-            text/plain:
-              example: Bad team
-        '401':
-          description: The authentication you supplied is incorrect
-          content:
-            text/plain:
-              example: The authentication you supplied is incorrect
-        '405':
-          description: Method not allowed
-      parameters: []
+    servers:
+    - url: https://api.lemlist.com/api
   /contacts/lists:
     get:
       summary: Get Contact Lists
@@ -664,8 +518,7 @@ paths:
                       description: Name of the contact list
                     dynamic:
                       type: boolean
-                      description: Whether the list is dynamic (auto-populated by filters) or static (manually
-                        managed)
+                      description: Whether the list is dynamic (auto-populated by filters) or static (manually managed)
               example:
               - _id: clt_abc123def456ghi78
                 name: Nurturing
@@ -685,10 +538,11 @@ paths:
               example: The authentication you supplied is incorrect
         '405':
           description: Method not allowed
+      security:
+      - basicAuth: []
     post:
       summary: Create Contact List
-      description: Creates a new static contact list. After creating the list, use `POST /contacts/lists/{listId}/entities`
-        to add contacts to it.
+      description: Creates a new static contact list. After creating the list, use `POST /contacts/lists/{listId}/entities` to add contacts to it.
       tags:
       - Contacts
       requestBody:
@@ -742,35 +596,41 @@ paths:
               example: The authentication you supplied is incorrect
         '405':
           description: Method not allowed
+      security:
+      - basicAuth: []
+    servers:
+    - url: https://api.lemlist.com/api
   /contacts/lists/{listId}/entities:
+    parameters:
+    - name: listId
+      in: path
+      required: true
+      description: The unique identifier of the contact list (`clt_xxx` format). Must be a **static** contact list.
+      example: clt_xxxxxxxxxxxxxxxxx
+      schema:
+        type: string
+        pattern: ^clt_[a-zA-Z0-9]+$
     post:
       summary: Add or Remove Contacts in a List
-      description: 'Adds existing CRM contacts to a static contact list, or removes them when `?action=remove`
-        is set.
+      description: 'Adds existing CRM contacts to a static contact list, or removes them when `?action=remove` is set.
 
 
-        - **Add** (default): send a `POST` with a `contactIds` body. Contacts already in the list are
-        silently skipped (no duplicates) and reported in `alreadyInList`.
+        - **Add** (default): send a `POST` with a `contactIds` body. Contacts already in the list are silently skipped (no duplicates) and reported in `alreadyInList`.
 
-        - **Remove**: send a `POST` with `?action=remove` and a `contactIds` body. Contacts that are not
-        in the list are silently skipped; `removedCount` reflects the associations actually removed. This
-        only affects list membership, the contacts are not deleted from your CRM.
+        - **Remove**: send a `POST` with `?action=remove` and a `contactIds` body. Contacts that are not in the list are silently skipped; `removedCount` reflects the associations actually removed. This only affects list membership, the contacts are not deleted from your CRM.
 
 
-        The list must be a **static** contact list (`clt_xxx`). Dynamic lists (auto-populated by filter
-        rules) and company lists are rejected.
+        The list must be a **static** contact list (`clt_xxx`). Dynamic lists (auto-populated by filter rules) and company lists are rejected.
 
 
-        **Removal uses `POST ?action=remove` on purpose:** a `DELETE` request body is dropped by our stack,
-        so `DELETE` on this path is **not supported** and returns `405 Method Not Allowed`.'
+        **Removal uses `POST ?action=remove` on purpose:** a `DELETE` request body is dropped by our stack, so `DELETE` on this path is **not supported** and returns `405 Method Not Allowed`.'
       tags:
       - Contacts
       parameters:
       - name: action
         in: query
         required: false
-        description: Omit to **add** the contacts to the list. Set to `remove` to **remove** them from
-          the list.
+        description: Omit to **add** the contacts to the list. Set to `remove` to **remove** them from the list.
         example: remove
         schema:
           type: string
@@ -792,16 +652,14 @@ paths:
                     pattern: ^ctc_[a-zA-Z0-9]+$
                   minItems: 1
                   maxItems: 1000
-                  description: Array of contact IDs (`ctc_xxx` format) to add to or remove from the list.
-                    Required, non-empty, maximum 1,000 per request.
+                  description: Array of contact IDs (`ctc_xxx` format) to add to or remove from the list. Required, non-empty, maximum 1,000 per request.
             example:
               contactIds:
               - ctc_xxxxxxxxxxxxxxxxx
               - ctc_yyyyyyyyyyyyyyyyy
       responses:
         '200':
-          description: Contacts added to or removed from the list successfully. The response body depends
-            on `action`.
+          description: Contacts added to or removed from the list successfully. The response body depends on `action`.
           content:
             application/json:
               schema:
@@ -814,12 +672,10 @@ paths:
                     description: Number of contacts added to the list (add only).
                   alreadyInList:
                     type: integer
-                    description: Number of contacts that were already in the list and therefore skipped
-                      (add only).
+                    description: Number of contacts that were already in the list and therefore skipped (add only).
                   removedCount:
                     type: integer
-                    description: Number of list associations actually removed (remove only). Contacts
-                      that were not in the list are not counted.
+                    description: Number of list associations actually removed (remove only). Contacts that were not in the list are not counted.
               examples:
                 add:
                   summary: Add contacts (no action)
@@ -833,10 +689,7 @@ paths:
                     message: Contacts removed from list successfully
                     removedCount: 2
         '400':
-          description: 'Possible errors: Bad team / Invalid listId format (expected clt_xxx) / contactIds
-            is required and must be a non-empty array / Maximum 1,000 contacts per request / All contactIds
-            must be in ctc_xxx format / List is not a contact list / Cannot manually add contacts to a
-            dynamic list / Cannot manually remove contacts from a dynamic list.'
+          description: 'Possible errors: Bad team / Invalid listId format (expected clt_xxx) / contactIds is required and must be a non-empty array / Maximum 1,000 contacts per request / All contactIds must be in ctc_xxx format / List is not a contact list / Cannot manually add contacts to a dynamic list / Cannot manually remove contacts from a dynamic list.'
           content:
             text/plain:
               example: contactIds is required and must be a non-empty array
@@ -851,8 +704,7 @@ paths:
             text/plain:
               example: Contact list not found
         '405':
-          description: Method not allowed. `DELETE` on this path is not supported because the request
-            body is dropped by our stack. Use `POST ?action=remove` to remove contacts.
+          description: Method not allowed. `DELETE` on this path is not supported because the request body is dropped by our stack. Use `POST ?action=remove` to remove contacts.
           content:
             text/plain:
               example: Method not allowed
@@ -861,30 +713,21 @@ paths:
           content:
             text/plain:
               example: Failed to add contacts to list
-    parameters:
-    - name: listId
-      in: path
-      required: true
-      description: The unique identifier of the contact list (`clt_xxx` format). Must be a **static**
-        contact list.
-      example: clt_xxxxxxxxxxxxxxxxx
-      schema:
-        type: string
-        pattern: ^clt_[a-zA-Z0-9]+$
+      security:
+      - basicAuth: []
+    servers:
+    - url: https://api.lemlist.com/api
   /contacts/export:
     get:
       summary: Export Contact List
-      description: 'Exports contacts or companies from a CRM list as a CSV file. The response is streamed
-        as `text/csv` with a `Content-Disposition: attachment` header.
+      description: 'Exports contacts or companies from a CRM list as a CSV file. The response is streamed as `text/csv` with a `Content-Disposition: attachment` header.
 
 
         The exported columns depend on the `entity` type:
 
-        - **contact**: firstName, lastName, email, linkedinUrl, companyName, jobTitle, phone, status,
-        owner, campaigns, contactLists, and more.
+        - **contact**: firstName, lastName, email, linkedinUrl, companyName, jobTitle, phone, status, owner, campaigns, contactLists, and more.
 
-        - **company**: name, domain, linkedinUrl, industry, website, status, size, owner, numberOfContacts,
-        companyLists, and more.
+        - **company**: name, domain, linkedinUrl, industry, website, status, size, owner, numberOfContacts, companyLists, and more.
 
 
         Custom fields are included as additional columns.'
@@ -923,16 +766,38 @@ paths:
               example: Bad team
         '401':
           description: Unauthorized
+      security:
+      - basicAuth: []
+    servers:
+    - url: https://api.lemlist.com/api
 components:
-  securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
   schemas:
+    FieldRejection:
+      type: object
+      description: A value lemlist refused to write on a Contact or Company, with the reason why. Surfaced under `fieldRejections[]` on those objects; filter a list endpoint to only flagged records via the `fieldRejectionReason` query param.
+      properties:
+        field:
+          type: string
+          description: The record field the rejected value targeted (e.g. `emails`, `linkedinUrl`, `domain`).
+        reason:
+          type: string
+          description: Why the value was rejected, prefixed by its origin — `enrichment_*` (raised while enriching) or `crm_sync_*` (raised during CRM sync). Same values accepted by the `fieldRejectionReason` query param.
+        source:
+          type: string
+          description: Where the rejection came from — an enrichment source (`lemrich`) or a CRM provider (`hubspot`, `salesforce`, `pipedrive`).
+        conflictingRecordId:
+          type: string
+          description: For duplicate reasons, the id of the record that already holds the value — use it to merge or remap before resolving the duplicate. Omitted for non-duplicate reasons.
+        rejectedValue:
+          type: string
+          description: The value that was refused.
+        rejectedAt:
+          type: string
+          format: date-time
+          description: When the rejection was recorded.
     Contact:
       type: object
-      description: A contact record in your CRM. Not to be confused with a lead which is a contact specifically
-        added to a campaign.
+      description: A contact record in your CRM. Not to be confused with a lead which is a contact specifically added to a campaign.
       properties:
         _id:
           type: string
@@ -977,40 +842,17 @@ components:
           description: ID of the user who created the contact
         unsubscribed:
           type: boolean
-          description: Whether the contact is globally unsubscribed. When true, no outreach will be sent
-            to this contact.
+          description: Whether the contact is globally unsubscribed. When true, no outreach will be sent to this contact.
         fieldRejections:
           type: array
-          description: Values lemlist refused to write on this contact, each with its reason. Empty when
-            none. Filter the list endpoint to only flagged contacts via `GET /contacts?fieldRejectionReason=...`.
+          description: Values lemlist refused to write on this contact, each with its reason. Empty when none. Filter the list endpoint to only flagged contacts via `GET /contacts?fieldRejectionReason=...`.
           items:
             $ref: '#/components/schemas/FieldRejection'
-    FieldRejection:
-      type: object
-      description: A value lemlist refused to write on a Contact or Company, with the reason why. Surfaced
-        under `fieldRejections[]` on those objects; filter a list endpoint to only flagged records via
-        the `fieldRejectionReason` query param.
-      properties:
-        field:
-          type: string
-          description: The record field the rejected value targeted (e.g. `emails`, `linkedinUrl`, `domain`).
-        reason:
-          type: string
-          description: Why the value was rejected, prefixed by its origin — `enrichment_*` (raised while
-            enriching) or `crm_sync_*` (raised during CRM sync). Same values accepted by the `fieldRejectionReason`
-            query param.
-        source:
-          type: string
-          description: Where the rejection came from — an enrichment source (`lemrich`) or a CRM provider
-            (`hubspot`, `salesforce`, `pipedrive`).
-        conflictingRecordId:
-          type: string
-          description: For duplicate reasons, the id of the record that already holds the value — use
-            it to merge or remap before resolving the duplicate. Omitted for non-duplicate reasons.
-        rejectedValue:
-          type: string
-          description: The value that was refused.
-        rejectedAt:
-          type: string
-          format: date-time
-          description: When the rejection was recorded.
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-refined-from:
+- lemlist-openapi-v1-legacy.json
+- lemlist-openapi-v2.json
+- lemlist-openapi.yml

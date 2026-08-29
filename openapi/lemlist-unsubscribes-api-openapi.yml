@@ -1,17 +1,181 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: lemlist Unsubscribes API
+  title: Lemlist Unsubscribes API
   version: 1.0.0
-  description: The Unsubscribes operations of the lemlist API, split by tag from the OpenAPI lemlist publishes
-    at https://developer.lemlist.com/api-reference/openapi/v2.json. Operation content is carried verbatim
-    from the provider spec.
+  description: 'Operations tagged Unsubscribes across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
-security:
-- basicAuth: []
 tags:
 - name: Unsubscribes
 paths:
+  /unsubscribes/:
+    parameters: []
+    get:
+      summary: Retrieve Unsubscribes
+      tags:
+      - Unsubscribes
+      parameters:
+      - name: offset
+        in: query
+        required: false
+        description: (Optional) Offset from the start. For pagination.
+        example: '0'
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        required: false
+        description: (Optional) Number of email to retrieve. 100 per default.
+        example: '5'
+        schema:
+          type: integer
+      - name: Content
+        in: header
+        required: false
+        example: application/json
+        schema:
+          type: string
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Retrieve Unsubscribes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    createdAt:
+                      type: string
+                      format: date-time
+                    value:
+                      type: string
+                      format: email
+                    source:
+                      type: string
+              example:
+              - _id: uns_Y9Lf5R2mpNWs8x0cz
+                createdAt: '2023-06-12T10:45:21.367Z'
+                value: john.doe@example.com
+                source: user
+              - _id: uns_B8Tq7U4dnGXp9a1wy
+                createdAt: '2023-06-09T18:23:45.890Z'
+                value: jane.smith@example.org
+                source: bounce
+              - _id: uns_D5Jr6W3yfPQt0b2vx
+                createdAt: '2023-06-08T14:12:56.534Z'
+                value: michael.brown@domain.net
+                source: api
+              - _id: uns_F4Gs8V1hnLYc3w9kt
+                createdAt: '2023-06-05T08:34:17.298Z'
+                value: emma.johnson@sample.com
+                source: abuse
+              - _id: uns_H3Jf9X2lpKZw4y7bv
+                createdAt: '2023-06-01T21:56:34.672Z'
+                value: william.davis@fake.org
+                source: lead
+    servers:
+    - url: https://api.lemlist.com/api
+  /unsubs/export:
+    parameters: []
+    get:
+      summary: Export Unsubscribes
+      tags:
+      - Unsubscribes
+      parameters:
+      - name: Content
+        in: header
+        required: false
+        example: application/json
+        schema:
+          type: string
+      responses:
+        '200':
+          headers: {}
+          description: Export Unsubscribes
+    servers:
+    - url: https://api.lemlist.com/api
+  /unsubscribes/john.doe@domain.com:
+    parameters: []
+    get:
+      summary: Get Unsubscribe Email
+      tags:
+      - Unsubscribes
+      parameters:
+      - name: Content
+        in: header
+        required: false
+        example: application/json
+        schema:
+          type: string
+      responses:
+        '200':
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+                  value:
+                    type: string
+                    format: email
+                  source:
+                    type: string
+              example:
+                _id: uns_Y9Lf5R2mpNWs8x0cz
+                createdAt: '2023-06-12T10:45:21.367Z'
+                value: john.doe@example.com
+                source: user
+        '404':
+          headers: {}
+          description: Not found
+    post:
+      summary: Add Unsubscribe Email/Domain
+      tags:
+      - Unsubscribes
+      parameters:
+      - name: Content
+        in: header
+        required: false
+        example: application/json
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+    delete:
+      summary: Delete Unsubscribe Email
+      tags:
+      - Unsubscribes
+      parameters:
+      - name: Content
+        in: header
+        required: false
+        example: application/json
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+    servers:
+    - url: https://api.lemlist.com/api
   /unsubscribes:
     get:
       deprecated: true
@@ -67,51 +231,14 @@ paths:
           content:
             text/plain:
               example: No user found for this API key
-  /unsubs/export:
-    get:
-      deprecated: true
-      summary: Export Unsubscribes
-      tags:
-      - Unsubscribes
-      parameters: []
-      responses:
-        '200':
-          description: Success
-          content:
-            text/csv:
-              example: 'value,source,createdAt
-
-                william.davis@fake.org,lead,2019-12-19T21:56:34.672Z
-
-                emma.johnson@sample.com,abuse,2020-09-30T08:34:17.298Z
-
-                michael.brown@domain.net,api,2021-03-12T14:12:56.534Z
-
-                jane.smith@example.org,bounce,2022-11-23T18:23:45.890Z
-
-                john.doe@example.com,user,2023-06-15T10:45:21.367Z
-
-                alice.brown@domainexample.com,lead,2023-07-21T09:14:25.521Z
-
-                bob.smith@example.net,user,2023-08-01T17:34:43.679Z
-
-                charlie.doe@mockmail.com,api,2023-09-12T11:05:37.874Z
-
-                david.jones@sampledomain.org,abuse,2023-10-05T15:23:54.129Z
-
-                eve.wilson@fakemail.com,bounce,2024-01-07T08:19:45.213Z'
-        '400':
-          description: Bad team
-          content:
-            text/plain:
-              example: Bad team
-        '401':
-          description: Unauthorized
+      security:
+      - basicAuth: []
+    servers:
+    - url: https://api.lemlist.com/api
   /v2/unsubscribes/variables:
     get:
       summary: List Unsubscribed Variables
-      description: Retrieves a paginated list of all unsubscribed variables (emails, domains, LinkedIn
-        URLs, phone numbers).
+      description: Retrieves a paginated list of all unsubscribed variables (emails, domains, LinkedIn URLs, phone numbers).
       tags:
       - Unsubscribes
       parameters:
@@ -153,6 +280,8 @@ paths:
               example: Bad team
         '401':
           description: Unauthorized
+      security:
+      - basicAuth: []
     post:
       summary: Bulk Unsubscribe Variables
       description: Unsubscribes up to 10,000 variables in a single request.
@@ -171,8 +300,7 @@ paths:
                   type: array
                   items:
                     type: string
-                  description: List of variables to unsubscribe (emails, domains, LinkedIn URLs, or phone
-                    numbers). Maximum 10,000 values.
+                  description: List of variables to unsubscribe (emails, domains, LinkedIn URLs, or phone numbers). Maximum 10,000 values.
                   maxItems: 10000
             example:
               values:
@@ -192,6 +320,10 @@ paths:
               example: Maximum 10000 values allowed
         '401':
           description: Unauthorized
+      security:
+      - basicAuth: []
+    servers:
+    - url: https://api.lemlist.com/api
   /v2/unsubscribes/variables/{value}:
     get:
       summary: Get Unsubscribed Variable
@@ -249,10 +381,11 @@ paths:
           content:
             text/plain:
               example: Variable not found
+      security:
+      - basicAuth: []
     post:
       summary: Unsubscribe Variable
-      description: Unsubscribes a single variable. This operation is idempotent — if the variable is already
-        unsubscribed, the existing record is returned.
+      description: Unsubscribes a single variable. This operation is idempotent — if the variable is already unsubscribed, the existing record is returned.
       tags:
       - Unsubscribes
       parameters:
@@ -306,10 +439,11 @@ paths:
           content:
             text/plain:
               example: Failed to unsubscribe variable
+      security:
+      - basicAuth: []
     delete:
       summary: Re-subscribe Variable
-      description: Removes a variable from the unsubscribe list. Variables with a protected source (LEAD
-        or ABUSE) cannot be re-subscribed.
+      description: Removes a variable from the unsubscribe list. Variables with a protected source (LEAD or ABUSE) cannot be re-subscribed.
       tags:
       - Unsubscribes
       parameters:
@@ -338,6 +472,10 @@ paths:
           content:
             text/plain:
               example: Variable is protected and cannot be re-subscribed
+      security:
+      - basicAuth: []
+    servers:
+    - url: https://api.lemlist.com/api
   /v2/unsubscribes/contacts/{contactId}:
     get:
       summary: Get Contact Subscription Status
@@ -374,6 +512,8 @@ paths:
           content:
             text/plain:
               example: Failed to get contact subscription
+      security:
+      - basicAuth: []
     post:
       summary: Unsubscribe Contact
       description: Marks a contact as unsubscribed (do-not-contact).
@@ -405,6 +545,8 @@ paths:
           content:
             text/plain:
               example: Failed to update contact subscription
+      security:
+      - basicAuth: []
     delete:
       summary: Re-subscribe Contact
       description: Removes the unsubscribed (do-not-contact) flag from a contact.
@@ -436,6 +578,10 @@ paths:
           content:
             text/plain:
               example: Failed to update contact subscription
+      security:
+      - basicAuth: []
+    servers:
+    - url: https://api.lemlist.com/api
   /v2/unsubscribes/exports/variables:
     get:
       summary: Export Unsubscribed Variables
@@ -459,6 +605,10 @@ paths:
               example: Bad team
         '401':
           description: Unauthorized
+      security:
+      - basicAuth: []
+    servers:
+    - url: https://api.lemlist.com/api
   /v2/unsubscribes/exports/contacts:
     get:
       summary: Export Unsubscribed Contacts
@@ -482,6 +632,10 @@ paths:
               example: Bad team
         '401':
           description: Unauthorized
+      security:
+      - basicAuth: []
+    servers:
+    - url: https://api.lemlist.com/api
   /unsubscribes/{email}:
     get:
       deprecated: true
@@ -544,8 +698,9 @@ paths:
             text/plain:
               example: No user found for this API key
         '500':
-          description: 'Possible errors: Invalid value / Invalid email address or domain / Invalid email
-            address or domain. Domains must start with @'
+          description: 'Possible errors: Invalid value / Invalid email address or domain / Invalid email address or domain. Domains must start with @'
+      security:
+      - basicAuth: []
     post:
       deprecated: true
       summary: Add Unsubscribe Email or Domain
@@ -598,6 +753,8 @@ paths:
           content:
             text/plain:
               example: Unsubscribe not found
+      security:
+      - basicAuth: []
     delete:
       deprecated: true
       summary: Delete Unsubscribe Email
@@ -645,11 +802,11 @@ paths:
           content:
             text/plain:
               example: Unsubscribe not found
+      security:
+      - basicAuth: []
+    servers:
+    - url: https://api.lemlist.com/api
 components:
-  securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
   schemas:
     ContactSubscriptionStatus:
       type: object
@@ -712,3 +869,11 @@ components:
           type: string
           format: date-time
           description: When the variable was unsubscribed
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-refined-from:
+- lemlist-openapi-v1-legacy.json
+- lemlist-openapi-v2.json
+- lemlist-openapi.yml

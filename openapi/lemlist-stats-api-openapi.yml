@@ -1,0 +1,147 @@
+openapi: 3.2.0
+info:
+  title: lemlist Stats API
+  version: 1.0.0
+  description: "Welcome to the lemlist Developer Documentation.\n\nlemlist is very customizable and open. You'll find on this page all the API and integration you can do with lemlist.\n\n# Rate Limit\n\nlemlist's API rate limits requests in order to prevent abuse and overload of our services.  \nRate limits are applied on all routes and per api key performing the request.  \nThe rate limits are **20** requests per **2** seconds.  \nThe response provide any information you may need about it:\n\n| Header | Description |\n| --- | --- |\n| Retry-After | The number of second in which you can retry |\n| X-RateLimit-Limit | The maximum requests in that time |\n| X-RateLimit-Remaining | The number of remaining requests you can make |\n| X-RateLimit-Reset | The date when the rate limit will reset |\n\n_Example of values for the rate limit headers_\n\n``` json\n{\n    \"Retry-After\": 2,\n    \"X-RateLimit-Limit\": 20,\n    \"X-RateLimit-Remaining\": 7,\n    \"Retry-After\" : \"Tue Feb 16 2021 09:02:42 GMT+0100 (Central European Standard Time)\"\n}\n\n ```\n\n# Definitions\n\n## Team\n\nA team is the entity of lemlist that can handle users and billing.\n\n## Credits\n\nCredits are the coins a team uses to enrich emails, linkedIn url, etc via the route enrich. Each enrichment feature needs a certain amount of credit to run.\n\n## User\n\nYou use A user account to connect to lemlist and send messages via the connected emails or linkedIn account.\n\n## Campaigns\n\nIs the entity to automate the outreach, a campaign has multiple sequences composed of steps.\n\n## Lead\n\nA lead is a person that you try to contact via a Campaign.\n\n## Activities\n\nIs the history of all the steps\n\n## Unsubscribe\n\nUnsubscribe is when a person decides they don't want to receive emails from you anymore.\n\n# Authentication\n\nAll API routes are using the dedicated sub domain `api.lemlist.com`.\n\nlemlist uses API keys to allow access to the API. You can get your lemlist API key at our [integration page](https://app.lemlist.com/settings/integrations).\n\nYou need to add the `Authorization` header using the `Basic` authentication type. `login:password` **where the login is always empty and the password is the API key**.\n\nOr pass your API key as a query parameter `access_token`\n\n⚠️ **Don't forget to add the semicolon (**`:`**) before your API key in curl command.**\n\n> To authorize, use this code: \n  \n\n``` shell\ncurl https://api.lemlist.com/api/team \\\n  --user \":YourApiKey\"\n\n ```\n\n> Or \n  \n\n``` shell\ncurl https://api.lemlist.com/api/team?access_token=YourApiKey\n\n ```\n\n**Make sure to replace** **`YourApiKey`** **with your API key.**\n\n# Give feedback\n\nIf you want to report a bug, ask for data or share with us a usecase please fill this [form. ](https://lemlist.typeform.com/to/mfVlkyGf) It will help us centralize your needs!"
+servers:
+- url: https://api.lemlist.com/api
+tags:
+- name: Stats
+paths:
+  /campaigns/{campaignId}/stats:
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      example: '{{campaignId}}'
+      schema:
+        type: string
+    get:
+      summary: Campaign stats
+      tags:
+      - Stats
+      parameters:
+      - name: startDate
+        in: query
+        required: false
+        example: '2024-01-07T22:00:00.000Z'
+        schema:
+          type: integer
+      - name: endDate
+        in: query
+        required: false
+        example: '2024-07-10T21:59:59.999Z'
+        schema:
+          type: integer
+      - name: timezone
+        in: query
+        required: false
+        example: Europe/Paris
+        schema:
+          type: string
+      - name: Content
+        in: header
+        required: false
+        example: application/json
+        schema:
+          type: string
+      responses:
+        default:
+          headers:
+            Content-Type:
+              schema:
+                type: string
+              example: application/json
+          description: Campaign stats
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  leadTotal:
+                    type: integer
+                  leadToLaunch:
+                    type: integer
+                  leadReadyToSend:
+                    type: integer
+                  leadInProgress:
+                    type: integer
+                  leadCompleted:
+                    type: integer
+                  sentCount:
+                    type: integer
+                  deliveredCount:
+                    type: integer
+                  openedCount:
+                    type: integer
+                  clickedCount:
+                    type: integer
+                  repliedCount:
+                    type: integer
+                  interestedCount:
+                    type: integer
+              example:
+                leadTotal: 0
+                leadToLaunch: 0
+                leadReadyToSend: 0
+                leadInProgress: 0
+                leadCompleted: 0
+                sentCount: 0
+                deliveredCount: 0
+                openedCount: 0
+                clickedCount: 0
+                repliedCount: 0
+                interestedCount: 0
+  /v2/campaigns/{campaignId}/stats:
+    parameters:
+    - name: campaignId
+      in: path
+      required: true
+      example: '{{campaignId}}'
+      schema:
+        type: string
+    get:
+      summary: Campaign stats V2
+      tags:
+      - Stats
+      parameters:
+      - name: startDate
+        in: query
+        required: false
+        example: '2024-01-07T22:00:00.000Z'
+        schema:
+          type: integer
+      - name: endDate
+        in: query
+        required: false
+        example: '2025-07-10T21:59:59.999Z'
+        schema:
+          type: integer
+      - name: sendUser
+        in: query
+        required: false
+        example: usr_b62rnsjxu236ttSH3|email@example.com
+        schema:
+          type: string
+      - name: ABSelected
+        in: query
+        required: false
+        example: A
+        schema:
+          type: string
+      - name: channels
+        in: query
+        required: false
+        example: '["others", "linkedin", "email"]'
+        schema:
+          type: string
+      - name: Content
+        in: header
+        required: false
+        example: application/json
+        schema:
+          type: string
+      responses:
+        default:
+          headers: {}
+          description: Campaign stats V2

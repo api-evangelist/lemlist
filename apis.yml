@@ -323,6 +323,16 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/lemlist-fields-api-openapi.yml
+- aid: lemlist:lemlist-stats-api
+  name: lemlist Stats API
+  description: The Stats API from lemlist — 2 operation(s) for stats.
+  humanURL: https://developer.lemlist.com/mcp/setup
+  baseURL: https://app.lemlist.com/mcp
+  tags:
+  - Stats
+  properties:
+  - type: OpenAPI
+    url: openapi/lemlist-stats-api-openapi.yml
 common:
 - type: Website
   url: https://www.lemlist.com
