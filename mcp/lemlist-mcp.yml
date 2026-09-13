@@ -12,15 +12,17 @@ deployment:
   endpoint: https://app.lemlist.com/mcp
   auth: oauth
   verified: probed
-  note: >-
-    POST {"jsonrpc":"2.0","id":1,"method":"tools/list"} to https://app.lemlist.com/mcp
-    on 2026-08-13 returned HTTP 401 with
-    WWW-Authenticate: Bearer resource_metadata="https://app.lemlist.com/.well-known/oauth-protected-resource/mcp"
-    and body {"error":{"code":-32602,"message":"X-API-Key header or Authorization: Bearer
-    token is required"}} — a live, correctly-challenging MCP endpoint. There is no
-    first-party stdio package: the npx invocation lemlist documents is the generic
-    `mcp-remote` bridge in front of this same hosted URL, not a lemlist-published
-    stdio server.
+  note: 'POST {"jsonrpc":"2.0","id":1,"method":"tools/list"} to https://app.lemlist.com/mcp on 2026-08-13
+    returned HTTP 401 with WWW-Authenticate: Bearer resource_metadata="https://app.lemlist.com/.well-known/oauth-protected-resource/mcp"
+    and body {"error":{"code":-32602,"message":"X-API-Key header or Authorization: Bearer token is required"}}
+    — a live, correctly-challenging MCP endpoint. There is no first-party stdio package: the npx invocation
+    lemlist documents is the generic `mcp-remote` bridge in front of this same hosted URL, not a lemlist-published
+    stdio server.'
+  probe_prior: (never probed)
+  probe: gated
+  probe_why: RFC 9728 challenge on the MCP path only
+  checked: '2026-09-11'
+  source: claimed-backlog re-probe 2026-09-11
 server:
   name: lemlist
   transport: http
@@ -28,12 +30,11 @@ server:
   authentication:
   - scheme: oauth2
     preferred: true
-    detail: Dynamic client registration + authorization-code with PKCE (S256). Access
-      token 1h, refresh token 30d. Metadata at https://app.lemlist.com/.well-known/oauth-authorization-server
+    detail: Dynamic client registration + authorization-code with PKCE (S256). Access token 1h, refresh
+      token 30d. Metadata at https://app.lemlist.com/.well-known/oauth-authorization-server
     scope: full_access
   - scheme: api-key
-    detail: 'X-API-Key header carrying a lemlist API key (Settings > Team > Integrations
-      > Generate)'
+    detail: X-API-Key header carrying a lemlist API key (Settings > Team > Integrations > Generate)
   clients_documented:
   - Claude Desktop
   - Claude Code
@@ -41,21 +42,17 @@ server:
   - Windsurf
   install_documented:
   - claude mcp add --transport http lemlist https://app.lemlist.com/mcp
-  - 'claude mcp add --transport http lemlist https://app.lemlist.com/mcp --header "X-API-Key:
-    YOUR_API_KEY"'
+  - 'claude mcp add --transport http lemlist https://app.lemlist.com/mcp --header "X-API-Key: YOUR_API_KEY"'
   - npx mcp-remote https://app.lemlist.com/mcp
-tools_source: >-
-  The live tools/list is auth-gated, so tool input schemas could not be introspected
-  anonymously. The tool names below are the ones lemlist itself publishes in its Agent
-  Skill (https://developer.lemlist.com/skill.md) and in the /lemlist-agent Claude Code
-  prompt (https://developer.lemlist.com/mcp/lemlist-agent). Names and purpose are the
-  provider's; input schemas require an authenticated tools/list.
+tools_source: The live tools/list is auth-gated, so tool input schemas could not be introspected anonymously.
+  The tool names below are the ones lemlist itself publishes in its Agent Skill (https://developer.lemlist.com/skill.md)
+  and in the /lemlist-agent Claude Code prompt (https://developer.lemlist.com/mcp/lemlist-agent). Names
+  and purpose are the provider's; input schemas require an authenticated tools/list.
 tool_count_claimed: 40
 tool_count_claimed_source: https://www.lemlist.com/product/lemlist-mcp
 tools:
 - name: lemleads_search
-  description: Search the lemlist B2B people database by role, industry, company size,
-    location
+  description: Search the lemlist B2B people database by role, industry, company size, location
 - name: create_campaign_with_sequence
   description: Create a campaign together with its email sequence
 - name: add_sequence_step
@@ -118,7 +115,6 @@ credit_bearing_tools:
 - enrich_data
 - bulk_enrich_data
 - add_lead_to_campaign
-note: >-
-  lemlist documents that email finding, email verification, phone enrichment and
-  lead addition with enrichment consume account credits, and instructs agents to warn
-  the user and check get_team_info before calling them.
+note: lemlist documents that email finding, email verification, phone enrichment and lead addition with
+  enrichment consume account credits, and instructs agents to warn the user and check get_team_info before
+  calling them.
