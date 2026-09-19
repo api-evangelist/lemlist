@@ -230,6 +230,8 @@ apis:
   humanURL: https://developer.lemlist.com/api-reference
   baseURL: https://api.lemlist.com/api
   tags:
+  - Schedule
+  tags_raw:
   - Schedules
   properties:
   - type: OpenAPI
