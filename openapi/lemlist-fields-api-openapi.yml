@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Lemlist Fields API
+  title: lemlist Fields API
   version: 1.0.0
-  description: 'Operations tagged Fields across 2 of this provider''s published API definitions: lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: Welcome to the lemlist Developer Documentation.
 servers:
 - url: https://api.lemlist.com/api
 security:
@@ -189,13 +189,10 @@ paths:
               example:
                 success: false
                 error: Method not allowed. Use GET.
-    servers:
-    - url: https://api.lemlist.com/api
+      operationId: getFields
+      x-operation-id-source: derived
 components:
   securitySchemes:
     basicAuth:
       type: http
       scheme: basic
-x-refined-from:
-- lemlist-openapi-v2.json
-- lemlist-openapi.yml

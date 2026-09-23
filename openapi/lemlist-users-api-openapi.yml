@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Lemlist Users API
   version: 1.0.0
-  description: 'Operations tagged Users across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Users across 2 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
 tags:
@@ -110,6 +110,8 @@ paths:
         '401':
           headers: {}
           description: Unauthorized
+      operationId: getUsersByUserId
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /user/channels:
@@ -222,10 +224,45 @@ paths:
               example: Bad method
       security:
       - basicAuth: []
+      operationId: getUserChannels
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
 components:
   schemas:
+    Mailbox:
+      type: object
+      description: An email account connected to a user for sending campaigns.
+      properties:
+        _id:
+          type: string
+          description: Unique mailbox identifier
+        email:
+          type: string
+          format: email
+          description: Mailbox email address
+        provider:
+          type: string
+          description: Email provider (google, microsoft, etc.)
+        status:
+          type: string
+          description: Connection status
+          enum:
+          - CONNECTED
+          - ERROR
+          - DISCONNECTED
+        lemlist:
+          type: object
+          properties:
+            emailLimit:
+              type: integer
+              description: Daily send limit
+        lemwarm:
+          type: object
+          properties:
+            active:
+              type: boolean
+              description: Lemwarm activation status
     User:
       type: object
       description: A team member account with connected email and/or LinkedIn sending capabilities.
@@ -264,39 +301,6 @@ components:
           description: Email mailboxes connected to this user
           items:
             $ref: '#/components/schemas/Mailbox'
-    Mailbox:
-      type: object
-      description: An email account connected to a user for sending campaigns.
-      properties:
-        _id:
-          type: string
-          description: Unique mailbox identifier
-        email:
-          type: string
-          format: email
-          description: Mailbox email address
-        provider:
-          type: string
-          description: Email provider (google, microsoft, etc.)
-        status:
-          type: string
-          description: Connection status
-          enum:
-          - CONNECTED
-          - ERROR
-          - DISCONNECTED
-        lemlist:
-          type: object
-          properties:
-            emailLimit:
-              type: integer
-              description: Daily send limit
-        lemwarm:
-          type: object
-          properties:
-            active:
-              type: boolean
-              description: Lemwarm activation status
   securitySchemes:
     basicAuth:
       type: http
@@ -304,4 +308,3 @@ components:
 x-refined-from:
 - lemlist-openapi-v1-legacy.json
 - lemlist-openapi-v2.json
-- lemlist-openapi.yml

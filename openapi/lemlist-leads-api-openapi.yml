@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Lemlist Leads API
   version: 1.0.0
-  description: 'Operations tagged Leads across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Leads across 2 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
 tags:
@@ -93,6 +93,8 @@ paths:
                 _id: lea_3pRTJnkxwwF6vh1m
                 isPaused: false
                 campaignId: cam_K9L8M7N6O5P4Q3R2S1
+      operationId: postLeadsStartByLeadId
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /leads/pause/{leadId}:
@@ -245,6 +247,8 @@ paths:
                 _id: lea_7kMNQwplxvvD2hf5z
                 isPaused: true
                 campaignId: cam_A1B2C3D4E5F6G7H8I9
+      operationId: postLeadsPauseByLeadId
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /leads/interested/{leadIdOrEmail}:
@@ -332,6 +336,8 @@ paths:
                 _id: lea_3pRTJnkxwwF6vh1m
                 isPaused: true
                 campaignId: cam_K9L8M7N6O5P4Q3R2S1
+      operationId: postLeadsInterestedByLeadIdOrEmail
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /leads/notinterested/{leadIdOrEmail}:
@@ -419,6 +425,8 @@ paths:
                 _id: lea_3pRTJnkxwwF6vh1m
                 isPaused: true
                 campaignId: cam_K9L8M7N6O5P4Q3R2S1
+      operationId: postLeadsNotinterestedByLeadIdOrEmail
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/{campaignId}/leads/{leadIdOrEmail}/interested:
@@ -503,6 +511,8 @@ paths:
                 _id: lea_7kMNQwplxvvD2hf5z
                 isPaused: false
                 campaignId: cam_A1B2C3D4E5F6G7H8I9
+      operationId: postCampaignsByCampaignIdLeadsByLeadIdOrEmailInterested
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/{campaignId}/leads/{leadIdOrEmail}/notinterested:
@@ -587,6 +597,8 @@ paths:
                 _id: lea_7kMNQwplxvvD2hf5z
                 isPaused: false
                 campaignId: cam_A1B2C3D4E5F6G7H8I9
+      operationId: postCampaignsByCampaignIdLeadsByLeadIdOrEmailNotinterested
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /leads/{email}:
@@ -678,6 +690,8 @@ paths:
         default:
           headers: {}
           description: Lead not found
+      operationId: getLeadsByEmail
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /leads:
@@ -777,6 +791,8 @@ paths:
         default:
           headers: {}
           description: Lead not found
+      operationId: getLeads
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/{campaignId}/leads/{email}:
@@ -943,6 +959,8 @@ paths:
               companyDomain: '{{lead-companyDomain}}'
               icebreaker: '{{lead-icebreacker}}'
               contactOwner: '{{lead-contactOwner}}'
+      operationId: postCampaignsByCampaignIdLeadsByEmail
+      x-operation-id-source: derived
     delete:
       summary: Unsubscribe Lead from Campaign
       tags:
@@ -1012,6 +1030,8 @@ paths:
                 type: string
               example: application/json
           description: Already unsubscribe / invalide email
+      operationId: deleteCampaignsByCampaignIdLeadsByEmail
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/{campaignId}/leads/{leadId}:
@@ -1122,6 +1142,8 @@ paths:
                   type: string
             example:
               preferredContactMethod: email
+      operationId: patchCampaignsByCampaignIdLeadsByLeadId
+      x-operation-id-source: derived
     delete:
       summary: Delete Lead
       tags:
@@ -1194,6 +1216,8 @@ paths:
         '404':
           headers: {}
           description: Lead not found
+      operationId: deleteCampaignsByCampaignIdLeadsByLeadId
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /leads/{leadId}/variables:
@@ -1263,6 +1287,8 @@ paths:
               example:
                 ok: false
                 status: Variables house already exist
+      operationId: postLeadsByLeadIdVariables
+      x-operation-id-source: derived
     patch:
       summary: Update variables
       tags:
@@ -1322,6 +1348,8 @@ paths:
               example:
                 ok: false
                 status: Variables color not found
+      operationId: patchLeadsByLeadIdVariables
+      x-operation-id-source: derived
     delete:
       summary: Delete variables
       tags:
@@ -1365,6 +1393,8 @@ paths:
               example:
                 ok: false
                 status: Variables color not found
+      operationId: deleteLeadsByLeadIdVariables
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /leads/audio:
@@ -1434,6 +1464,8 @@ paths:
                   sequenceId: seq_ZYdm8Bh5eJzu2ExmN
                   emailTemplateId: etp_DrycDKL7WBM7TcWnm
                   fileName: file2
+      operationId: postLeadsAudio
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /crm/filters:
@@ -1499,6 +1531,8 @@ paths:
         '401':
           headers: {}
           description: Unauthorized
+      operationId: getCrmFilters
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/{campaignId}/leads/import:
@@ -1562,6 +1596,8 @@ paths:
               filterId: '{{filterId}}'
               filterType: '{{filterType}}'
               deduplicate: '{{deduplicate}}'
+      operationId: postCampaignsByCampaignIdLeadsImport
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/{campaignId}/leads/:
@@ -1620,6 +1656,8 @@ paths:
                 state: scanned
       security:
       - basicAuth: []
+      operationId: getCampaignsByCampaignIdLeads
+      x-operation-id-source: derived
     post:
       summary: Create Lead in Campaign
       tags:
@@ -1783,6 +1821,8 @@ paths:
               example: No user found for this API key
       security:
       - basicAuth: []
+      operationId: postCampaignsByCampaignIdLeads
+      x-operation-id-source: derived
     delete:
       summary: Unsubscribe Lead from Campaign
       tags:
@@ -1829,6 +1869,8 @@ paths:
       parameters: []
       security:
       - basicAuth: []
+      operationId: deleteCampaignsByCampaignIdLeads
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /leads/review/{leadId}:
@@ -1900,6 +1942,8 @@ paths:
           description: Method not allowed
       security:
       - basicAuth: []
+      operationId: postLeadsReviewByLeadId
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
 components:
@@ -1924,4 +1968,3 @@ components:
 x-refined-from:
 - lemlist-openapi-v1-legacy.json
 - lemlist-openapi-v2.json
-- lemlist-openapi.yml

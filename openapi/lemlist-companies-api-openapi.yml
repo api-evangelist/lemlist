@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Lemlist Companies API
   version: 1.0.0
-  description: 'Operations tagged Companies across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Companies across 2 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
 tags:
@@ -60,6 +60,8 @@ paths:
       responses:
         '200':
           description: Success
+      operationId: getCompanies
+      x-operation-id-source: derived
     post:
       summary: Add and update company
       description: Creates a new company or updates an existing one (upsert). If a company with the same domain, LinkedIn URL, or Sales Navigator URL already exists, it will be updated with the provided non-empty fields. Null or empty values are ignored during updates to preserve existing data. You can target an existing company directly by providing `companyId`, bypassing domain/LinkedIn matching — in that case `name` and `domain` become optional.
@@ -262,6 +264,8 @@ paths:
             text/plain:
               example: The authentication you supplied is incorrect
       parameters: []
+      operationId: postCompanies
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /companies/{companyId}/notes:
@@ -290,6 +294,8 @@ paths:
                   type: string
             example:
               note: Note created from the Api !
+      operationId: postCompaniesByCompanyIdNotes
+      x-operation-id-source: derived
     get:
       summary: Retrieve company notes
       tags:
@@ -326,6 +332,8 @@ paths:
       responses:
         '200':
           description: Success
+      operationId: getCompaniesByCompanyIdNotes
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /companies/{companyId}:
@@ -426,10 +434,35 @@ paths:
           description: Method not allowed.
       security:
       - basicAuth: []
+      operationId: deleteCompaniesByCompanyId
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
 components:
   schemas:
+    FieldRejection:
+      type: object
+      description: A value lemlist refused to write on a Contact or Company, with the reason why. Surfaced under `fieldRejections[]` on those objects; filter a list endpoint to only flagged records via the `fieldRejectionReason` query param.
+      properties:
+        field:
+          type: string
+          description: The record field the rejected value targeted (e.g. `emails`, `linkedinUrl`, `domain`).
+        reason:
+          type: string
+          description: Why the value was rejected, prefixed by its origin — `enrichment_*` (raised while enriching) or `crm_sync_*` (raised during CRM sync). Same values accepted by the `fieldRejectionReason` query param.
+        source:
+          type: string
+          description: Where the rejection came from — an enrichment source (`lemrich`) or a CRM provider (`hubspot`, `salesforce`, `pipedrive`).
+        conflictingRecordId:
+          type: string
+          description: For duplicate reasons, the id of the record that already holds the value — use it to merge or remap before resolving the duplicate. Omitted for non-duplicate reasons.
+        rejectedValue:
+          type: string
+          description: The value that was refused.
+        rejectedAt:
+          type: string
+          format: date-time
+          description: When the rejection was recorded.
     CompanyNote:
       type: object
       description: A text note attached to a company record to store information.
@@ -545,29 +578,6 @@ components:
                     type: object
                     additionalProperties: true
                     description: Extra context. For `UNIQUE_INDEX_ERROR_COMPANY`, contains `alreadyExistingCompanyId` — the lemlist company that already occupies the conflicting CRM record. Use it to remap contacts onto the right lemlist company before deleting the duplicate.
-    FieldRejection:
-      type: object
-      description: A value lemlist refused to write on a Contact or Company, with the reason why. Surfaced under `fieldRejections[]` on those objects; filter a list endpoint to only flagged records via the `fieldRejectionReason` query param.
-      properties:
-        field:
-          type: string
-          description: The record field the rejected value targeted (e.g. `emails`, `linkedinUrl`, `domain`).
-        reason:
-          type: string
-          description: Why the value was rejected, prefixed by its origin — `enrichment_*` (raised while enriching) or `crm_sync_*` (raised during CRM sync). Same values accepted by the `fieldRejectionReason` query param.
-        source:
-          type: string
-          description: Where the rejection came from — an enrichment source (`lemrich`) or a CRM provider (`hubspot`, `salesforce`, `pipedrive`).
-        conflictingRecordId:
-          type: string
-          description: For duplicate reasons, the id of the record that already holds the value — use it to merge or remap before resolving the duplicate. Omitted for non-duplicate reasons.
-        rejectedValue:
-          type: string
-          description: The value that was refused.
-        rejectedAt:
-          type: string
-          format: date-time
-          description: When the rejection was recorded.
   securitySchemes:
     basicAuth:
       type: http
@@ -575,4 +585,3 @@ components:
 x-refined-from:
 - lemlist-openapi-v1-legacy.json
 - lemlist-openapi-v2.json
-- lemlist-openapi.yml

@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Lemlist Sequences API
   version: 1.0.0
-  description: 'Operations tagged Sequences across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Sequences across 2 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
 tags:
@@ -126,6 +126,8 @@ paths:
                     index: 3
                     message: Test message
                   level: 1
+      operationId: getCampaignsByCampaignIdSequences
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /sequences/{sequenceId}/steps:
@@ -182,6 +184,8 @@ paths:
             schema:
               type: object
             example: {}
+      operationId: postSequencesBySequenceIdSteps
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /sequences/{sequenceId}/steps/{stepId}:
@@ -244,6 +248,8 @@ paths:
             schema:
               type: object
             example: {}
+      operationId: patchSequencesBySequenceIdStepsByStepId
+      x-operation-id-source: derived
     delete:
       summary: Delete sequence step
       tags:
@@ -278,6 +284,8 @@ paths:
             schema:
               type: object
             example: {}
+      operationId: deleteSequencesBySequenceIdStepsByStepId
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /sequences/{sequenceId}/steps/{stepId}/ab-test:
@@ -366,6 +374,8 @@ paths:
           description: Method not allowed
       security:
       - basicAuth: []
+      operationId: postSequencesBySequenceIdStepsByStepIdAbTest
+      x-operation-id-source: derived
     get:
       summary: Get A/B Test Variant
       tags:
@@ -431,6 +441,8 @@ paths:
           description: Method not allowed
       security:
       - basicAuth: []
+      operationId: getSequencesBySequenceIdStepsByStepIdAbTest
+      x-operation-id-source: derived
     patch:
       summary: Update A/B Test Variant
       tags:
@@ -524,6 +536,8 @@ paths:
           description: Method not allowed
       security:
       - basicAuth: []
+      operationId: patchSequencesBySequenceIdStepsByStepIdAbTest
+      x-operation-id-source: derived
     delete:
       summary: Delete A/B Test Variant
       tags:
@@ -576,6 +590,8 @@ paths:
           description: Method not allowed
       security:
       - basicAuth: []
+      operationId: deleteSequencesBySequenceIdStepsByStepIdAbTest
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /sequences/{sequenceId}/steps/{stepId}/ab-test/winner:
@@ -659,6 +675,8 @@ paths:
           description: Method not allowed
       security:
       - basicAuth: []
+      operationId: postSequencesBySequenceIdStepsByStepIdAbTestWinner
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
 components:
@@ -669,4 +687,3 @@ components:
 x-refined-from:
 - lemlist-openapi-v1-legacy.json
 - lemlist-openapi-v2.json
-- lemlist-openapi.yml

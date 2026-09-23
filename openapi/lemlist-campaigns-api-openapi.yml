@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Lemlist Campaigns API
   version: 1.0.0
-  description: 'Operations tagged Campaigns across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Campaigns across 2 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
 tags:
@@ -132,6 +132,8 @@ paths:
                 - Solutions
                 status: draft
                 hasError: true
+      operationId: getCampaigns
+      x-operation-id-source: derived
     post:
       summary: Create a new campaign
       tags:
@@ -240,6 +242,8 @@ paths:
                   type: string
             example:
               name: '{{name}}'
+      operationId: postCampaigns
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/{campaignId}:
@@ -274,6 +278,8 @@ paths:
               schema:
                 type: object
               example: null
+      operationId: getCampaignsByCampaignId
+      x-operation-id-source: derived
     patch:
       summary: Update campaign configuration
       tags:
@@ -348,6 +354,8 @@ paths:
               disableTrackClick: '{{disableTrackClick}}'
               disableTrackReply: '{{disableTrackReply}}'
               stopOnLinkClickedFilter: '{{stopOnLinkClickedFilter}}'
+      operationId: patchCampaignsByCampaignId
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/{campaignId}/pause:
@@ -389,6 +397,8 @@ paths:
               example:
                 _id: cam_A1B2C3D4E5F6G7H8I9
                 state: paused
+      operationId: postCampaignsByCampaignIdPause
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/{campaignId}/export/start:
@@ -464,6 +474,8 @@ paths:
                 progressType: starting
                 progress: 0
                 total: 0
+      operationId: getCampaignsByCampaignIdExportStart
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/{campaignId}/export/{exportId}/status:
@@ -576,6 +588,8 @@ paths:
               example:
                 ok: false
                 message: Export with id axp_8bALQxunkwwC3yc9p not found
+      operationId: getCampaignsByCampaignIdExportByExportIdStatus
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/reports:
@@ -682,6 +696,8 @@ paths:
               example:
                 ok: false
                 message: Export with id axp_8bALQxunkwwC3yc9p not found
+      operationId: getCampaignsReports
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/{campaignId}/export/{exportId}/email/{email}:
@@ -791,6 +807,8 @@ paths:
                   endedAt: '2024-07-11T09:49:15.497Z'
                   url: https://api.lemlist.com/api/files/exports/fil_axp_7dKLTwqpjxzR5vh2n_insights_outreach_2024.csv
                   email: emily.johnson@example.com
+      operationId: putCampaignsByCampaignIdExportByExportIdEmailByEmail
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/{campaignId}/export/leads:
@@ -834,6 +852,8 @@ paths:
                 type: string
               example: application/json
           description: Export Campaign Leads
+      operationId: getCampaignsByCampaignIdExportLeads
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/{campaignId}/start:
@@ -884,6 +904,8 @@ paths:
               example: Campaign not found
       security:
       - basicAuth: []
+      operationId: postCampaignsByCampaignIdStart
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /v2/campaigns/{campaignId}/stats:
@@ -1162,6 +1184,8 @@ paths:
               example: Bad method
       security:
       - basicAuth: []
+      operationId: getV2CampaignsByCampaignIdStats
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /v2/campaigns/stats/batch:
@@ -1435,6 +1459,8 @@ paths:
               example: Bad method
       security:
       - basicAuth: []
+      operationId: postV2CampaignsStatsBatch
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/{campaignId}/duplicate:
@@ -1537,6 +1563,8 @@ paths:
                 error: Campaign not found
       security:
       - basicAuth: []
+      operationId: postCampaignsByCampaignIdDuplicate
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/{campaignId}/statutes:
@@ -1617,6 +1645,8 @@ paths:
           description: Bad method
       security:
       - basicAuth: []
+      operationId: getCampaignsByCampaignIdStatutes
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
 components:
@@ -1712,4 +1742,3 @@ components:
 x-refined-from:
 - lemlist-openapi-v1-legacy.json
 - lemlist-openapi-v2.json
-- lemlist-openapi.yml

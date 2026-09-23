@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Lemlist Webhooks API
   version: 1.0.0
-  description: 'Operations tagged Webhooks across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Webhooks across 2 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
 tags:
@@ -68,6 +68,8 @@ paths:
                 createdAt: '2022-05-21T02:34:17.678Z'
                 type: linkedinInterested
                 campaignId: cam_T3U4V5W6X7Y8Z9A1B2
+      operationId: getHooks
+      x-operation-id-source: derived
     post:
       summary: Add a webhook
       tags:
@@ -159,6 +161,8 @@ paths:
             schema:
               type: object
             example: null
+      operationId: postHooks
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /hooks/{hookId}:
@@ -220,6 +224,8 @@ paths:
             schema:
               type: object
             example: {}
+      operationId: deleteHooksByHookId
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
 components:
@@ -331,4 +337,3 @@ components:
 x-refined-from:
 - lemlist-openapi-v1-legacy.json
 - lemlist-openapi-v2.json
-- lemlist-openapi.yml

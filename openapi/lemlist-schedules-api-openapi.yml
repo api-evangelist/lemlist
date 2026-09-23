@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Lemlist Schedules API
   version: 1.0.0
-  description: 'Operations tagged Schedules across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Schedules across 2 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
 tags:
@@ -161,6 +161,8 @@ paths:
                   currentPage: 1
                   nextPage: 2
                   totalPage: 1927
+      operationId: getSchedules
+      x-operation-id-source: derived
     post:
       summary: Create a new schedule
       tags:
@@ -259,6 +261,8 @@ paths:
               weekdays:
               - '{{days}}'
               public: '{{public}}'
+      operationId: postSchedules
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /schedules/{scheduleId}:
@@ -333,6 +337,8 @@ paths:
                 teamId: tea_Lq4kN7R2pqEA4YFst
                 createdBy: usr_n2PG5aHnsGErYS2Yg
                 createdAt: '2025-01-17T15:17:59.207Z'
+      operationId: getSchedulesByScheduleId
+      x-operation-id-source: derived
     patch:
       summary: Update a schedule
       tags:
@@ -431,6 +437,8 @@ paths:
               weekdays:
               - '{{days}}'
               public: '{{public}}'
+      operationId: patchSchedulesByScheduleId
+      x-operation-id-source: derived
     delete:
       summary: Delete a schedule
       tags:
@@ -459,6 +467,8 @@ paths:
                     type: string
               example:
                 _id: skd_L2sKZ3HMddtrfmHGr
+      operationId: deleteSchedulesByScheduleId
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/{campaignId}/schedules/:
@@ -565,6 +575,8 @@ paths:
                 teamId: tea_b834id4r7skME8mfW
                 createdBy: usr_cTWih7tcKWicFRiQj
                 createdAt: '2025-02-06T15:35:52.079Z'
+      operationId: getCampaignsByCampaignIdSchedules
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /campaigns/{campaignId}/schedules/{scheduleId}:
@@ -612,6 +624,8 @@ paths:
               example:
                 scheduleId: skd_CBHNKLZsZr3FFJHPK
                 campaignId: cam_SaAarzTsXms8BENvR
+      operationId: postCampaignsByCampaignIdSchedulesByScheduleId
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
 components:
@@ -699,4 +713,3 @@ components:
 x-refined-from:
 - lemlist-openapi-v1-legacy.json
 - lemlist-openapi-v2.json
-- lemlist-openapi.yml

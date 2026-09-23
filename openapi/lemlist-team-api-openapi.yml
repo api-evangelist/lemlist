@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Lemlist Team API
   version: 1.0.0
-  description: 'Operations tagged Team across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Team across 2 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
 tags:
@@ -131,6 +131,8 @@ paths:
         '401':
           headers: {}
           description: Unauthorized
+      operationId: getTeam
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /team/senders:
@@ -241,6 +243,8 @@ paths:
         '401':
           headers: {}
           description: Unauthorized
+      operationId: getTeamSenders
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /team/credits:
@@ -299,6 +303,8 @@ paths:
         '401':
           headers: {}
           description: Unauthorized
+      operationId: getTeamCredits
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /team/crmUsers:
@@ -343,10 +349,127 @@ paths:
         '401':
           headers: {}
           description: Unauthorized
+      operationId: getTeamCrmUsers
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
 components:
   schemas:
+    Team:
+      type: object
+      description: The organization account that manages users and billing.
+      properties:
+        _id:
+          type: string
+          description: Unique team identifier
+        name:
+          type: string
+          description: Team name
+        userIds:
+          type: array
+          description: User IDs in this team
+          items:
+            type: string
+        createdBy:
+          type: string
+          description: User ID who created the team
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the team was created
+        hooks:
+          type: array
+          description: Webhooks configured for the team
+          items:
+            $ref: '#/components/schemas/Webhook'
+        beta:
+          type: array
+          description: Beta features enabled for the team
+          items:
+            type: string
+        slackWebhook:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
+              description: Slack webhook URL for notifications
+            failCounter:
+              type: integer
+              description: Number of consecutive failed notifications
+          description: Slack webhooks configured for the team
+        invitedUsers:
+          type: array
+          description: Pending user invitations
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+              role:
+                type: string
+              invitedBy:
+                type: string
+              invitedAt:
+                type: string
+                format: date-time
+        agency:
+          type: string
+          description: Agency identifier if team is part of an agency
+        pictureId:
+          type: string
+          description: Team profile picture file ID
+        customDomain:
+          type: string
+          description: Custom domain for the team
+        users:
+          type: array
+          description: Team members with their basic details. Only returned when the request includes the `version=v2` query parameter.
+          items:
+            type: object
+            properties:
+              userId:
+                type: string
+                description: Unique user identifier
+              name:
+                type: string
+                description: User's full name
+              email:
+                type: string
+                format: email
+                description: User's primary email address
+              role:
+                type: string
+                description: User's role in the team
+    Credits:
+      type: object
+      description: Credits are the coins a team uses to enrich emails, LinkedIn URLs, etc. Each enrichment feature needs a certain amount of credits to run.
+      properties:
+        credits:
+          type: integer
+          description: Total credits remaining
+        details:
+          type: object
+          properties:
+            remaining:
+              type: object
+              properties:
+                total:
+                  type: integer
+                  description: Total credits remaining
+                freemium:
+                  type: integer
+                  description: Freemium credits remaining
+                subscription:
+                  type: integer
+                  description: Subscription credits remaining
+                gifted:
+                  type: integer
+                  description: Gifted credits remaining
+                paid:
+                  type: integer
+                  description: Paid credits remaining
     Webhook:
       type: object
       description: Webhooks send real-time HTTP notifications upon campaign events (opens, clicks, replies, etc.).
@@ -447,121 +570,6 @@ components:
         zapId:
           type: integer
           description: Zapier integration ID (if the destination is a Zapier webhook)
-    Credits:
-      type: object
-      description: Credits are the coins a team uses to enrich emails, LinkedIn URLs, etc. Each enrichment feature needs a certain amount of credits to run.
-      properties:
-        credits:
-          type: integer
-          description: Total credits remaining
-        details:
-          type: object
-          properties:
-            remaining:
-              type: object
-              properties:
-                total:
-                  type: integer
-                  description: Total credits remaining
-                freemium:
-                  type: integer
-                  description: Freemium credits remaining
-                subscription:
-                  type: integer
-                  description: Subscription credits remaining
-                gifted:
-                  type: integer
-                  description: Gifted credits remaining
-                paid:
-                  type: integer
-                  description: Paid credits remaining
-    Team:
-      type: object
-      description: The organization account that manages users and billing.
-      properties:
-        _id:
-          type: string
-          description: Unique team identifier
-        name:
-          type: string
-          description: Team name
-        userIds:
-          type: array
-          description: User IDs in this team
-          items:
-            type: string
-        createdBy:
-          type: string
-          description: User ID who created the team
-        createdAt:
-          type: string
-          format: date-time
-          description: Date and time when the team was created
-        hooks:
-          type: array
-          description: Webhooks configured for the team
-          items:
-            $ref: '#/components/schemas/Webhook'
-        beta:
-          type: array
-          description: Beta features enabled for the team
-          items:
-            type: string
-        slackWebhook:
-          type: object
-          properties:
-            url:
-              type: string
-              format: uri
-              description: Slack webhook URL for notifications
-            failCounter:
-              type: integer
-              description: Number of consecutive failed notifications
-          description: Slack webhooks configured for the team
-        invitedUsers:
-          type: array
-          description: Pending user invitations
-          items:
-            type: object
-            properties:
-              email:
-                type: string
-                format: email
-              role:
-                type: string
-              invitedBy:
-                type: string
-              invitedAt:
-                type: string
-                format: date-time
-        agency:
-          type: string
-          description: Agency identifier if team is part of an agency
-        pictureId:
-          type: string
-          description: Team profile picture file ID
-        customDomain:
-          type: string
-          description: Custom domain for the team
-        users:
-          type: array
-          description: Team members with their basic details. Only returned when the request includes the `version=v2` query parameter.
-          items:
-            type: object
-            properties:
-              userId:
-                type: string
-                description: Unique user identifier
-              name:
-                type: string
-                description: User's full name
-              email:
-                type: string
-                format: email
-                description: User's primary email address
-              role:
-                type: string
-                description: User's role in the team
   securitySchemes:
     basicAuth:
       type: http
@@ -569,4 +577,3 @@ components:
 x-refined-from:
 - lemlist-openapi-v1-legacy.json
 - lemlist-openapi-v2.json
-- lemlist-openapi.yml

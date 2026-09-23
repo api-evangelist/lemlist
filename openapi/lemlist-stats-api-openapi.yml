@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: lemlist Stats API
   version: 1.0.0
-  description: "Welcome to the lemlist Developer Documentation.\n\nlemlist is very customizable and open. You'll find on this page all the API and integration you can do with lemlist.\n\n# Rate Limit\n\nlemlist's API rate limits requests in order to prevent abuse and overload of our services.  \nRate limits are applied on all routes and per api key performing the request.  \nThe rate limits are **20** requests per **2** seconds.  \nThe response provide any information you may need about it:\n\n| Header | Description |\n| --- | --- |\n| Retry-After | The number of second in which you can retry |\n| X-RateLimit-Limit | The maximum requests in that time |\n| X-RateLimit-Remaining | The number of remaining requests you can make |\n| X-RateLimit-Reset | The date when the rate limit will reset |\n\n_Example of values for the rate limit headers_\n\n``` json\n{\n    \"Retry-After\": 2,\n    \"X-RateLimit-Limit\": 20,\n    \"X-RateLimit-Remaining\": 7,\n    \"Retry-After\" : \"Tue Feb 16 2021 09:02:42 GMT+0100 (Central European Standard Time)\"\n}\n\n ```\n\n# Definitions\n\n## Team\n\nA team is the entity of lemlist that can handle users and billing.\n\n## Credits\n\nCredits are the coins a team uses to enrich emails, linkedIn url, etc via the route enrich. Each enrichment feature needs a certain amount of credit to run.\n\n## User\n\nYou use A user account to connect to lemlist and send messages via the connected emails or linkedIn account.\n\n## Campaigns\n\nIs the entity to automate the outreach, a campaign has multiple sequences composed of steps.\n\n## Lead\n\nA lead is a person that you try to contact via a Campaign.\n\n## Activities\n\nIs the history of all the steps\n\n## Unsubscribe\n\nUnsubscribe is when a person decides they don't want to receive emails from you anymore.\n\n# Authentication\n\nAll API routes are using the dedicated sub domain `api.lemlist.com`.\n\nlemlist uses API keys to allow access to the API. You can get your lemlist API key at our [integration page](https://app.lemlist.com/settings/integrations).\n\nYou need to add the `Authorization` header using the `Basic` authentication type. `login:password` **where the login is always empty and the password is the API key**.\n\nOr pass your API key as a query parameter `access_token`\n\n⚠️ **Don't forget to add the semicolon (**`:`**) before your API key in curl command.**\n\n> To authorize, use this code: \n  \n\n``` shell\ncurl https://api.lemlist.com/api/team \\\n  --user \":YourApiKey\"\n\n ```\n\n> Or \n  \n\n``` shell\ncurl https://api.lemlist.com/api/team?access_token=YourApiKey\n\n ```\n\n**Make sure to replace** **`YourApiKey`** **with your API key.**\n\n# Give feedback\n\nIf you want to report a bug, ask for data or share with us a usecase please fill this [form. ](https://lemlist.typeform.com/to/mfVlkyGf) It will help us centralize your needs!"
+  description: Welcome to the lemlist Developer Documentation.
 servers:
 - url: https://api.lemlist.com/api
 tags:
@@ -92,6 +92,8 @@ paths:
                 clickedCount: 0
                 repliedCount: 0
                 interestedCount: 0
+      operationId: getCampaignsByCampaignIdStats
+      x-operation-id-source: derived
   /v2/campaigns/{campaignId}/stats:
     parameters:
     - name: campaignId
@@ -145,3 +147,5 @@ paths:
         default:
           headers: {}
           description: Campaign stats V2
+      operationId: getV2CampaignsByCampaignIdStats
+      x-operation-id-source: derived

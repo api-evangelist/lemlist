@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Lemlist Activities API
   version: 1.0.0
-  description: 'Operations tagged Activities across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Activities across 2 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
 tags:
@@ -363,6 +363,8 @@ paths:
                 sequenceTested: A
                 recording: <recording url>
                 transcription: <transcription url>
+      operationId: getActivities
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /activities:
@@ -689,6 +691,8 @@ paths:
           description: Unauthorized
       security:
       - basicAuth: []
+      operationId: getActivities
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /activities/{activityId}/recording-transcript:
@@ -728,6 +732,8 @@ paths:
           description: Error while deleting recording or transcript
       security:
       - basicAuth: []
+      operationId: deleteActivitiesByActivityIdRecordingTranscript
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
 components:
@@ -771,4 +777,3 @@ components:
 x-refined-from:
 - lemlist-openapi-v1-legacy.json
 - lemlist-openapi-v2.json
-- lemlist-openapi.yml

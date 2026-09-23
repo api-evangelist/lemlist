@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Lemlist People database API
   version: 1.0.0
-  description: 'Operations tagged People database across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged People database across 2 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
 tags:
@@ -56,6 +56,8 @@ paths:
                 - companies
                 type: text
                 helper: Use free text search (to fill the in and/or out array)
+      operationId: getDatabaseFilters
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /database/people:
@@ -139,6 +141,8 @@ paths:
                 - France
                 out: []
               page: 1
+      operationId: postDatabasePeople
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /schema/people:
@@ -514,6 +518,8 @@ paths:
                 - France
                 out: []
               page: 1
+      operationId: getSchemaPeople
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /database/companies:
@@ -597,6 +603,8 @@ paths:
                 - Postman
                 out: []
               page: 1
+      operationId: postDatabaseCompanies
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /schema/companies:
@@ -765,6 +773,8 @@ paths:
                 - France
                 out: []
               page: 1
+      operationId: getSchemaCompanies
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /database/personas:
@@ -857,10 +867,10 @@ paths:
       description: 'Creates a persona for your team from a name and a set of People Database filters.
 
 
-        Use [Get Database Filters](/api-reference/endpoints/people-database/get-database-filters) to discover the valid `filterId` values. Filters carry no `type` property: it is derived from `filterId` server-side. Filters that require a plan your team does not have are dropped silently, so the persona is stored with the subset your plan allows.
+        Use Get Database Filters to discover the valid `filterId` values. Filters carry no `type` property: it is derived from `filterId` server-side. Filters that require a plan your team does not have are dropped silently, so the persona is stored with the subset your plan allows.
 
 
-        Only the created id is returned. The stored `name` and `filters` are sanitized and plan-gated server-side, so echoing the request payload back would misreport what was persisted; call [List Personas](/api-reference/endpoints/people-database/list-personas) to read the stored persona.
+        Only the created id is returned. The stored `name` and `filters` are sanitized and plan-gated server-side, so echoing the request payload back would misreport what was persisted; call List Personas to read the stored persona.
 
 
         This endpoint is in closed beta and answers `403` unless the beta is enabled for your team.'
@@ -1074,69 +1084,32 @@ components:
         code:
           type: string
           description: Machine-readable error code, stable across releases
-    DatabaseFilter:
+    PersonaFilter:
       type: object
-      description: Saved search criteria for querying the People database.
+      description: 'One People Database filter of a persona. `in` includes matching values, `out` excludes them. There is no `type` property: it is derived from `filterId` server-side.'
+      required:
+      - filterId
       properties:
-        _id:
+        filterId:
           type: string
-        name:
-          type: string
-        criteria:
-          type: object
-          additionalProperties: true
-    Persona:
-      type: object
-      description: 'A People Database persona: a named, reusable set of People Database filters saved by your team. A persona id can be referenced elsewhere in the API, for example through the `persona` filter of a Signal Agent.'
-      properties:
-        _id:
-          type: string
-          description: Unique persona identifier
-          example: pdp_ExAmPlE1234567890a
-        name:
-          type: string
-          description: Display name. Unique within your team.
-          example: SaaS founders
-        mode:
-          type: string
-          description: Search mode the filters target
-          enum:
-          - leads
-          - companies
-          example: leads
-        filters:
+          description: People Database filter identifier. Use [Get Database Filters](/api-reference/endpoints/people-database/get-database-filters) to discover the valid ids.
+          example: currentTitle
+        in:
           type: array
-          description: People Database filters defining the persona
+          description: Values to include
           items:
-            $ref: '#/components/schemas/PersonaFilter'
-        createdAt:
-          type: string
-          format: date-time
-          description: Date the persona was created
-          example: '2026-07-31T09:12:00.000Z'
-        updatedAt:
-          type: string
-          format: date-time
-          description: Date of the last modification
-          example: '2026-07-31T09:12:00.000Z'
-    PersonaCreateResponse:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            _id:
-              type: string
-              description: Id of the created persona
-              example: pdp_ExAmPlE1234567890a
-    PersonaListResponse:
-      type: object
-      properties:
-        data:
+            type: string
+          example:
+          - Founder
+        out:
           type: array
-          description: The team's personas, most recently created first
+          description: Values to exclude
           items:
-            $ref: '#/components/schemas/Persona'
+            type: string
+          example: []
+        exactMatch:
+          type: boolean
+          description: Exact-match toggle, for the text filters that support it
     PeopleSchema:
       type: object
       description: A person record from lemlist's People database.
@@ -1330,32 +1303,49 @@ components:
           type: number
         _id:
           type: string
-    PersonaFilter:
+    PersonaCreateResponse:
       type: object
-      description: 'One People Database filter of a persona. `in` includes matching values, `out` excludes them. There is no `type` property: it is derived from `filterId` server-side.'
-      required:
-      - filterId
       properties:
-        filterId:
+        data:
+          type: object
+          properties:
+            _id:
+              type: string
+              description: Id of the created persona
+              example: pdp_ExAmPlE1234567890a
+    PersonaListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: The team's personas, most recently created first
+          items:
+            $ref: '#/components/schemas/Persona'
+    DatabaseFilter:
+      type: object
+      description: Saved search criteria for querying the People database.
+      properties:
+        _id:
           type: string
-          description: People Database filter identifier. Use [Get Database Filters](/api-reference/endpoints/people-database/get-database-filters) to discover the valid ids.
-          example: currentTitle
-        in:
-          type: array
-          description: Values to include
-          items:
-            type: string
-          example:
-          - Founder
-        out:
-          type: array
-          description: Values to exclude
-          items:
-            type: string
-          example: []
-        exactMatch:
-          type: boolean
-          description: Exact-match toggle, for the text filters that support it
+        name:
+          type: string
+        criteria:
+          type: object
+          additionalProperties: true
+    PersonaDeleteResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            _id:
+              type: string
+              description: Id of the deleted persona
+              example: pdp_ExAmPlE1234567890a
+            deleted:
+              type: boolean
+              description: Always `true` when the persona was removed
+              example: true
     CompaniesSchema:
       type: object
       description: A company record from lemlist's Companies database.
@@ -1459,20 +1449,40 @@ components:
         _id:
           type: string
           description: Internal document ID
-    PersonaDeleteResponse:
+    Persona:
       type: object
+      description: 'A People Database persona: a named, reusable set of People Database filters saved by your team. A persona id can be referenced elsewhere in the API, for example through the `persona` filter of a Signal Agent.'
       properties:
-        data:
-          type: object
-          properties:
-            _id:
-              type: string
-              description: Id of the deleted persona
-              example: pdp_ExAmPlE1234567890a
-            deleted:
-              type: boolean
-              description: Always `true` when the persona was removed
-              example: true
+        _id:
+          type: string
+          description: Unique persona identifier
+          example: pdp_ExAmPlE1234567890a
+        name:
+          type: string
+          description: Display name. Unique within your team.
+          example: SaaS founders
+        mode:
+          type: string
+          description: Search mode the filters target
+          enum:
+          - leads
+          - companies
+          example: leads
+        filters:
+          type: array
+          description: People Database filters defining the persona
+          items:
+            $ref: '#/components/schemas/PersonaFilter'
+        createdAt:
+          type: string
+          format: date-time
+          description: Date the persona was created
+          example: '2026-07-31T09:12:00.000Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date of the last modification
+          example: '2026-07-31T09:12:00.000Z'
   securitySchemes:
     basicAuth:
       type: http
@@ -1480,4 +1490,3 @@ components:
 x-refined-from:
 - lemlist-openapi-v1-legacy.json
 - lemlist-openapi-v2.json
-- lemlist-openapi.yml

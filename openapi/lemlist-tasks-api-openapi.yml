@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Lemlist Tasks API
   version: 1.0.0
-  description: 'Operations tagged Tasks across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Tasks across 2 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
 tags:
@@ -81,6 +81,8 @@ paths:
                   dueDate: '2025-02-13T09:08:53.061Z'
                   userId: usr_6Y58qbtsYv2rCHQiJ
                 page: 0
+      operationId: getTasks
+      x-operation-id-source: derived
     post:
       summary: Tasks
       tags:
@@ -100,6 +102,8 @@ paths:
                   type: string
             example:
               leadId: lea_sMsXBnXd7mG2XdxFR
+      operationId: postTasks
+      x-operation-id-source: derived
     patch:
       summary: Tasks
       tags:
@@ -109,6 +113,8 @@ paths:
         default:
           headers: {}
           description: Opportunities
+      operationId: patchTasks
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /tasks/ignore:
@@ -122,6 +128,8 @@ paths:
         default:
           headers: {}
           description: Ignore tasks
+      operationId: postTasksIgnore
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
 components:
@@ -171,4 +179,3 @@ components:
 x-refined-from:
 - lemlist-openapi-v1-legacy.json
 - lemlist-openapi-v2.json
-- lemlist-openapi.yml

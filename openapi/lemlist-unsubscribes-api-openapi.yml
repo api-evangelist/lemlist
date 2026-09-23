@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Lemlist Unsubscribes API
   version: 1.0.0
-  description: 'Operations tagged Unsubscribes across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Unsubscribes across 2 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
 tags:
@@ -81,6 +81,8 @@ paths:
                 createdAt: '2023-06-01T21:56:34.672Z'
                 value: william.davis@fake.org
                 source: lead
+      operationId: getUnsubscribes
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /unsubs/export:
@@ -100,6 +102,8 @@ paths:
         '200':
           headers: {}
           description: Export Unsubscribes
+      operationId: getUnsubsExport
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /unsubscribes/john.doe@domain.com:
@@ -146,6 +150,8 @@ paths:
         '404':
           headers: {}
           description: Not found
+      operationId: getUnsubscribesJohnDoe@domainCom
+      x-operation-id-source: derived
     post:
       summary: Add Unsubscribe Email/Domain
       tags:
@@ -160,6 +166,8 @@ paths:
       responses:
         '200':
           description: Success
+      operationId: postUnsubscribesJohnDoe@domainCom
+      x-operation-id-source: derived
     delete:
       summary: Delete Unsubscribe Email
       tags:
@@ -174,6 +182,8 @@ paths:
       responses:
         '200':
           description: Success
+      operationId: deleteUnsubscribesJohnDoe@domainCom
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /unsubscribes:
@@ -233,6 +243,8 @@ paths:
               example: No user found for this API key
       security:
       - basicAuth: []
+      operationId: getUnsubscribes
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /v2/unsubscribes/variables:
@@ -282,6 +294,8 @@ paths:
           description: Unauthorized
       security:
       - basicAuth: []
+      operationId: getV2UnsubscribesVariables
+      x-operation-id-source: derived
     post:
       summary: Bulk Unsubscribe Variables
       description: Unsubscribes up to 10,000 variables in a single request.
@@ -322,6 +336,8 @@ paths:
           description: Unauthorized
       security:
       - basicAuth: []
+      operationId: postV2UnsubscribesVariables
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /v2/unsubscribes/variables/{value}:
@@ -383,6 +399,8 @@ paths:
               example: Variable not found
       security:
       - basicAuth: []
+      operationId: getV2UnsubscribesVariablesByValue
+      x-operation-id-source: derived
     post:
       summary: Unsubscribe Variable
       description: Unsubscribes a single variable. This operation is idempotent — if the variable is already unsubscribed, the existing record is returned.
@@ -441,6 +459,8 @@ paths:
               example: Failed to unsubscribe variable
       security:
       - basicAuth: []
+      operationId: postV2UnsubscribesVariablesByValue
+      x-operation-id-source: derived
     delete:
       summary: Re-subscribe Variable
       description: Removes a variable from the unsubscribe list. Variables with a protected source (LEAD or ABUSE) cannot be re-subscribed.
@@ -474,6 +494,8 @@ paths:
               example: Variable is protected and cannot be re-subscribed
       security:
       - basicAuth: []
+      operationId: deleteV2UnsubscribesVariablesByValue
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /v2/unsubscribes/contacts/{contactId}:
@@ -514,6 +536,8 @@ paths:
               example: Failed to get contact subscription
       security:
       - basicAuth: []
+      operationId: getV2UnsubscribesContactsByContactId
+      x-operation-id-source: derived
     post:
       summary: Unsubscribe Contact
       description: Marks a contact as unsubscribed (do-not-contact).
@@ -547,6 +571,8 @@ paths:
               example: Failed to update contact subscription
       security:
       - basicAuth: []
+      operationId: postV2UnsubscribesContactsByContactId
+      x-operation-id-source: derived
     delete:
       summary: Re-subscribe Contact
       description: Removes the unsubscribed (do-not-contact) flag from a contact.
@@ -580,6 +606,8 @@ paths:
               example: Failed to update contact subscription
       security:
       - basicAuth: []
+      operationId: deleteV2UnsubscribesContactsByContactId
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /v2/unsubscribes/exports/variables:
@@ -607,6 +635,8 @@ paths:
           description: Unauthorized
       security:
       - basicAuth: []
+      operationId: getV2UnsubscribesExportsVariables
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /v2/unsubscribes/exports/contacts:
@@ -634,6 +664,8 @@ paths:
           description: Unauthorized
       security:
       - basicAuth: []
+      operationId: getV2UnsubscribesExportsContacts
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /unsubscribes/{email}:
@@ -701,6 +733,8 @@ paths:
           description: 'Possible errors: Invalid value / Invalid email address or domain / Invalid email address or domain. Domains must start with @'
       security:
       - basicAuth: []
+      operationId: getUnsubscribesByEmail
+      x-operation-id-source: derived
     post:
       deprecated: true
       summary: Add Unsubscribe Email or Domain
@@ -755,6 +789,8 @@ paths:
               example: Unsubscribe not found
       security:
       - basicAuth: []
+      operationId: postUnsubscribesByEmail
+      x-operation-id-source: derived
     delete:
       deprecated: true
       summary: Delete Unsubscribe Email
@@ -804,20 +840,12 @@ paths:
               example: Unsubscribe not found
       security:
       - basicAuth: []
+      operationId: deleteUnsubscribesByEmail
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
 components:
   schemas:
-    ContactSubscriptionStatus:
-      type: object
-      description: Subscription status of a contact.
-      properties:
-        _id:
-          type: string
-          description: Contact identifier
-        doNotContact:
-          type: boolean
-          description: Whether the contact is unsubscribed
     Unsubscribe:
       type: object
       description: A record of someone opting out of receiving emails.
@@ -846,6 +874,16 @@ components:
           - campaign
           - team
           - global
+    ContactSubscriptionStatus:
+      type: object
+      description: Subscription status of a contact.
+      properties:
+        _id:
+          type: string
+          description: Contact identifier
+        doNotContact:
+          type: boolean
+          description: Whether the contact is unsubscribed
     UnsubscribedVariable:
       type: object
       description: A variable (email, domain, LinkedIn URL, or phone number) that has been unsubscribed.
@@ -876,4 +914,3 @@ components:
 x-refined-from:
 - lemlist-openapi-v1-legacy.json
 - lemlist-openapi-v2.json
-- lemlist-openapi.yml

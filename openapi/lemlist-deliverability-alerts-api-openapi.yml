@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Lemlist Deliverability alerts API
+  title: lemlist Deliverability alerts API
   version: 1.0.0
-  description: 'Operations tagged Deliverability alerts across 2 of this provider''s published API definitions: lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: Welcome to the lemlist Developer Documentation.
 servers:
 - url: https://api.lemlist.com/api
 security:
@@ -67,6 +67,8 @@ paths:
           description: Bad team
         '401':
           description: Unauthorized
+      operationId: getDeliverabilityAlerts
+      x-operation-id-source: derived
     post:
       summary: Create Deliverability Alert
       tags:
@@ -218,8 +220,8 @@ paths:
           description: Beta feature not enabled for this team
         '409':
           description: An alert with the same widget, metric, severity, scope, scopeEntities, threshold, comparisonOperator, periodDays and periodMode already exists
-    servers:
-    - url: https://api.lemlist.com/api
+      operationId: postDeliverabilityAlerts
+      x-operation-id-source: derived
   /deliverability/alerts/{alertId}:
     get:
       summary: Get Deliverability Alert
@@ -277,6 +279,8 @@ paths:
           description: Unauthorized
         '404':
           description: Alert not found
+      operationId: getDeliverabilityAlertsByAlertId
+      x-operation-id-source: derived
     patch:
       summary: Update Deliverability Alert
       tags:
@@ -377,6 +381,8 @@ paths:
           description: Unauthorized
         '404':
           description: Alert not found
+      operationId: patchDeliverabilityAlertsByAlertId
+      x-operation-id-source: derived
     delete:
       summary: Delete Deliverability Alert
       tags:
@@ -407,8 +413,8 @@ paths:
           description: Unauthorized
         '404':
           description: Alert not found
-    servers:
-    - url: https://api.lemlist.com/api
+      operationId: deleteDeliverabilityAlertsByAlertId
+      x-operation-id-source: derived
 components:
   schemas:
     DeliverabilityAlert:
@@ -539,6 +545,3 @@ components:
     basicAuth:
       type: http
       scheme: basic
-x-refined-from:
-- lemlist-openapi-v2.json
-- lemlist-openapi.yml

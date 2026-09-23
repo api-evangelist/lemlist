@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Lemlist Enrich API
   version: 1.0.0
-  description: 'Operations tagged Enrich across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Enrich across 2 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
 tags:
@@ -213,6 +213,8 @@ paths:
                 enrichmentStatus: not-found
                 error: Enrichment not found
                 data: {}
+      operationId: getEnrichByEnrichId
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /enrich:
@@ -338,6 +340,8 @@ paths:
                     type: string
               example:
                 error: No enrichment requested (findEmail, findPhone, linkedinEnrichment or verifyEmail required)
+      operationId: postEnrich
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /leads/{leadId}/enrich:
@@ -427,6 +431,8 @@ paths:
                     type: string
               example:
                 id: enr_gLpC97CBdER2kpn7z
+      operationId: postLeadsByLeadIdEnrich
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /v2/enrichments/bulk:
@@ -536,6 +542,8 @@ paths:
               - linkedin_enrichment
               metadata:
                 some_id: some_id
+      operationId: postV2EnrichmentsBulk
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
 components:
@@ -546,4 +554,3 @@ components:
 x-refined-from:
 - lemlist-openapi-v1-legacy.json
 - lemlist-openapi-v2.json
-- lemlist-openapi.yml

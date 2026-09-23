@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Lemlist Lemwarm API
   version: 1.0.0
-  description: 'Operations tagged lemwarm across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged lemwarm across 2 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
 tags:
@@ -50,6 +50,8 @@ paths:
             schema:
               type: object
             example: {}
+      operationId: postLemwarmByUserMailboxIdStart
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /lemwarm/{userMailboxId}/pause:
@@ -94,6 +96,8 @@ paths:
             schema:
               type: object
             example: {}
+      operationId: postLemwarmByUserMailboxIdPause
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /lemwarm/{userMailboxId}/settings:
@@ -265,6 +269,8 @@ paths:
             schema:
               type: object
             example: {}
+      operationId: getLemwarmByUserMailboxIdSettings
+      x-operation-id-source: derived
     patch:
       summary: Update settings
       tags:
@@ -306,6 +312,8 @@ paths:
             example:
               warmEmailMax: '{{warmEmailMax}}'
               warmEmailRampup: '{{warmEmailRampup}}'
+      operationId: patchLemwarmByUserMailboxIdSettings
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
 components:
@@ -339,4 +347,3 @@ components:
 x-refined-from:
 - lemlist-openapi-v1-legacy.json
 - lemlist-openapi-v2.json
-- lemlist-openapi.yml

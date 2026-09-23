@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Lemlist Inbox API
   version: 1.0.0
-  description: 'Operations tagged Inbox across 3 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json, lemlist-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Inbox across 2 of this provider''s published API definitions: lemlist-openapi-v1-legacy.json, lemlist-openapi-v2.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.lemlist.com/api
 tags:
@@ -153,6 +153,8 @@ paths:
                   type: string
             example:
               userId: usr_vvv9vehz2Ghvgbedv
+      operationId: getInbox
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /inbox/{contactId}:
@@ -303,6 +305,8 @@ paths:
                   previousPage: null
                   perPage: 1
                   totalPages: 22
+      operationId: getInboxByContactId
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /inbox/email:
@@ -367,6 +371,8 @@ paths:
               subject: '{{subject}}'
               message: '{{message}}'
               cc: []
+      operationId: postInboxEmail
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /inbox/linkedin:
@@ -418,6 +424,8 @@ paths:
               leadId: '{{leadId}}'
               contactId: '{{contactId}}'
               message: '{{message}}'
+      operationId: postInboxLinkedin
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /inbox/whatsapp:
@@ -458,6 +466,8 @@ paths:
               contactId: '{{contactId}}'
               leadId: '{{leadId}}'
               message: '{{message}}'
+      operationId: postInboxWhatsapp
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /inbox/labels:
@@ -494,6 +504,8 @@ paths:
       parameters: []
       security:
       - basicAuth: []
+      operationId: getInboxLabels
+      x-operation-id-source: derived
     post:
       summary: Create Label
       description: Creates a new label available to the team.
@@ -544,6 +556,8 @@ paths:
       parameters: []
       security:
       - basicAuth: []
+      operationId: postInboxLabels
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /inbox/labels/{labelId}:
@@ -592,6 +606,8 @@ paths:
           description: Method not allowed
       security:
       - basicAuth: []
+      operationId: getInboxLabelsByLabelId
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /inbox/conversations/labels/{contactId}:
@@ -661,6 +677,8 @@ paths:
           description: Method not allowed
       security:
       - basicAuth: []
+      operationId: postInboxConversationsLabelsByContactId
+      x-operation-id-source: derived
     delete:
       summary: Remove Labels from Conversation
       description: Removes one or more labels from one conversation.
@@ -721,6 +739,8 @@ paths:
           description: Method not allowed
       security:
       - basicAuth: []
+      operationId: deleteInboxConversationsLabelsByContactId
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /inbox/{contactId}/drafts:
@@ -811,6 +831,8 @@ paths:
           description: Method not allowed
       security:
       - basicAuth: []
+      operationId: getInboxByContactIdDrafts
+      x-operation-id-source: derived
     post:
       summary: Create Draft
       description: Creates a new draft for a specific contact. The source is automatically set to "api".
@@ -916,6 +938,8 @@ paths:
           description: Method not allowed
       security:
       - basicAuth: []
+      operationId: postInboxByContactIdDrafts
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
   /inbox/{contactId}/drafts/{draftId}:
@@ -1037,6 +1061,8 @@ paths:
           description: Method not allowed
       security:
       - basicAuth: []
+      operationId: getInboxByContactIdDraftsByDraftId
+      x-operation-id-source: derived
     patch:
       summary: Update Draft
       description: Partially updates an existing draft. Only the provided fields will be updated.
@@ -1196,6 +1222,8 @@ paths:
           description: Method not allowed
       security:
       - basicAuth: []
+      operationId: patchInboxByContactIdDraftsByDraftId
+      x-operation-id-source: derived
     delete:
       summary: Delete Draft
       description: Soft-deletes a draft by setting its deletedAt timestamp.
@@ -1254,27 +1282,12 @@ paths:
           description: Method not allowed
       security:
       - basicAuth: []
+      operationId: deleteInboxByContactIdDraftsByDraftId
+      x-operation-id-source: derived
     servers:
     - url: https://api.lemlist.com/api
 components:
   schemas:
-    InboxMessage:
-      type: object
-      description: A single message within an inbox conversation.
-      properties:
-        _id:
-          type: string
-        conversationId:
-          type: string
-        sender:
-          type: string
-        recipient:
-          type: string
-        body:
-          type: string
-        sentAt:
-          type: string
-          format: date-time
     InboxConversation:
       type: object
       description: A message thread between a user and a contact in the inbox.
@@ -1314,6 +1327,23 @@ components:
           - string
           - 'null'
           description: Email of the user who created the label
+    InboxMessage:
+      type: object
+      description: A single message within an inbox conversation.
+      properties:
+        _id:
+          type: string
+        conversationId:
+          type: string
+        sender:
+          type: string
+        recipient:
+          type: string
+        body:
+          type: string
+        sentAt:
+          type: string
+          format: date-time
   securitySchemes:
     basicAuth:
       type: http
@@ -1321,4 +1351,3 @@ components:
 x-refined-from:
 - lemlist-openapi-v1-legacy.json
 - lemlist-openapi-v2.json
-- lemlist-openapi.yml
