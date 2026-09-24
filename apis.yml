@@ -50,6 +50,7 @@ tags:
 - Multichannel Messaging
 - Webhook
 - MCP
+- A2A
 tags_raw:
 - Email Outreach
 - Sales Engagement
@@ -63,6 +64,7 @@ tags_raw:
 - Multichannel Messaging
 - Webhooks
 - MCP
+- A2A
 url: https://raw.githubusercontent.com/api-evangelist/lemlist/refs/heads/main/apis.yml
 created: '2026-05-11'
 modified: '2026-08-13'
@@ -294,7 +296,7 @@ apis:
   - type: OpenAPI
     url: openapi/lemlist-email-accounts-api-openapi.yml
 - aid: lemlist:lemlist-lemwarm-api
-  name: lemlist lemwarm API
+  name: lemlist Lemwarm API
   description: lemwarm mailbox warm-up - start, pause, and read or update warm-up settings per mailbox.
   humanURL: https://developer.lemlist.com/api-reference
   baseURL: https://api.lemlist.com/api
