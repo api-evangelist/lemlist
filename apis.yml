@@ -434,3 +434,10 @@ x-enrichment:
   status: enriched
   artifacts_added: 22
   pass: local-v1
+x-a2a:
+  verified: true
+  probed: '2026-09-26'
+  url: "https://developer.lemlist.com/.well-known/agent-card.json"
+  grade: "conformant"
+  protocol_version: "0.3"
+  control: 404
