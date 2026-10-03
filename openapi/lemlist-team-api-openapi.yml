@@ -355,6 +355,106 @@ paths:
     - url: https://api.lemlist.com/api
 components:
   schemas:
+    Webhook:
+      type: object
+      description: Webhooks send real-time HTTP notifications upon campaign events (opens, clicks, replies, etc.).
+      properties:
+        _id:
+          type: string
+          description: Unique webhook identifier
+        targetUrl:
+          type: string
+          format: uri
+          description: Destination URL for event notifications
+        type:
+          type: string
+          description: Event type to listen for. Events are grouped by category — see the endpoint docs for a full breakdown.
+          enum:
+          - contacted
+          - hooked
+          - attracted
+          - warmed
+          - interested
+          - notInterested
+          - emailsSent
+          - emailsOpened
+          - emailsClicked
+          - emailsReplied
+          - emailsBounced
+          - emailsFailed
+          - emailsInterested
+          - emailsNotInterested
+          - emailsUnsubscribed
+          - linkedinSent
+          - linkedinOpened
+          - linkedinReplied
+          - linkedinInterested
+          - linkedinNotInterested
+          - linkedinSendFailed
+          - linkedinVisitDone
+          - linkedinVisitFailed
+          - linkedinFollowDone
+          - linkedinFollowFailed
+          - linkedinFollowSkipped
+          - linkedinInviteDone
+          - linkedinInviteFailed
+          - linkedinInviteAccepted
+          - linkedinEndorseDone
+          - linkedinEndorseFailed
+          - linkedinEndorseSkipped
+          - linkedinVoiceNoteDone
+          - linkedinVoiceNoteFailed
+          - linkedinLikeLastPostDone
+          - linkedinLikeLastPostNoPost
+          - linkedinLikeLastPostFailed
+          - linkedinWithdrawInvitationDone
+          - linkedinWithdrawInvitationFailed
+          - whatsappMessageSent
+          - whatsappMessageDelivered
+          - whatsappMessageOpened
+          - whatsappReplied
+          - whatsappMessageFailed
+          - smsSent
+          - smsDelivered
+          - smsReplied
+          - smsFailed
+          - aircallCreated
+          - aircallEnded
+          - aircallDone
+          - aircallInterested
+          - aircallNotInterested
+          - apiDone
+          - apiInterested
+          - apiNotInterested
+          - apiFailed
+          - manualInterested
+          - manualNotInterested
+          - paused
+          - resumed
+          - stopped
+          - campaignComplete
+          - customDomainErrors
+          - connectionIssue
+          - sendLimitReached
+          - lemwarmPaused
+          - annotated
+          - enrichmentDone
+          - enrichmentError
+          - callRecordingDone
+          - callTranscriptDone
+          - inboxLabelUpdated
+          - signalRegistered
+          - deliverabilityAlertTriggered
+        campaignId:
+          type: string
+          description: The ID of the campaign the webhook is associated with (if any)
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        zapId:
+          type: integer
+          description: Zapier integration ID (if the destination is a Zapier webhook)
     Credits:
       type: object
       description: Credits are the coins a team uses to enrich emails, LinkedIn URLs, etc. Each enrichment feature needs a certain amount of credits to run.
@@ -470,106 +570,6 @@ components:
               role:
                 type: string
                 description: User's role in the team
-    Webhook:
-      type: object
-      description: Webhooks send real-time HTTP notifications upon campaign events (opens, clicks, replies, etc.).
-      properties:
-        _id:
-          type: string
-          description: Unique webhook identifier
-        targetUrl:
-          type: string
-          format: uri
-          description: Destination URL for event notifications
-        type:
-          type: string
-          description: Event type to listen for. Events are grouped by category — see the endpoint docs for a full breakdown.
-          enum:
-          - contacted
-          - hooked
-          - attracted
-          - warmed
-          - interested
-          - notInterested
-          - emailsSent
-          - emailsOpened
-          - emailsClicked
-          - emailsReplied
-          - emailsBounced
-          - emailsFailed
-          - emailsInterested
-          - emailsNotInterested
-          - emailsUnsubscribed
-          - linkedinSent
-          - linkedinOpened
-          - linkedinReplied
-          - linkedinInterested
-          - linkedinNotInterested
-          - linkedinSendFailed
-          - linkedinVisitDone
-          - linkedinVisitFailed
-          - linkedinFollowDone
-          - linkedinFollowFailed
-          - linkedinFollowSkipped
-          - linkedinInviteDone
-          - linkedinInviteFailed
-          - linkedinInviteAccepted
-          - linkedinEndorseDone
-          - linkedinEndorseFailed
-          - linkedinEndorseSkipped
-          - linkedinVoiceNoteDone
-          - linkedinVoiceNoteFailed
-          - linkedinLikeLastPostDone
-          - linkedinLikeLastPostNoPost
-          - linkedinLikeLastPostFailed
-          - linkedinWithdrawInvitationDone
-          - linkedinWithdrawInvitationFailed
-          - whatsappMessageSent
-          - whatsappMessageDelivered
-          - whatsappMessageOpened
-          - whatsappReplied
-          - whatsappMessageFailed
-          - smsSent
-          - smsDelivered
-          - smsReplied
-          - smsFailed
-          - aircallCreated
-          - aircallEnded
-          - aircallDone
-          - aircallInterested
-          - aircallNotInterested
-          - apiDone
-          - apiInterested
-          - apiNotInterested
-          - apiFailed
-          - manualInterested
-          - manualNotInterested
-          - paused
-          - resumed
-          - stopped
-          - campaignComplete
-          - customDomainErrors
-          - connectionIssue
-          - sendLimitReached
-          - lemwarmPaused
-          - annotated
-          - enrichmentDone
-          - enrichmentError
-          - callRecordingDone
-          - callTranscriptDone
-          - inboxLabelUpdated
-          - signalRegistered
-          - deliverabilityAlertTriggered
-        campaignId:
-          type: string
-          description: The ID of the campaign the webhook is associated with (if any)
-        createdAt:
-          type: string
-          format: date-time
-          description: Creation timestamp
-        zapId:
-          type: integer
-          description: Zapier integration ID (if the destination is a Zapier webhook)
   securitySchemes:
     basicAuth:
       type: http

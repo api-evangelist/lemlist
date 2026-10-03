@@ -1303,23 +1303,6 @@ components:
         createdAt:
           type: string
           format: date-time
-    InboxMessage:
-      type: object
-      description: A single message within an inbox conversation.
-      properties:
-        _id:
-          type: string
-        conversationId:
-          type: string
-        sender:
-          type: string
-        recipient:
-          type: string
-        body:
-          type: string
-        sentAt:
-          type: string
-          format: date-time
     Label:
       type: object
       description: A label used to categorize and organize inbox conversations.
@@ -1344,6 +1327,23 @@ components:
           - string
           - 'null'
           description: Email of the user who created the label
+    InboxMessage:
+      type: object
+      description: A single message within an inbox conversation.
+      properties:
+        _id:
+          type: string
+        conversationId:
+          type: string
+        sender:
+          type: string
+        recipient:
+          type: string
+        body:
+          type: string
+        sentAt:
+          type: string
+          format: date-time
   securitySchemes:
     basicAuth:
       type: http

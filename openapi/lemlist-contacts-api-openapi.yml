@@ -788,29 +788,6 @@ paths:
     - url: https://api.lemlist.com/api
 components:
   schemas:
-    FieldRejection:
-      type: object
-      description: A value lemlist refused to write on a Contact or Company, with the reason why. Surfaced under `fieldRejections[]` on those objects; filter a list endpoint to only flagged records via the `fieldRejectionReason` query param.
-      properties:
-        field:
-          type: string
-          description: The record field the rejected value targeted (e.g. `emails`, `linkedinUrl`, `domain`).
-        reason:
-          type: string
-          description: Why the value was rejected, prefixed by its origin — `enrichment_*` (raised while enriching) or `crm_sync_*` (raised during CRM sync). Same values accepted by the `fieldRejectionReason` query param.
-        source:
-          type: string
-          description: Where the rejection came from — an enrichment source (`lemrich`) or a CRM provider (`hubspot`, `salesforce`, `pipedrive`).
-        conflictingRecordId:
-          type: string
-          description: For duplicate reasons, the id of the record that already holds the value — use it to merge or remap before resolving the duplicate. Omitted for non-duplicate reasons.
-        rejectedValue:
-          type: string
-          description: The value that was refused.
-        rejectedAt:
-          type: string
-          format: date-time
-          description: When the rejection was recorded.
     Contact:
       type: object
       description: A contact record in your CRM. Not to be confused with a lead which is a contact specifically added to a campaign.
@@ -864,6 +841,29 @@ components:
           description: Values lemlist refused to write on this contact, each with its reason. Empty when none. Filter the list endpoint to only flagged contacts via `GET /contacts?fieldRejectionReason=...`.
           items:
             $ref: '#/components/schemas/FieldRejection'
+    FieldRejection:
+      type: object
+      description: A value lemlist refused to write on a Contact or Company, with the reason why. Surfaced under `fieldRejections[]` on those objects; filter a list endpoint to only flagged records via the `fieldRejectionReason` query param.
+      properties:
+        field:
+          type: string
+          description: The record field the rejected value targeted (e.g. `emails`, `linkedinUrl`, `domain`).
+        reason:
+          type: string
+          description: Why the value was rejected, prefixed by its origin — `enrichment_*` (raised while enriching) or `crm_sync_*` (raised during CRM sync). Same values accepted by the `fieldRejectionReason` query param.
+        source:
+          type: string
+          description: Where the rejection came from — an enrichment source (`lemrich`) or a CRM provider (`hubspot`, `salesforce`, `pipedrive`).
+        conflictingRecordId:
+          type: string
+          description: For duplicate reasons, the id of the record that already holds the value — use it to merge or remap before resolving the duplicate. Omitted for non-duplicate reasons.
+        rejectedValue:
+          type: string
+          description: The value that was refused.
+        rejectedAt:
+          type: string
+          format: date-time
+          description: When the rejection was recorded.
   securitySchemes:
     basicAuth:
       type: http

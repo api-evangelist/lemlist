@@ -874,16 +874,6 @@ components:
           - campaign
           - team
           - global
-    ContactSubscriptionStatus:
-      type: object
-      description: Subscription status of a contact.
-      properties:
-        _id:
-          type: string
-          description: Contact identifier
-        doNotContact:
-          type: boolean
-          description: Whether the contact is unsubscribed
     UnsubscribedVariable:
       type: object
       description: A variable (email, domain, LinkedIn URL, or phone number) that has been unsubscribed.
@@ -907,6 +897,16 @@ components:
           type: string
           format: date-time
           description: When the variable was unsubscribed
+    ContactSubscriptionStatus:
+      type: object
+      description: Subscription status of a contact.
+      properties:
+        _id:
+          type: string
+          description: Contact identifier
+        doNotContact:
+          type: boolean
+          description: Whether the contact is unsubscribed
   securitySchemes:
     basicAuth:
       type: http
