@@ -37,6 +37,10 @@ accessModel:
   generated: '2026-08-13'
   method: searched
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/lemlist.png
+x-docs-platform: mintlify
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-10-03
+x-docs-hosting: vercel
 tags:
 - Email Outreach
 - Sales Engagement
@@ -338,6 +342,9 @@ apis:
   - type: OpenAPI
     url: openapi/lemlist-stats-api-openapi.yml
 common:
+- type: CapabilityMap
+  url: capabilities/lemlist-capability-edges.yml
+  name: lemlist Business Capability Map
 - type: Website
   url: https://www.lemlist.com
 - type: DeveloperPortal
