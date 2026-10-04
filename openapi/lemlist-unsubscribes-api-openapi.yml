@@ -846,6 +846,16 @@ paths:
     - url: https://api.lemlist.com/api
 components:
   schemas:
+    ContactSubscriptionStatus:
+      type: object
+      description: Subscription status of a contact.
+      properties:
+        _id:
+          type: string
+          description: Contact identifier
+        doNotContact:
+          type: boolean
+          description: Whether the contact is unsubscribed
     Unsubscribe:
       type: object
       description: A record of someone opting out of receiving emails.
@@ -897,16 +907,6 @@ components:
           type: string
           format: date-time
           description: When the variable was unsubscribed
-    ContactSubscriptionStatus:
-      type: object
-      description: Subscription status of a contact.
-      properties:
-        _id:
-          type: string
-          description: Contact identifier
-        doNotContact:
-          type: boolean
-          description: Whether the contact is unsubscribed
   securitySchemes:
     basicAuth:
       type: http

@@ -1288,19 +1288,21 @@ paths:
     - url: https://api.lemlist.com/api
 components:
   schemas:
-    InboxConversation:
+    InboxMessage:
       type: object
-      description: A message thread between a user and a contact in the inbox.
+      description: A single message within an inbox conversation.
       properties:
         _id:
           type: string
-        leadId:
+        conversationId:
           type: string
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/InboxMessage'
-        createdAt:
+        sender:
+          type: string
+        recipient:
+          type: string
+        body:
+          type: string
+        sentAt:
           type: string
           format: date-time
     Label:
@@ -1327,21 +1329,19 @@ components:
           - string
           - 'null'
           description: Email of the user who created the label
-    InboxMessage:
+    InboxConversation:
       type: object
-      description: A single message within an inbox conversation.
+      description: A message thread between a user and a contact in the inbox.
       properties:
         _id:
           type: string
-        conversationId:
+        leadId:
           type: string
-        sender:
-          type: string
-        recipient:
-          type: string
-        body:
-          type: string
-        sentAt:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/InboxMessage'
+        createdAt:
           type: string
           format: date-time
   securitySchemes:

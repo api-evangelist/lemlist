@@ -355,6 +355,34 @@ paths:
     - url: https://api.lemlist.com/api
 components:
   schemas:
+    Credits:
+      type: object
+      description: Credits are the coins a team uses to enrich emails, LinkedIn URLs, etc. Each enrichment feature needs a certain amount of credits to run.
+      properties:
+        credits:
+          type: integer
+          description: Total credits remaining
+        details:
+          type: object
+          properties:
+            remaining:
+              type: object
+              properties:
+                total:
+                  type: integer
+                  description: Total credits remaining
+                freemium:
+                  type: integer
+                  description: Freemium credits remaining
+                subscription:
+                  type: integer
+                  description: Subscription credits remaining
+                gifted:
+                  type: integer
+                  description: Gifted credits remaining
+                paid:
+                  type: integer
+                  description: Paid credits remaining
     Webhook:
       type: object
       description: Webhooks send real-time HTTP notifications upon campaign events (opens, clicks, replies, etc.).
@@ -455,34 +483,6 @@ components:
         zapId:
           type: integer
           description: Zapier integration ID (if the destination is a Zapier webhook)
-    Credits:
-      type: object
-      description: Credits are the coins a team uses to enrich emails, LinkedIn URLs, etc. Each enrichment feature needs a certain amount of credits to run.
-      properties:
-        credits:
-          type: integer
-          description: Total credits remaining
-        details:
-          type: object
-          properties:
-            remaining:
-              type: object
-              properties:
-                total:
-                  type: integer
-                  description: Total credits remaining
-                freemium:
-                  type: integer
-                  description: Freemium credits remaining
-                subscription:
-                  type: integer
-                  description: Subscription credits remaining
-                gifted:
-                  type: integer
-                  description: Gifted credits remaining
-                paid:
-                  type: integer
-                  description: Paid credits remaining
     Team:
       type: object
       description: The organization account that manages users and billing.

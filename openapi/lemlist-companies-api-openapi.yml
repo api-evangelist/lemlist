@@ -440,62 +440,6 @@ paths:
     - url: https://api.lemlist.com/api
 components:
   schemas:
-    CompanyNote:
-      type: object
-      description: A text note attached to a company record to store information.
-      properties:
-        _id:
-          type: string
-          description: Unique note identifier
-        teamId:
-          type: string
-          description: Team ID that owns the company
-        companyId:
-          type: string
-          description: Parent company ID
-        note:
-          type: string
-          description: Note text content
-        type:
-          type: string
-          description: Type of note or activity (e.g., 'annotated')
-        userId:
-          type: string
-          description: ID of the user who created the note
-        sendUserId:
-          type: string
-          description: ID of the sending user if applicable
-        createdAt:
-          type: string
-          format: date-time
-          description: Creation timestamp
-        updatedAt:
-          type: string
-          format: date-time
-          description: Last update timestamp
-    FieldRejection:
-      type: object
-      description: A value lemlist refused to write on a Contact or Company, with the reason why. Surfaced under `fieldRejections[]` on those objects; filter a list endpoint to only flagged records via the `fieldRejectionReason` query param.
-      properties:
-        field:
-          type: string
-          description: The record field the rejected value targeted (e.g. `emails`, `linkedinUrl`, `domain`).
-        reason:
-          type: string
-          description: Why the value was rejected, prefixed by its origin — `enrichment_*` (raised while enriching) or `crm_sync_*` (raised during CRM sync). Same values accepted by the `fieldRejectionReason` query param.
-        source:
-          type: string
-          description: Where the rejection came from — an enrichment source (`lemrich`) or a CRM provider (`hubspot`, `salesforce`, `pipedrive`).
-        conflictingRecordId:
-          type: string
-          description: For duplicate reasons, the id of the record that already holds the value — use it to merge or remap before resolving the duplicate. Omitted for non-duplicate reasons.
-        rejectedValue:
-          type: string
-          description: The value that was refused.
-        rejectedAt:
-          type: string
-          format: date-time
-          description: When the rejection was recorded.
     Company:
       type: object
       description: An organization record in your CRM.
@@ -578,6 +522,62 @@ components:
                     type: object
                     additionalProperties: true
                     description: Extra context. For `UNIQUE_INDEX_ERROR_COMPANY`, contains `alreadyExistingCompanyId` — the lemlist company that already occupies the conflicting CRM record. Use it to remap contacts onto the right lemlist company before deleting the duplicate.
+    CompanyNote:
+      type: object
+      description: A text note attached to a company record to store information.
+      properties:
+        _id:
+          type: string
+          description: Unique note identifier
+        teamId:
+          type: string
+          description: Team ID that owns the company
+        companyId:
+          type: string
+          description: Parent company ID
+        note:
+          type: string
+          description: Note text content
+        type:
+          type: string
+          description: Type of note or activity (e.g., 'annotated')
+        userId:
+          type: string
+          description: ID of the user who created the note
+        sendUserId:
+          type: string
+          description: ID of the sending user if applicable
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+    FieldRejection:
+      type: object
+      description: A value lemlist refused to write on a Contact or Company, with the reason why. Surfaced under `fieldRejections[]` on those objects; filter a list endpoint to only flagged records via the `fieldRejectionReason` query param.
+      properties:
+        field:
+          type: string
+          description: The record field the rejected value targeted (e.g. `emails`, `linkedinUrl`, `domain`).
+        reason:
+          type: string
+          description: Why the value was rejected, prefixed by its origin — `enrichment_*` (raised while enriching) or `crm_sync_*` (raised during CRM sync). Same values accepted by the `fieldRejectionReason` query param.
+        source:
+          type: string
+          description: Where the rejection came from — an enrichment source (`lemrich`) or a CRM provider (`hubspot`, `salesforce`, `pipedrive`).
+        conflictingRecordId:
+          type: string
+          description: For duplicate reasons, the id of the record that already holds the value — use it to merge or remap before resolving the duplicate. Omitted for non-duplicate reasons.
+        rejectedValue:
+          type: string
+          description: The value that was refused.
+        rejectedAt:
+          type: string
+          format: date-time
+          description: When the rejection was recorded.
   securitySchemes:
     basicAuth:
       type: http
