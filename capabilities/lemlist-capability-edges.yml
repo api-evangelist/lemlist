@@ -1,0 +1,66 @@
+slug: lemlist
+provider: lemlist
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 5
+edges:
+- tag: Campaigns
+  spec_file: lemlist-campaigns-api-openapi.yml
+  capability_id: BC-400.40
+  capability_id_l1: BC-400
+  capability_name: Demand Generation Management
+  confidence: 0.85
+  evidence: POST /campaigns  Create a new campaign; POST /campaigns/{campaignId}/start  Start Campaign;
+    GET /campaigns/{campaignId}/export/leads  Export Campaign Leads
+  reason: Create, start, pause and report on multichannel outreach campaigns and export their leads —
+    this is lead-generation campaign management, i.e. Demand Generation Management.
+- tag: Leads
+  spec_file: lemlist-leads-api-openapi.yml
+  capability_id: BC-410.30
+  capability_id_l1: BC-410
+  capability_name: Opportunity & Pipeline Management
+  confidence: 0.8
+  evidence: POST /leads/interested/{leadIdOrEmail}  Mark a Lead as interested; POST /campaigns/{campaignId}/leads/{email}  Create
+    Lead in a Campaign; POST /leads/pause/{leadId}  Pause a Lead
+  reason: Full lead lifecycle operations — create, update, qualify as interested/not interested, pause,
+    delete within campaigns — which is lead/opportunity pipeline management in a sales engagement tool.
+- tag: Contacts
+  spec_file: lemlist-contacts-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.75
+  evidence: POST /contacts  Add and update contact; POST /contacts/lists  Create Contact List; GET /contacts/export  Export
+    Contact List
+  reason: Create, update, delete and list-segment contact records — management of the customer/prospect
+    contact data store within a sales engagement platform.
+- tag: Webhooks
+  spec_file: lemlist-webhooks-api-openapi.yml
+  capability_id: BC-4270.80
+  capability_id_l1: BC-4270
+  capability_name: Webhook & Event Subscription Management
+  confidence: 0.72
+  evidence: GET /hooks Get All webhooks; POST /hooks Add a webhook; DELETE /hooks/{hookId} Delete a webhook
+  reason: The surface is the lifecycle (list/create/delete) of outbound webhook subscriptions exposed
+    to integrators of this SaaS, which matches Webhook & Event Subscription Management under the developer
+    platform capability. Confidence held below high because webhook endpoints are often treated as pure
+    integration plumbing.
+- tag: Companies
+  spec_file: lemlist-companies-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.7
+  evidence: POST /companies  Add and update company; POST /companies/{companyId}/notes  Create company
+    note
+  reason: CRUD over company (account) records with notes — maintenance of prospect/customer account master
+    data. Could also read as Account Management; mapped to Customer Data Management with moderate confidence.
