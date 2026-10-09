@@ -118,3 +118,18 @@ credit_bearing_tools:
 note: lemlist documents that email finding, email verification, phone enrichment and lead addition with
   enrichment consume account credits, and instructs agents to warn the user and check get_team_info before
   calling them.
+rfc9728:
+  endpoint: https://app.lemlist.com/mcp
+  metadata_url: https://app.lemlist.com/.well-known/oauth-protected-resource/mcp
+  discovered_via: WWW-Authenticate resource_metadata on an anonymous POST initialize
+  fetched: '2026-09-25'
+  http_status: 200
+  content_type: application/json
+  document:
+    resource: https://app.lemlist.com/mcp
+    authorization_servers:
+    - https://app.lemlist.com
+    scopes_supported:
+    - full_access
+    bearer_methods_supported:
+    - header

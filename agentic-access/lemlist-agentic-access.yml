@@ -1,4 +1,4 @@
-generated: '2026-08-13'
+generated: '2026-09-23'
 method: generated
 source: openapi/lemlist-activities-api-openapi.yml, openapi/lemlist-campaigns-api-openapi.yml,
   openapi/lemlist-companies-api-openapi.yml, openapi/lemlist-contacts-api-openapi.yml, openapi/lemlist-deliverability-alerts-api-openapi.yml,
@@ -6,24 +6,35 @@ source: openapi/lemlist-activities-api-openapi.yml, openapi/lemlist-campaigns-ap
   openapi/lemlist-inbox-api-openapi.yml, openapi/lemlist-leads-api-openapi.yml, openapi/lemlist-lemwarm-api-openapi.yml,
   openapi/lemlist-people-database-api-openapi.yml, openapi/lemlist-schedules-api-openapi.yml,
   openapi/lemlist-sequences-api-openapi.yml, openapi/lemlist-signal-agents-api-openapi.yml,
-  openapi/lemlist-tasks-api-openapi.yml, openapi/lemlist-team-api-openapi.yml, openapi/lemlist-unsubscribes-api-openapi.yml,
-  openapi/lemlist-users-api-openapi.yml, openapi/lemlist-webhooks-api-openapi.yml
+  openapi/lemlist-stats-api-openapi.yml, openapi/lemlist-tasks-api-openapi.yml, openapi/lemlist-team-api-openapi.yml,
+  openapi/lemlist-unsubscribes-api-openapi.yml, openapi/lemlist-users-api-openapi.yml, openapi/lemlist-webhooks-api-openapi.yml
 description: Recommended x-agentic-access execution contracts, classified heuristically from
   the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
   audience per deployment. See research/curity/agentic-governance/.
 summary:
-  operations: 143
+  operations: 153
   by_action_class:
-    connected: 59
-    acting: 84
+    connected: 67
+    acting: 86
   by_consequence:
-    read: 59
-    write: 81
-    physical: 3
+    read: 67
+    write: 82
+    physical: 4
   human_in_the_loop_required: 0
 operations:
+- path: /activities/
+  method: get
+  operationId: getActivities
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
 - path: /activities
   method: get
+  operationId: getActivities
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -33,6 +44,7 @@ operations:
     audit: none
 - path: /activities/{activityId}/recording-transcript
   method: delete
+  operationId: deleteActivitiesByActivityIdRecordingTranscript
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -48,6 +60,7 @@ operations:
     audit: required
 - path: /campaigns
   method: get
+  operationId: getCampaigns
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -57,6 +70,7 @@ operations:
     audit: none
 - path: /campaigns
   method: post
+  operationId: postCampaigns
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -72,6 +86,7 @@ operations:
     audit: required
 - path: /campaigns/{campaignId}
   method: get
+  operationId: getCampaignsByCampaignId
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -81,6 +96,7 @@ operations:
     audit: none
 - path: /campaigns/{campaignId}
   method: patch
+  operationId: patchCampaignsByCampaignId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -96,21 +112,7 @@ operations:
     audit: required
 - path: /campaigns/{campaignId}/pause
   method: post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /campaigns/{campaignId}/start
-  method: post
+  operationId: postCampaignsByCampaignIdPause
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -126,6 +128,7 @@ operations:
     audit: required
 - path: /campaigns/{campaignId}/export/start
   method: get
+  operationId: getCampaignsByCampaignIdExportStart
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -135,30 +138,7 @@ operations:
     audit: none
 - path: /campaigns/{campaignId}/export/{exportId}/status
   method: get
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /campaigns/{campaignId}/export/{exportId}/email/{email}
-  method: put
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /campaigns/{campaignId}/export/leads
-  method: get
+  operationId: getCampaignsByCampaignIdExportByExportIdStatus
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -168,6 +148,7 @@ operations:
     audit: none
 - path: /campaigns/reports
   method: get
+  operationId: getCampaignsReports
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -175,8 +156,27 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /v2/campaigns/{campaignId}/stats
+- path: /campaigns/{campaignId}/export/{exportId}/email/{email}
+  method: put
+  operationId: putCampaignsByCampaignIdExportByExportIdEmailByEmail
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /campaigns/{campaignId}/export/leads
   method: get
+  operationId: getCampaignsByCampaignIdExportLeads
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -184,8 +184,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /v2/campaigns/stats/batch
+- path: /campaigns/{campaignId}/start
   method: post
+  operationId: postCampaignsByCampaignIdStart
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -199,8 +200,29 @@ operations:
       - abnormal
       - high-value
     audit: required
+- path: /v2/campaigns/{campaignId}/stats
+  method: get
+  operationId: getV2CampaignsByCampaignIdStats
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2/campaigns/stats/batch
+  method: post
+  operationId: postV2CampaignsStatsBatch
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
 - path: /campaigns/{campaignId}/duplicate
   method: post
+  operationId: postCampaignsByCampaignIdDuplicate
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -216,6 +238,7 @@ operations:
     audit: required
 - path: /campaigns/{campaignId}/statutes
   method: get
+  operationId: getCampaignsByCampaignIdStatutes
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -225,6 +248,7 @@ operations:
     audit: none
 - path: /companies
   method: get
+  operationId: getCompanies
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -234,6 +258,7 @@ operations:
     audit: none
 - path: /companies
   method: post
+  operationId: postCompanies
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -247,8 +272,35 @@ operations:
       - abnormal
       - high-value
     audit: required
+- path: /companies/{companyId}/notes
+  method: post
+  operationId: postCompaniesByCompanyIdNotes
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /companies/{companyId}/notes
+  method: get
+  operationId: getCompaniesByCompanyIdNotes
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
 - path: /companies/{companyId}
   method: delete
+  operationId: deleteCompaniesByCompanyId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -262,8 +314,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /companies/{companyId}/notes
+- path: /contacts/{idOrEmail}
   method: get
+  operationId: getContactsByIdOrEmail
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -271,47 +324,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /companies/{companyId}/notes
-  method: post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /contacts
-  method: get
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /contacts
-  method: post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
 - path: /contacts/{idOrEmail}
   method: delete
+  operationId: deleteContactsByIdOrEmail
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -325,8 +340,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /contacts/{idOrEmail}
+- path: /contacts
   method: get
+  operationId: getContacts
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -334,8 +350,25 @@ operations:
     token:
       max-ttl: 3600
     audit: none
+- path: /contacts
+  method: post
+  operationId: postContacts
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
 - path: /contacts/lists
   method: get
+  operationId: getContactsLists
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -345,6 +378,7 @@ operations:
     audit: none
 - path: /contacts/lists
   method: post
+  operationId: postContactsLists
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -360,6 +394,7 @@ operations:
     audit: required
 - path: /contacts/lists/{listId}/entities
   method: post
+  operationId: postContactsListsByListIdEntities
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -375,6 +410,7 @@ operations:
     audit: required
 - path: /contacts/export
   method: get
+  operationId: getContactsExport
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -384,6 +420,7 @@ operations:
     audit: none
 - path: /deliverability/alerts
   method: get
+  operationId: getDeliverabilityAlerts
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -393,6 +430,7 @@ operations:
     audit: none
 - path: /deliverability/alerts
   method: post
+  operationId: postDeliverabilityAlerts
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -408,6 +446,7 @@ operations:
     audit: required
 - path: /deliverability/alerts/{alertId}
   method: get
+  operationId: getDeliverabilityAlertsByAlertId
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -417,6 +456,7 @@ operations:
     audit: none
 - path: /deliverability/alerts/{alertId}
   method: patch
+  operationId: patchDeliverabilityAlertsByAlertId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -432,6 +472,7 @@ operations:
     audit: required
 - path: /deliverability/alerts/{alertId}
   method: delete
+  operationId: deleteDeliverabilityAlertsByAlertId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -447,6 +488,7 @@ operations:
     audit: required
 - path: /user/email-accounts
   method: post
+  operationId: postUserEmailAccounts
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -462,6 +504,7 @@ operations:
     audit: required
 - path: /user/email-accounts/{emailAccountId}
   method: delete
+  operationId: deleteUserEmailAccountsByEmailAccountId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -477,6 +520,7 @@ operations:
     audit: required
 - path: /user/email-accounts/{emailAccountId}/test
   method: post
+  operationId: postUserEmailAccountsByEmailAccountIdTest
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -492,6 +536,7 @@ operations:
     audit: required
 - path: /enrich/{enrichId}
   method: get
+  operationId: getEnrichByEnrichId
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -501,21 +546,7 @@ operations:
     audit: none
 - path: /enrich
   method: post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /v2/enrichments/bulk
-  method: post
+  operationId: postEnrich
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -531,6 +562,23 @@ operations:
     audit: required
 - path: /leads/{leadId}/enrich
   method: post
+  operationId: postLeadsByLeadIdEnrich
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v2/enrichments/bulk
+  method: post
+  operationId: postV2EnrichmentsBulk
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -546,6 +594,7 @@ operations:
     audit: required
 - path: /fields
   method: get
+  operationId: getFields
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -555,6 +604,7 @@ operations:
     audit: none
 - path: /inbox
   method: get
+  operationId: getInbox
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -564,6 +614,7 @@ operations:
     audit: none
 - path: /inbox/{contactId}
   method: get
+  operationId: getInboxByContactId
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -573,6 +624,7 @@ operations:
     audit: none
 - path: /inbox/email
   method: post
+  operationId: postInboxEmail
   x-agentic-access:
     action-class: acting
     consequence: physical
@@ -590,6 +642,7 @@ operations:
     audit: required
 - path: /inbox/linkedin
   method: post
+  operationId: postInboxLinkedin
   x-agentic-access:
     action-class: acting
     consequence: physical
@@ -607,6 +660,7 @@ operations:
     audit: required
 - path: /inbox/whatsapp
   method: post
+  operationId: postInboxWhatsapp
   x-agentic-access:
     action-class: acting
     consequence: physical
@@ -624,6 +678,7 @@ operations:
     audit: required
 - path: /inbox/labels
   method: get
+  operationId: getInboxLabels
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -633,6 +688,7 @@ operations:
     audit: none
 - path: /inbox/labels
   method: post
+  operationId: postInboxLabels
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -648,6 +704,7 @@ operations:
     audit: required
 - path: /inbox/labels/{labelId}
   method: get
+  operationId: getInboxLabelsByLabelId
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -657,6 +714,7 @@ operations:
     audit: none
 - path: /inbox/conversations/labels/{contactId}
   method: post
+  operationId: postInboxConversationsLabelsByContactId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -672,6 +730,7 @@ operations:
     audit: required
 - path: /inbox/conversations/labels/{contactId}
   method: delete
+  operationId: deleteInboxConversationsLabelsByContactId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -687,6 +746,7 @@ operations:
     audit: required
 - path: /inbox/{contactId}/drafts
   method: get
+  operationId: getInboxByContactIdDrafts
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -696,6 +756,7 @@ operations:
     audit: none
 - path: /inbox/{contactId}/drafts
   method: post
+  operationId: postInboxByContactIdDrafts
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -711,6 +772,7 @@ operations:
     audit: required
 - path: /inbox/{contactId}/drafts/{draftId}
   method: get
+  operationId: getInboxByContactIdDraftsByDraftId
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -720,6 +782,7 @@ operations:
     audit: none
 - path: /inbox/{contactId}/drafts/{draftId}
   method: patch
+  operationId: patchInboxByContactIdDraftsByDraftId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -735,108 +798,7 @@ operations:
     audit: required
 - path: /inbox/{contactId}/drafts/{draftId}
   method: delete
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /leads
-  method: get
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /leads/{email}
-  method: get
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /campaigns/{campaignId}/leads/
-  method: get
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /campaigns/{campaignId}/leads/
-  method: post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /campaigns/{campaignId}/leads/
-  method: delete
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /campaigns/{campaignId}/leads/{leadId}
-  method: patch
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /campaigns/{campaignId}/leads/{leadId}
-  method: delete
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /campaigns/{campaignId}/leads/{email}
-  method: delete
+  operationId: deleteInboxByContactIdDraftsByDraftId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -852,6 +814,7 @@ operations:
     audit: required
 - path: /leads/start/{leadId}
   method: post
+  operationId: postLeadsStartByLeadId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -867,21 +830,7 @@ operations:
     audit: required
 - path: /leads/pause/{leadId}
   method: post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /leads/review/{leadId}
-  method: post
+  operationId: postLeadsPauseByLeadId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -897,6 +846,7 @@ operations:
     audit: required
 - path: /leads/interested/{leadIdOrEmail}
   method: post
+  operationId: postLeadsInterestedByLeadIdOrEmail
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -912,6 +862,7 @@ operations:
     audit: required
 - path: /leads/notinterested/{leadIdOrEmail}
   method: post
+  operationId: postLeadsNotinterestedByLeadIdOrEmail
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -927,6 +878,7 @@ operations:
     audit: required
 - path: /campaigns/{campaignId}/leads/{leadIdOrEmail}/interested
   method: post
+  operationId: postCampaignsByCampaignIdLeadsByLeadIdOrEmailInterested
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -942,6 +894,91 @@ operations:
     audit: required
 - path: /campaigns/{campaignId}/leads/{leadIdOrEmail}/notinterested
   method: post
+  operationId: postCampaignsByCampaignIdLeadsByLeadIdOrEmailNotinterested
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /leads/{email}
+  method: get
+  operationId: getLeadsByEmail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /leads
+  method: get
+  operationId: getLeads
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /campaigns/{campaignId}/leads/{email}
+  method: post
+  operationId: postCampaignsByCampaignIdLeadsByEmail
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /campaigns/{campaignId}/leads/{email}
+  method: delete
+  operationId: deleteCampaignsByCampaignIdLeadsByEmail
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /campaigns/{campaignId}/leads/{leadId}
+  method: patch
+  operationId: patchCampaignsByCampaignIdLeadsByLeadId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /campaigns/{campaignId}/leads/{leadId}
+  method: delete
+  operationId: deleteCampaignsByCampaignIdLeadsByLeadId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -957,6 +994,7 @@ operations:
     audit: required
 - path: /leads/{leadId}/variables
   method: post
+  operationId: postLeadsByLeadIdVariables
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -972,6 +1010,7 @@ operations:
     audit: required
 - path: /leads/{leadId}/variables
   method: patch
+  operationId: patchLeadsByLeadIdVariables
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -987,6 +1026,7 @@ operations:
     audit: required
 - path: /leads/{leadId}/variables
   method: delete
+  operationId: deleteLeadsByLeadIdVariables
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1002,6 +1042,7 @@ operations:
     audit: required
 - path: /leads/audio
   method: post
+  operationId: postLeadsAudio
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1017,6 +1058,7 @@ operations:
     audit: required
 - path: /crm/filters
   method: get
+  operationId: getCrmFilters
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1026,6 +1068,65 @@ operations:
     audit: none
 - path: /campaigns/{campaignId}/leads/import
   method: post
+  operationId: postCampaignsByCampaignIdLeadsImport
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /campaigns/{campaignId}/leads/
+  method: get
+  operationId: getCampaignsByCampaignIdLeads
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /campaigns/{campaignId}/leads/
+  method: post
+  operationId: postCampaignsByCampaignIdLeads
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /campaigns/{campaignId}/leads/
+  method: delete
+  operationId: deleteCampaignsByCampaignIdLeads
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /leads/review/{leadId}
+  method: post
+  operationId: postLeadsReviewByLeadId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1041,6 +1142,7 @@ operations:
     audit: required
 - path: /lemwarm/{userMailboxId}/start
   method: post
+  operationId: postLemwarmByUserMailboxIdStart
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1056,6 +1158,7 @@ operations:
     audit: required
 - path: /lemwarm/{userMailboxId}/pause
   method: post
+  operationId: postLemwarmByUserMailboxIdPause
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1071,6 +1174,7 @@ operations:
     audit: required
 - path: /lemwarm/{userMailboxId}/settings
   method: get
+  operationId: getLemwarmByUserMailboxIdSettings
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1080,6 +1184,7 @@ operations:
     audit: none
 - path: /lemwarm/{userMailboxId}/settings
   method: patch
+  operationId: patchLemwarmByUserMailboxIdSettings
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1095,6 +1200,7 @@ operations:
     audit: required
 - path: /database/filters
   method: get
+  operationId: getDatabaseFilters
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1104,7 +1210,7 @@ operations:
     audit: none
 - path: /database/people
   method: post
-  operationId: searchPeopleDatabase
+  operationId: postDatabasePeople
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1118,8 +1224,19 @@ operations:
       - abnormal
       - high-value
     audit: required
+- path: /schema/people
+  method: get
+  operationId: getSchemaPeople
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
 - path: /database/companies
   method: post
+  operationId: postDatabaseCompanies
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1133,6 +1250,16 @@ operations:
       - abnormal
       - high-value
     audit: required
+- path: /schema/companies
+  method: get
+  operationId: getSchemaCompanies
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
 - path: /database/personas
   method: get
   operationId: listPersonas
@@ -1177,6 +1304,7 @@ operations:
     audit: required
 - path: /schedules
   method: get
+  operationId: getSchedules
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1186,6 +1314,7 @@ operations:
     audit: none
 - path: /schedules
   method: post
+  operationId: postSchedules
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1201,6 +1330,7 @@ operations:
     audit: required
 - path: /schedules/{scheduleId}
   method: get
+  operationId: getSchedulesByScheduleId
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1210,6 +1340,7 @@ operations:
     audit: none
 - path: /schedules/{scheduleId}
   method: patch
+  operationId: patchSchedulesByScheduleId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1225,6 +1356,7 @@ operations:
     audit: required
 - path: /schedules/{scheduleId}
   method: delete
+  operationId: deleteSchedulesByScheduleId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1240,6 +1372,7 @@ operations:
     audit: required
 - path: /campaigns/{campaignId}/schedules/
   method: get
+  operationId: getCampaignsByCampaignIdSchedules
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1249,6 +1382,7 @@ operations:
     audit: none
 - path: /campaigns/{campaignId}/schedules/{scheduleId}
   method: post
+  operationId: postCampaignsByCampaignIdSchedulesByScheduleId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1264,6 +1398,7 @@ operations:
     audit: required
 - path: /campaigns/{campaignId}/sequences
   method: get
+  operationId: getCampaignsByCampaignIdSequences
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1273,6 +1408,7 @@ operations:
     audit: none
 - path: /sequences/{sequenceId}/steps
   method: post
+  operationId: postSequencesBySequenceIdSteps
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1288,6 +1424,7 @@ operations:
     audit: required
 - path: /sequences/{sequenceId}/steps/{stepId}
   method: patch
+  operationId: patchSequencesBySequenceIdStepsByStepId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1303,6 +1440,7 @@ operations:
     audit: required
 - path: /sequences/{sequenceId}/steps/{stepId}
   method: delete
+  operationId: deleteSequencesBySequenceIdStepsByStepId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1318,6 +1456,7 @@ operations:
     audit: required
 - path: /sequences/{sequenceId}/steps/{stepId}/ab-test
   method: post
+  operationId: postSequencesBySequenceIdStepsByStepIdAbTest
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1333,6 +1472,7 @@ operations:
     audit: required
 - path: /sequences/{sequenceId}/steps/{stepId}/ab-test
   method: get
+  operationId: getSequencesBySequenceIdStepsByStepIdAbTest
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1342,6 +1482,7 @@ operations:
     audit: none
 - path: /sequences/{sequenceId}/steps/{stepId}/ab-test
   method: patch
+  operationId: patchSequencesBySequenceIdStepsByStepIdAbTest
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1357,6 +1498,7 @@ operations:
     audit: required
 - path: /sequences/{sequenceId}/steps/{stepId}/ab-test
   method: delete
+  operationId: deleteSequencesBySequenceIdStepsByStepIdAbTest
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1372,6 +1514,7 @@ operations:
     audit: required
 - path: /sequences/{sequenceId}/steps/{stepId}/ab-test/winner
   method: post
+  operationId: postSequencesBySequenceIdStepsByStepIdAbTestWinner
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1387,6 +1530,7 @@ operations:
     audit: required
 - path: /watchlist/signals
   method: get
+  operationId: getWatchlistSignals
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1396,6 +1540,7 @@ operations:
     audit: none
 - path: /watchlist/{watchListId}/external-signals
   method: post
+  operationId: postWatchlistByWatchListIdExternalSignals
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1411,6 +1556,7 @@ operations:
     audit: required
 - path: /watchlist
   method: get
+  operationId: getWatchlist
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1420,6 +1566,7 @@ operations:
     audit: none
 - path: /watchlist
   method: post
+  operationId: postWatchlist
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1435,6 +1582,7 @@ operations:
     audit: required
 - path: /watchlist
   method: patch
+  operationId: patchWatchlist
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1450,6 +1598,7 @@ operations:
     audit: required
 - path: /watchlist
   method: delete
+  operationId: deleteWatchlist
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1465,6 +1614,7 @@ operations:
     audit: required
 - path: /watchlist/history
   method: get
+  operationId: getWatchlistHistory
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1474,6 +1624,7 @@ operations:
     audit: none
 - path: /watchlist/library
   method: get
+  operationId: getWatchlistLibrary
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1483,6 +1634,7 @@ operations:
     audit: none
 - path: /watchlist/filters
   method: get
+  operationId: getWatchlistFilters
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1492,6 +1644,27 @@ operations:
     audit: none
 - path: /watchlist/filter-values
   method: get
+  operationId: getWatchlistFilterValues
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /campaigns/{campaignId}/stats
+  method: get
+  operationId: getCampaignsByCampaignIdStats
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2/campaigns/{campaignId}/stats
+  method: get
+  operationId: getV2CampaignsByCampaignIdStats
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1501,6 +1674,7 @@ operations:
     audit: none
 - path: /tasks
   method: get
+  operationId: getTasks
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1510,6 +1684,7 @@ operations:
     audit: none
 - path: /tasks
   method: post
+  operationId: postTasks
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1525,6 +1700,7 @@ operations:
     audit: required
 - path: /tasks
   method: patch
+  operationId: patchTasks
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1540,6 +1716,7 @@ operations:
     audit: required
 - path: /tasks/ignore
   method: post
+  operationId: postTasksIgnore
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1555,6 +1732,7 @@ operations:
     audit: required
 - path: /team
   method: get
+  operationId: getTeam
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1564,6 +1742,7 @@ operations:
     audit: none
 - path: /team/senders
   method: get
+  operationId: getTeamSenders
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1573,6 +1752,7 @@ operations:
     audit: none
 - path: /team/credits
   method: get
+  operationId: getTeamCredits
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1582,6 +1762,7 @@ operations:
     audit: none
 - path: /team/crmUsers
   method: get
+  operationId: getTeamCrmUsers
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1589,8 +1770,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /unsubscribes
+- path: /unsubscribes/
   method: get
+  operationId: getUnsubscribes
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1600,6 +1782,59 @@ operations:
     audit: none
 - path: /unsubs/export
   method: get
+  operationId: getUnsubsExport
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /unsubscribes/john.doe@domain.com
+  method: get
+  operationId: getUnsubscribesJohnDoe@domainCom
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /unsubscribes/john.doe@domain.com
+  method: post
+  operationId: postUnsubscribesJohnDoe@domainCom
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /unsubscribes/john.doe@domain.com
+  method: delete
+  operationId: deleteUnsubscribesJohnDoe@domainCom
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /unsubscribes
+  method: get
+  operationId: getUnsubscribes
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1609,6 +1844,7 @@ operations:
     audit: none
 - path: /v2/unsubscribes/variables
   method: get
+  operationId: getV2UnsubscribesVariables
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1618,6 +1854,7 @@ operations:
     audit: none
 - path: /v2/unsubscribes/variables
   method: post
+  operationId: postV2UnsubscribesVariables
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1633,6 +1870,7 @@ operations:
     audit: required
 - path: /v2/unsubscribes/variables/{value}
   method: get
+  operationId: getV2UnsubscribesVariablesByValue
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1642,6 +1880,7 @@ operations:
     audit: none
 - path: /v2/unsubscribes/variables/{value}
   method: post
+  operationId: postV2UnsubscribesVariablesByValue
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1657,6 +1896,7 @@ operations:
     audit: required
 - path: /v2/unsubscribes/variables/{value}
   method: delete
+  operationId: deleteV2UnsubscribesVariablesByValue
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1672,6 +1912,7 @@ operations:
     audit: required
 - path: /v2/unsubscribes/contacts/{contactId}
   method: get
+  operationId: getV2UnsubscribesContactsByContactId
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1681,6 +1922,7 @@ operations:
     audit: none
 - path: /v2/unsubscribes/contacts/{contactId}
   method: post
+  operationId: postV2UnsubscribesContactsByContactId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1696,6 +1938,7 @@ operations:
     audit: required
 - path: /v2/unsubscribes/contacts/{contactId}
   method: delete
+  operationId: deleteV2UnsubscribesContactsByContactId
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1711,6 +1954,7 @@ operations:
     audit: required
 - path: /v2/unsubscribes/exports/variables
   method: get
+  operationId: getV2UnsubscribesExportsVariables
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1720,6 +1964,7 @@ operations:
     audit: none
 - path: /v2/unsubscribes/exports/contacts
   method: get
+  operationId: getV2UnsubscribesExportsContacts
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1729,6 +1974,7 @@ operations:
     audit: none
 - path: /unsubscribes/{email}
   method: get
+  operationId: getUnsubscribesByEmail
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1738,6 +1984,7 @@ operations:
     audit: none
 - path: /unsubscribes/{email}
   method: post
+  operationId: postUnsubscribesByEmail
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1753,6 +2000,7 @@ operations:
     audit: required
 - path: /unsubscribes/{email}
   method: delete
+  operationId: deleteUnsubscribesByEmail
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1768,6 +2016,7 @@ operations:
     audit: required
 - path: /users/{userId}
   method: get
+  operationId: getUsersByUserId
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1777,6 +2026,7 @@ operations:
     audit: none
 - path: /user/channels
   method: get
+  operationId: getUserChannels
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1786,6 +2036,7 @@ operations:
     audit: none
 - path: /hooks
   method: get
+  operationId: getHooks
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1795,6 +2046,7 @@ operations:
     audit: none
 - path: /hooks
   method: post
+  operationId: postHooks
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -1810,6 +2062,7 @@ operations:
     audit: required
 - path: /hooks/{hookId}
   method: delete
+  operationId: deleteHooksByHookId
   x-agentic-access:
     action-class: acting
     consequence: write
