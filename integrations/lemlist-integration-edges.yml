@@ -1,0 +1,910 @@
+generated: '2026-10-12'
+method: searched
+source:
+- https://zapier.com/apps/lemlist/integrations
+- https://n8n.io/integrations/lemlist/
+- https://composio.dev/toolkits/lemlist
+checked:
+- https://composio.dev/toolkits/lemlist
+- https://monid.ai/tools/lemlist
+- https://n8n.io/integrations/lemlist/
+- https://zapier.com/apps/lemlist/integrations
+summary: null
+marketplace_apps:
+- marketplace: zapier
+  channel: ipaas-listing
+  app: lemlist
+  url: https://zapier.com/apps/lemlist/integrations
+  external_url: https://lemlist.com/
+  partner_tier: GOLD
+  triggers:
+  - key: activity
+    label: New Activity
+  - key: unsubscribeList
+    label: Unsubscribed Recipient
+  actions:
+  - key: enrich
+    label: Enrich Lead
+  - key: findEmail
+    label: Find Email
+  - key: findPhone
+    label: Find Phone
+  - key: interestedLeadAllCampaigns
+    label: Mark a Lead From All Campaigns as Interested
+  - key: interestedLeadCampaign
+    label: Mark a Lead From One Campaign as Interested
+  - key: leadCreate
+    label: Add Lead to Campaign
+  - key: notInterestedLeadAllCampaigns
+    label: Mark a Lead From All Campaigns as Not Interested
+  - key: notInterestedLeadCampaign
+    label: Mark a Lead From One Campaign as Not Interested
+  - key: pauseLeadAllCampaigns
+    label: Pause Lead From All or Specific Campaigns
+  - key: removeLeadCampaign
+    label: Remove Lead From Campaign
+  - key: removeLeadUnsubscribe
+    label: Remove Lead From Unsubscribe
+  - key: startLeadAllCampaigns
+    label: Resume Lead From All or Specific Campaigns
+  - key: stopLeadCampaign
+    label: Unsubscribe a Lead
+  - key: unsubscribeCreate
+    label: Add Recipient to Unsubscribe List
+  - key: updateLeadCampaign
+    label: Update Lead From Campaign
+  - key: verifyEmail
+    label: Verify Email
+  searches:
+  - key: leadSearch
+    label: Search Lead
+- marketplace: n8n
+  channel: open-source-node
+  app: lemlist
+  url: https://n8n.io/integrations/lemlist/
+  identity: title
+  pair_pages: 390
+  pairs:
+  - lets-enhance
+  - libraria
+  - lighthouse
+  - lime-go
+  - line
+  - linear
+  - lingvanex
+  - linkedin
+  - linkish
+  - linode
+  - liveagent
+  - localazy
+  - loginradius
+  - lokalise
+  - lonescale
+  - lucidchart
+  - magento-2
+  - mailcheck
+  - mailchimp
+  - mailerlite
+  - mailersend
+  - mailgun
+  - mailify
+  - mailjet
+  - mailmodo
+  - malcore
+  - mandrill
+  - marcom-robot
+  - marketing-master-io
+  - marketplacer
+  - marketstack
+  - mastodon
+  - matrix
+  - mattermost
+  - mautic
+  - mav
+  - maverick
+  - medium
+  - mem
+  - messagebird
+  - metabase
+  - metatextai-inference-api
+  - mews
+  - microsoft-azure-monitor
+  - microsoft-dynamics-365-business-central-api
+  - microsoft-dynamics-crm
+  - microsoft-entra-id
+  - microsoft-entra-id-azure-active-directory
+  - microsoft-excel
+  - microsoft-graph-security
+  - microsoft-onedrive
+  - microsoft-outlook
+  - microsoft-sharepoint
+  - microsoft-sql
+  - microsoft-teams
+  - microsoft-teams-admin
+  - microsoft-to-do
+  - miestro
+  - mindee
+  - miro
+  - misp
+  - missive
+  - mist
+  - mistral-ai
+  - mixpanel
+  - mocean
+  - mondaycom
+  - mongodb
+  - monica-crm
+  - moonclerk
+  - moonmail
+  - morph
+  - mqtt
+  - msg91
+  - mux
+  - mx-toolbox
+  - my-askai
+  - myphoner
+  - mysql
+  - nanonets-ocr
+  - nasa
+  - ncscale
+  - netlify
+  - nextcloud
+  - nightfallai
+  - ninox
+  - nmkr
+  - nocodb
+  - notion
+  - nozbe-teams
+  - npm
+  - nuclia
+  - nusii-proposals
+  - nyckel
+  - nyota
+  - occasion
+  - ocrspace
+  - odoo
+  - offalerts
+  - okta
+  - omeda
+  - omniconvert
+  - omnimind
+  - on2air
+  - one-ai
+  - one-simple-api
+  - onfleet
+  - openai
+  - opencti
+  - openthesaurus
+  - openweathermap
+  - opn-formerly-omise
+  - oracle-database
+  - orbit
+  - order-desk
+  - ortto
+  - oura
+  - paddle
+  - pagerduty
+  - paperform
+  - papyrs
+  - parsehub
+  - parseprompt
+  - passcreator
+  - passslot
+  - patreon
+  - paymo
+  - paypal
+  - peekalink
+  - perplexity
+  - persio
+  - personal-ai
+  - phantombuster
+  - philips-hue
+  - phrase
+  - pinata
+  - pinboard
+  - pinterest
+  - pipedrive
+  - pipefy
+  - pirate-weather
+  - pitchly
+  - pivotal-tracker
+  - planview-leankit
+  - planyo-online-booking
+  - platformly
+  - plecto
+  - plivo
+  - postbin
+  - postgres
+  - posthog
+  - practitest
+  - predisai
+  - prodia
+  - product-hunt
+  - profitwell
+  - project-bubble-proprofs-project
+  - prompthub
+  - prospe-ai
+  - pushbullet
+  - pushcut
+  - pusher
+  - pushover
+  - qradar
+  - qualaroo
+  - qualys
+  - quentn
+  - questdb
+  - quick-base
+  - quickbooks-online
+  - quickchart
+  - quintadb
+  - rabbitmq
+  - radar
+  - raindrop
+  - rapid7-insightvm
+  - raven-tools
+  - rawg-video-games-database
+  - read-ai
+  - realphonevalidation
+  - recharge
+  - recorded-future
+  - redash
+  - reddit
+  - redis
+  - relevance-ai
+  - relink-url-shortener
+  - relysia
+  - replyio
+  - retable
+  - reverse-contact
+  - rewardful
+  - ritekit
+  - roboflow
+  - robolytix
+  - roboresponseai
+  - rocketchat
+  - rollbar
+  - rootly
+  - route4me
+  - rundeck
+  - s3
+  - sales-simplify
+  - salesforce
+  - salesmaa
+  - salesmate
+  - salesmsg
+  - salesrocks
+  - samsung-smartthings
+  - scrape-itcloud
+  - scrapeninja
+  - seamless-ai
+  - search-and-save
+  - seatable
+  - securityscorecard
+  - segment
+  - sekoia
+  - sellix
+  - sembly-ai
+  - sendgrid
+  - sendy
+  - sentryio
+  - servicenow
+  - sharly-ai
+  - shiphero
+  - shipstation
+  - shopify
+  - shortio
+  - shuffler
+  - sierra-interactive
+  - sifter
+  - signaturit
+  - signl4
+  - signrequest
+  - simpleem
+  - simplehash
+  - simplekpi
+  - simplelocalize
+  - simplero
+  - simpletexting
+  - sitecreatorio
+  - sitespeakai
+  - slack
+  - smaily
+  - smartreach
+  - smartsuite
+  - sms-it
+  - sms-magic
+  - sms77
+  - snapdocs
+  - snatchbot
+  - snipcart
+  - snowflake
+  - solve-data
+  - specter
+  - splunk
+  - spondyr
+  - spontit
+  - sportsdata
+  - spotify
+  - spydra
+  - sslmate-cert-spotter-api
+  - stackby
+  - stammerai
+  - starton
+  - statuscake
+  - storyblok
+  - strapi
+  - strava
+  - stripe
+  - studio-by-ai21-labs
+  - suitedash
+  - supabase
+  - supernormal
+  - superpowered
+  - supportivekoala
+  - survicate
+  - swagup
+  - switchboard
+  - syncly
+  - syncromsp
+  - synthesia
+  - taiga
+  - talentlms
+  - talknotes
+  - tapfiliate
+  - td-ameritrade
+  - teachable
+  - team-up
+  - teamdeck
+  - teamgate
+  - teknoir
+  - telegram
+  - testmonitor
+  - textcortex-ai
+  - textgain
+  - textkit
+  - textmagic
+  - thankster
+  - the-customer-factor
+  - the-leap
+  - thehive
+  - thehive-5
+  - thoughtfulgpt
+  - thrivecart
+  - tidb-cloud
+  - tierion
+  - tilda
+  - timescaledb
+  - timetonic
+  - tinyurl
+  - tisane-labs
+  - todoist
+  - token-metrics
+  - toket
+  - totango
+  - trackvia
+  - transifex
+  - travisci
+  - trellix-epo
+  - trello
+  - trengo
+  - trevorio
+  - turbohire
+  - tuskr
+  - tuulio
+  - twake
+  - twilio
+  - twist
+  - twitter
+  - unbounce
+  - unisender
+  - unleashed-software
+  - upkeep
+  - uplead
+  - uproc
+  - uptimerobot
+  - uptimetoolbox
+  - urlscanio
+  - uservoice
+  - venafi-tls-protect-cloud
+  - venafi-tls-protect-datacenter
+  - venly
+  - verifalia
+  - vero
+  - vimeo
+  - virustotal
+  - vivifyscrum
+  - voicit
+  - vonage
+  - vowel
+  - watchsignals
+  - waveline-extract
+  - webex-by-cisco
+  - webflow
+  - webscraperio
+  - wekan
+  - whal3s
+  - whatconverts
+  - whatsapp-business-cloud
+  - wise
+  - wizychat
+  - wonderchat
+  - wondercraft
+  - woocommerce
+  - woodpeckerco
+  - wordpress
+  - workast
+  - workboard
+  - woxo
+  - writesonic
+  - wubook-ratechecker
+  - xero
+  - xtractly
+  - ybug
+  - ycode
+  - yodiz
+  - yourls
+  - youtube
+  - zabbix
+  - zammad
+  - zendesk
+  - zenrows
+  - zoho-books
+  - zoho-crm
+  - zoho-desk
+  - zonka-feedback
+  - zoom
+  - zscaler-zia
+  - zulip
+- marketplace: composio
+  channel: agent-gateway
+  app: lemlist
+  url: https://composio.dev/toolkits/lemlist
+  identity: action-prefix
+  actions:
+  - key: LEMLIST_CREATE_COMPANY_NOTE
+  - key: LEMLIST_DELETE_DELETE_SCHEDULE
+  - key: LEMLIST_DELETE_DELETE_UNSUBSCRIBE_EMAIL
+  - key: LEMLIST_DELETE_UNSUBSCRIBE_LEAD_FROM_CAMPAIGN
+  - key: LEMLIST_GET_ALL_WEBHOOKS
+  - key: LEMLIST_GET_CAMPAIGN_BY_ID
+  - key: LEMLIST_GET_CAMPAIGN_EXPORT_START
+  - key: LEMLIST_GET_CAMPAIGN_EXPORT_STATUS
+  - key: LEMLIST_GET_CAMPAIGN_SEQUENCES
+  - key: LEMLIST_GET_CAMPAIGN_STATS
+  - key: LEMLIST_GET_COMPANIES_SCHEMA
+  - key: LEMLIST_GET_CONTACT_MESSAGES
+  - key: LEMLIST_GET_DATABASE_FILTERS
+  - key: LEMLIST_GET_EXPORT_CAMPAIGN_LEADS
+  - key: LEMLIST_GET_EXPORT_UNSUBSCRIBES
+  - key: LEMLIST_GET_GET_UNSUBSCRIBE_EMAIL
+  - key: LEMLIST_GET_LABEL
+  - key: LEMLIST_GET_LIST_CAMPAIGNS
+  - key: LEMLIST_GET_LIST_TASKS
+  - key: LEMLIST_GET_LIST_TEAM_SENDERS
+  - key: LEMLIST_GET_LIST_WATCHLIST_SIGNALS
+  - key: LEMLIST_GET_PEOPLE_SCHEMA
+  - key: LEMLIST_GET_RETRIEVE_ACTIVITIES
+  - key: LEMLIST_GET_RETRIEVE_LEAD_BY_EMAIL
+  - key: LEMLIST_GET_RETRIEVE_UNSUBSCRIBES
+  - key: LEMLIST_GET_TEAM_CREDITS
+  - key: LEMLIST_GET_TEAM_INFO
+  - key: LEMLIST_GET_USER
+  - key: LEMLIST_GET_USER_INFO
+  - key: LEMLIST_LIST_COMPANIES
+  - key: LEMLIST_LIST_COMPANY_NOTES
+  - key: LEMLIST_LIST_LABELS
+  - key: LEMLIST_PATCH_MARK_LEAD_AS_NOT_INTERESTED_IN_CAMPAIGN
+  - key: LEMLIST_PATCH_UPDATE_CAMPAIGN
+  - key: LEMLIST_PATCH_UPDATE_SCHEDULE
+  - key: LEMLIST_PATCH_UPDATE_SEQUENCE_STEP
+  - key: LEMLIST_POST_ADD_STEP_TO_SEQUENCE
+  - key: LEMLIST_POST_ADD_UNSUBSCRIBE_EMAIL_DOMAIN
+  - key: LEMLIST_POST_ADD_VARIABLES_TO_LEAD
+  - key: LEMLIST_POST_ASSOCIATE_SCHEDULE_WITH_CAMPAIGN
+  - key: LEMLIST_POST_CREATE_CAMPAIGN
+  - key: LEMLIST_POST_CREATE_LABEL
+  - key: LEMLIST_POST_CREATE_LEAD_IN_CAMPAIGN
+  - key: LEMLIST_POST_CREATE_SCHEDULE
+  - key: LEMLIST_POST_CREATE_TASK
+  - key: LEMLIST_POST_IGNORE_TASKS
+  - key: LEMLIST_POST_MARK_LEAD_AS_INTERESTED
+  - key: LEMLIST_POST_MARK_LEAD_AS_INTERESTED_IN_CAMPAIGN
+  - key: LEMLIST_POST_MARK_LEAD_AS_NOT_INTERESTED
+  - key: LEMLIST_POST_PAUSE_CAMPAIGN
+  - key: LEMLIST_POST_PAUSE_LEAD
+  - key: LEMLIST_SEARCH_COMPANIES_DATABASE
+  - key: LEMLIST_SEARCH_PEOPLE_DATABASE
+  - key: LEMLIST_UPDATE_TASK
+edges:
+- partner_name: HubSpot
+  partner: hubspot
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/hubspot
+  direction: third-party
+  category: Marketing Automation
+  partner_url: http://www.hubspot.com/
+- partner_name: Pipedrive
+  partner: pipedrive
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/pipedrive
+  direction: third-party
+  category: CRM (Customer Relationship Management)
+  partner_url: https://pipedrive.com/
+- partner_name: Airtable
+  partner: airtable
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/airtable
+  direction: third-party
+  category: Databases
+  partner_url: https://airtable.com/
+- partner_name: Slack
+  partner: slack
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/slack
+  direction: third-party
+  category: Team Chat
+  partner_url: https://slack.com/
+- partner_name: LeadConnector
+  partner: null
+  partner_match: null
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/leadconnector
+  direction: third-party
+  category: Marketing Automation
+  partner_url: https://www.leadconnectorhq.com/
+- partner_name: monday.com
+  partner: null
+  partner_match: null
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/monday
+  direction: third-party
+  category: Project Management
+  partner_url: https://monday.com/
+- partner_name: Attio
+  partner: attio
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/attio
+  direction: third-party
+  category: CRM (Customer Relationship Management)
+  partner_url: https://attio.com/
+- partner_name: Close
+  partner: close
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/close
+  direction: third-party
+  category: CRM (Customer Relationship Management)
+  partner_url: https://www.close.com/?utm_source=Partner&utm_medium=Integration_Listing&utm_campaign=2025_Partnerships&utm_content=Home
+- partner_name: Notion
+  partner: notion
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/notion
+  direction: third-party
+  category: Task Management
+  partner_url: https://www.notion.so/
+- partner_name: Typeform
+  partner: typeform
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/typeform
+  direction: third-party
+  category: Forms & Surveys
+  partner_url: https://www.typeform.com/signup?utm_medium=referral&utm_source=zapier&utm_campaign=zapier_integration&utm_content=marketplace
+- partner_name: Affinity
+  partner: affinity
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/affinity
+  direction: third-party
+  category: CRM (Customer Relationship Management)
+  partner_url: https://zapier.com/affinity.co
+- partner_name: Google Sheets
+  partner: google-sheets
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/google-sheets
+  direction: third-party
+  category: Google
+  partner_url: http://sheets.google.com/
+- partner_name: PhantomBuster
+  partner: null
+  partner_match: null
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/phantombuster
+  direction: third-party
+  category: Marketing Automation
+  partner_url: https://phantombuster.com/
+- partner_name: Apollo
+  partner: apollo
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/apollo
+  direction: third-party
+  category: Sales & CRM
+  partner_url: https://www.apollo.io/
+- partner_name: Calendly
+  partner: calendly
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/calendly
+  direction: third-party
+  category: Scheduling & Booking
+  partner_url: https://calendly.com/?utm_medium=partner&utm_source=zapier&utm_campaign=main_partner_page&utm_content=main_inbound_link
+- partner_name: Gmail
+  partner: gmail
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/gmail
+  direction: third-party
+  category: Email
+  partner_url: https://mail.google.com/
+- partner_name: ActiveCampaign
+  partner: activecampaign
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/activecampaign
+  direction: third-party
+  category: Marketing Automation
+  partner_url: https://www.activecampaign.com/?utm_source=unpaid_syndication_website&utm_medium=referral&utm_campaign=zapier_listing
+- partner_name: ClickUp
+  partner: clickup
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/clickup
+  direction: third-party
+  category: Project Management
+  partner_url: https://clickup.com/zapier
+- partner_name: Zendesk Sell
+  partner: zendesk-sell
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/zendesk-sell
+  direction: third-party
+  category: CRM (Customer Relationship Management)
+  partner_url: https://getbase.com/
+- partner_name: Giphy
+  partner: giphy
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/giphy
+  direction: third-party
+  category: Images & Design
+  partner_url: http://www.giphy.com/
+- partner_name: Instantly
+  partner: instantly-ai
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/instantly
+  direction: third-party
+  category: Email
+  partner_url: https://instantly.ai/
+- partner_name: NetHunt CRM
+  partner: null
+  partner_match: null
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/nethunt-crm
+  direction: third-party
+  category: CRM (Customer Relationship Management)
+  partner_url: https://nethunt.com/
+- partner_name: Brevo
+  partner: brevo
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/brevo
+  direction: third-party
+  category: Email Newsletters
+  partner_url: https://www.sendinblue.com/?utm_medium=plugin&utm_source=zapier
+- partner_name: Mailchimp
+  partner: mailchimp
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/mailchimp
+  direction: third-party
+  category: Marketing Automation
+  partner_url: https://mailchimp.com/
+- partner_name: Seamless
+  partner: seamless-ai
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/seamless
+  direction: third-party
+  category: AI Sales Tools
+  partner_url: https://seamless.ai/customers/education/articles/zapier-connection-guide
+- partner_name: Sellsy
+  partner: null
+  partner_match: null
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/sellsy
+  direction: third-party
+  category: Sales & CRM
+  partner_url: https://go.sellsy.com/demande-de-rendez-vous?utm_campaign=zapier
+- partner_name: Act!
+  partner: act
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/act-premium
+  direction: third-party
+  category: CRM (Customer Relationship Management)
+  partner_url: http://www.act.com/
+- partner_name: Odoo CRM
+  partner: odoo
+  partner_match: domain
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/odoo
+  direction: third-party
+  category: CRM (Customer Relationship Management)
+  partner_url: https://www.odoo.com/
+- partner_name: LinkedIn
+  partner: linkedin
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/linkedin
+  direction: third-party
+  category: Microsoft
+  partner_url: http://www.linkedin.com/
+- partner_name: Microsoft Outlook
+  partner: microsoft-outlook
+  partner_match: name-exact
+  partner_candidate: null
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/microsoft-outlook
+  direction: third-party
+  category: Calendar
+  partner_url: https://outlook.live.com/
+templates:
+- title: Send channel messages in Slack for new lemlist activities
+  url: https://zapier.com/apps/lemlist/integrations/slack/340519/send-channel-messages-in-slack-for-new-lemlist-activities
+  apps:
+  - lemlist
+  - slack
+- title: Add new lemlist email activity to Google Sheets as rows
+  url: https://zapier.com/apps/google-sheets/integrations/lemlist/24610/add-new-lemlist-email-activity-to-google-sheets-as-rows
+  apps:
+  - lemlist
+  - google-sheets
+- title: Create HubSpot contacts from new lemlist activities
+  url: https://zapier.com/apps/hubspot/integrations/lemlist/1240979/create-hubspot-contacts-from-new-lemlist-activities
+  apps:
+  - lemlist
+  - hubspot
+- title: Add new lemlist activities to Google Sheets as multiple spreadsheet rows
+  url: https://zapier.com/apps/google-sheets/integrations/lemlist/1461273/add-new-lemlist-activities-to-google-sheets-as-multiple-spreadsheet-rows
+  apps:
+  - lemlist
+  - google-sheets
+- title: Add new contacts in HubSpot to lemlist campaigns as leads automatically
+  url: https://zapier.com/apps/hubspot/integrations/lemlist/1305872/add-new-contacts-in-hubspot-to-lemlist-campaigns-as-leads-automatically
+  apps:
+  - hubspot
+  - lemlist
+- title: Add new Notion database items to lemlist campaigns as leads
+  url: https://zapier.com/apps/lemlist/integrations/notion/1308891/add-new-notion-database-items-to-lemlist-campaigns-as-leads
+  apps:
+  - notion
+  - lemlist
+- title: Add new Airtable records to lemlist campaigns as leads
+  url: https://zapier.com/apps/airtable/integrations/lemlist/1210974/add-new-airtable-records-to-lemlist-campaigns-as-leads
+  apps:
+  - airtable
+  - lemlist
+- title: Add new lemlist email activity to Pipedrive as people
+  url: https://zapier.com/apps/lemlist/integrations/pipedrive/24616/add-new-lemlist-email-activity-to-pipedrive-as-people
+  apps:
+  - lemlist
+  - pipedrive
+- title: Create noCRM.io leads from new lemlist activities
+  url: https://zapier.com/apps/lemlist/integrations/nocrm-io/1237286/create-nocrmio-leads-from-new-lemlist-activities
+  apps:
+  - lemlist
+  - nocrm-io
+- title: Add new leads from Facebook Lead Ads to lemlist
+  url: https://zapier.com/apps/facebook-lead-ads/integrations/lemlist/24633/add-new-leads-from-facebook-lead-ads-to-lemlist
+  apps:
+  - facebook-lead-ads
+  - lemlist
+- title: Create or update LeadConnector contacts for new lemlist activities
+  url: https://zapier.com/apps/leadconnector/integrations/lemlist/1218604/create-or-update-leadconnector-contacts-for-new-lemlist-activities
+  apps:
+  - lemlist
+  - leadconnector
+- title: Update Brevo contacts when recipients unsubscribe in lemlist
+  url: https://zapier.com/apps/brevo/integrations/lemlist/1721694/update-brevo-contacts-when-recipients-unsubscribe-in-lemlist
+  apps:
+  - lemlist
+  - brevo
+template_total: 509
