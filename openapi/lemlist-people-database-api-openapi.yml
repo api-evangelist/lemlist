@@ -1074,26 +1074,6 @@ paths:
     - url: https://api.lemlist.com/api
 components:
   schemas:
-    PersonaError:
-      type: object
-      description: Error envelope returned by the persona endpoints.
-      properties:
-        error:
-          type: string
-          description: Human-readable explanation of the failure
-        code:
-          type: string
-          description: Machine-readable error code, stable across releases
-    PersonaCreateResponse:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            _id:
-              type: string
-              description: Id of the created persona
-              example: pdp_ExAmPlE1234567890a
     PersonaDeleteResponse:
       type: object
       properties:
@@ -1108,6 +1088,27 @@ components:
               type: boolean
               description: Always `true` when the persona was removed
               example: true
+    PersonaCreateResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            _id:
+              type: string
+              description: Id of the created persona
+              example: pdp_ExAmPlE1234567890a
+    DatabaseFilter:
+      type: object
+      description: Saved search criteria for querying the People database.
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        criteria:
+          type: object
+          additionalProperties: true
     PersonaFilter:
       type: object
       description: 'One People Database filter of a persona. `in` includes matching values, `out` excludes them. There is no `type` property: it is derived from `filterId` server-side.'
@@ -1134,17 +1135,6 @@ components:
         exactMatch:
           type: boolean
           description: Exact-match toggle, for the text filters that support it
-    DatabaseFilter:
-      type: object
-      description: Saved search criteria for querying the People database.
-      properties:
-        _id:
-          type: string
-        name:
-          type: string
-        criteria:
-          type: object
-          additionalProperties: true
     CompaniesSchema:
       type: object
       description: A company record from lemlist's Companies database.
@@ -1248,48 +1238,6 @@ components:
         _id:
           type: string
           description: Internal document ID
-    PersonaListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          description: The team's personas, most recently created first
-          items:
-            $ref: '#/components/schemas/Persona'
-    Persona:
-      type: object
-      description: 'A People Database persona: a named, reusable set of People Database filters saved by your team. A persona id can be referenced elsewhere in the API, for example through the `persona` filter of a Signal Agent.'
-      properties:
-        _id:
-          type: string
-          description: Unique persona identifier
-          example: pdp_ExAmPlE1234567890a
-        name:
-          type: string
-          description: Display name. Unique within your team.
-          example: SaaS founders
-        mode:
-          type: string
-          description: Search mode the filters target
-          enum:
-          - leads
-          - companies
-          example: leads
-        filters:
-          type: array
-          description: People Database filters defining the persona
-          items:
-            $ref: '#/components/schemas/PersonaFilter'
-        createdAt:
-          type: string
-          format: date-time
-          description: Date the persona was created
-          example: '2026-07-31T09:12:00.000Z'
-        updatedAt:
-          type: string
-          format: date-time
-          description: Date of the last modification
-          example: '2026-07-31T09:12:00.000Z'
     PeopleSchema:
       type: object
       description: A person record from lemlist's People database.
@@ -1483,6 +1431,58 @@ components:
           type: number
         _id:
           type: string
+    PersonaListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: The team's personas, most recently created first
+          items:
+            $ref: '#/components/schemas/Persona'
+    Persona:
+      type: object
+      description: 'A People Database persona: a named, reusable set of People Database filters saved by your team. A persona id can be referenced elsewhere in the API, for example through the `persona` filter of a Signal Agent.'
+      properties:
+        _id:
+          type: string
+          description: Unique persona identifier
+          example: pdp_ExAmPlE1234567890a
+        name:
+          type: string
+          description: Display name. Unique within your team.
+          example: SaaS founders
+        mode:
+          type: string
+          description: Search mode the filters target
+          enum:
+          - leads
+          - companies
+          example: leads
+        filters:
+          type: array
+          description: People Database filters defining the persona
+          items:
+            $ref: '#/components/schemas/PersonaFilter'
+        createdAt:
+          type: string
+          format: date-time
+          description: Date the persona was created
+          example: '2026-07-31T09:12:00.000Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date of the last modification
+          example: '2026-07-31T09:12:00.000Z'
+    PersonaError:
+      type: object
+      description: Error envelope returned by the persona endpoints.
+      properties:
+        error:
+          type: string
+          description: Human-readable explanation of the failure
+        code:
+          type: string
+          description: Machine-readable error code, stable across releases
   securitySchemes:
     basicAuth:
       type: http

@@ -630,6 +630,31 @@ paths:
     - url: https://api.lemlist.com/api
 components:
   schemas:
+    ScheduleListResponse:
+      type: object
+      description: Paginated response containing multiple schedules.
+      properties:
+        schedules:
+          type: array
+          description: Array of schedule objects
+          items:
+            $ref: '#/components/schemas/Schedule'
+        pagination:
+          type: object
+          description: Pagination information
+          properties:
+            totalRecords:
+              type: integer
+              description: Total number of schedules across all pages
+            currentPage:
+              type: integer
+              description: Current page number
+            nextPage:
+              type: integer
+              description: Next page number (null if on last page)
+            totalPage:
+              type: integer
+              description: Total number of pages
     Schedule:
       type: object
       description: Sending time windows defining when campaigns can send messages (days and hours).
@@ -681,31 +706,6 @@ components:
         deletedBy:
           type: string
           description: Unique identifier of the user who deleted this schedule (only present if deleted)
-    ScheduleListResponse:
-      type: object
-      description: Paginated response containing multiple schedules.
-      properties:
-        schedules:
-          type: array
-          description: Array of schedule objects
-          items:
-            $ref: '#/components/schemas/Schedule'
-        pagination:
-          type: object
-          description: Pagination information
-          properties:
-            totalRecords:
-              type: integer
-              description: Total number of schedules across all pages
-            currentPage:
-              type: integer
-              description: Current page number
-            nextPage:
-              type: integer
-              description: Next page number (null if on last page)
-            totalPage:
-              type: integer
-              description: Total number of pages
   securitySchemes:
     basicAuth:
       type: http

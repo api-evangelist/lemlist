@@ -846,6 +846,29 @@ paths:
     - url: https://api.lemlist.com/api
 components:
   schemas:
+    UnsubscribedVariable:
+      type: object
+      description: A variable (email, domain, LinkedIn URL, or phone number) that has been unsubscribed.
+      properties:
+        _id:
+          type: string
+          description: Unique identifier for the unsubscribe entry
+        value:
+          type: string
+          description: The unsubscribed variable (email, domain, LinkedIn URL, or phone number)
+        source:
+          type: string
+          description: Origin of the unsubscription
+          enum:
+          - api
+          - bounced
+          - lead
+          - user
+          - abuse
+        createdAt:
+          type: string
+          format: date-time
+          description: When the variable was unsubscribed
     ContactSubscriptionStatus:
       type: object
       description: Subscription status of a contact.
@@ -884,29 +907,6 @@ components:
           - campaign
           - team
           - global
-    UnsubscribedVariable:
-      type: object
-      description: A variable (email, domain, LinkedIn URL, or phone number) that has been unsubscribed.
-      properties:
-        _id:
-          type: string
-          description: Unique identifier for the unsubscribe entry
-        value:
-          type: string
-          description: The unsubscribed variable (email, domain, LinkedIn URL, or phone number)
-        source:
-          type: string
-          description: Origin of the unsubscription
-          enum:
-          - api
-          - bounced
-          - lead
-          - user
-          - abuse
-        createdAt:
-          type: string
-          format: date-time
-          description: When the variable was unsubscribed
   securitySchemes:
     basicAuth:
       type: http
