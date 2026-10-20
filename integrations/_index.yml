@@ -15,6 +15,7 @@
   evidence: https://zapier.com/apps/lemlist/integrations/slack/340519/send-channel-messages-in-slack-for-new-lemlist-activities
   template: https://zapier.com/apps/lemlist/integrations/slack/340519/send-channel-messages-in-slack-for-new-lemlist-activities
   source: template
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: lemlist-add-new-lemlist-email-activity-to-google-sheets-as-rows
@@ -29,6 +30,7 @@
   evidence: https://zapier.com/apps/google-sheets/integrations/lemlist/24610/add-new-lemlist-email-activity-to-google-sheets-as-rows
   template: https://zapier.com/apps/google-sheets/integrations/lemlist/24610/add-new-lemlist-email-activity-to-google-sheets-as-rows
   source: template
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: lemlist-create-hubspot-contacts-from-new-lemlist-activities
@@ -43,6 +45,7 @@
   evidence: https://zapier.com/apps/hubspot/integrations/lemlist/1240979/create-hubspot-contacts-from-new-lemlist-activities
   template: https://zapier.com/apps/hubspot/integrations/lemlist/1240979/create-hubspot-contacts-from-new-lemlist-activities
   source: template
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: lemlist-add-new-lemlist-activities-to-google-sheets-as-multiple-spreadsheet-rows
@@ -57,6 +60,7 @@
   evidence: https://zapier.com/apps/google-sheets/integrations/lemlist/1461273/add-new-lemlist-activities-to-google-sheets-as-multiple-spreadsheet-rows
   template: https://zapier.com/apps/google-sheets/integrations/lemlist/1461273/add-new-lemlist-activities-to-google-sheets-as-multiple-spreadsheet-rows
   source: template
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: lemlist-add-new-contacts-in-hubspot-to-lemlist-campaigns-as-leads-automatically
@@ -71,6 +75,7 @@
   evidence: https://zapier.com/apps/hubspot/integrations/lemlist/1305872/add-new-contacts-in-hubspot-to-lemlist-campaigns-as-leads-automatically
   template: https://zapier.com/apps/hubspot/integrations/lemlist/1305872/add-new-contacts-in-hubspot-to-lemlist-campaigns-as-leads-automatically
   source: template
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: lemlist-add-new-notion-database-items-to-lemlist-campaigns-as-leads
@@ -85,6 +90,7 @@
   evidence: https://zapier.com/apps/lemlist/integrations/notion/1308891/add-new-notion-database-items-to-lemlist-campaigns-as-leads
   template: https://zapier.com/apps/lemlist/integrations/notion/1308891/add-new-notion-database-items-to-lemlist-campaigns-as-leads
   source: template
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: lemlist-add-new-airtable-records-to-lemlist-campaigns-as-leads
@@ -99,6 +105,7 @@
   evidence: https://zapier.com/apps/airtable/integrations/lemlist/1210974/add-new-airtable-records-to-lemlist-campaigns-as-leads
   template: https://zapier.com/apps/airtable/integrations/lemlist/1210974/add-new-airtable-records-to-lemlist-campaigns-as-leads
   source: template
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: lemlist-add-new-lemlist-email-activity-to-pipedrive-as-people
@@ -113,6 +120,7 @@
   evidence: https://zapier.com/apps/lemlist/integrations/pipedrive/24616/add-new-lemlist-email-activity-to-pipedrive-as-people
   template: https://zapier.com/apps/lemlist/integrations/pipedrive/24616/add-new-lemlist-email-activity-to-pipedrive-as-people
   source: template
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: lemlist-create-or-update-leadconnector-contacts-for-new-lemlist-activities
@@ -126,6 +134,7 @@
   evidence: https://zapier.com/apps/leadconnector/integrations/lemlist/1218604/create-or-update-leadconnector-contacts-for-new-lemlist-activities
   template: https://zapier.com/apps/leadconnector/integrations/lemlist/1218604/create-or-update-leadconnector-contacts-for-new-lemlist-activities
   source: template
+  relationship: ipaas-bridge
   status: pending-partner-spec
   arazzo: null
 - slug: lemlist-update-brevo-contacts-when-recipients-unsubscribe-in-lemlist
@@ -140,266 +149,7 @@
   evidence: https://zapier.com/apps/brevo/integrations/lemlist/1721694/update-brevo-contacts-when-recipients-unsubscribe-in-lemlist
   template: https://zapier.com/apps/brevo/integrations/lemlist/1721694/update-brevo-contacts-when-recipients-unsubscribe-in-lemlist
   source: template
-  status: pending-generation
-  arazzo: null
-- slug: lemlist-monday-com
-  label: monday.com
-  partner_name: monday.com
-  category: Project Management
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/monday
-  source: edge
-  status: pending-partner-spec
-  arazzo: null
-- slug: lemlist-attio
-  label: Attio
-  partner: attio
-  partner_name: Attio
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/attio
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: lemlist-close
-  label: Close
-  partner: close
-  partner_name: Close
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/close
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: lemlist-typeform
-  label: Typeform
-  partner: typeform
-  partner_name: Typeform
-  category: Forms & Surveys
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/typeform
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: lemlist-affinity
-  label: Affinity
-  partner: affinity
-  partner_name: Affinity
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/affinity
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: lemlist-phantombuster
-  label: PhantomBuster
-  partner_name: PhantomBuster
-  category: Marketing Automation
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/phantombuster
-  source: edge
-  status: pending-partner-spec
-  arazzo: null
-- slug: lemlist-apollo
-  label: Apollo
-  partner: apollo
-  partner_name: Apollo
-  category: Sales & CRM
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/apollo
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: lemlist-calendly
-  label: Calendly
-  partner: calendly
-  partner_name: Calendly
-  category: Scheduling & Booking
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/calendly
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: lemlist-gmail
-  label: Gmail
-  partner: gmail
-  partner_name: Gmail
-  category: Email
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/gmail
-  source: edge
-  status: pending-partner-spec
-  arazzo: null
-- slug: lemlist-activecampaign
-  label: ActiveCampaign
-  partner: activecampaign
-  partner_name: ActiveCampaign
-  category: Marketing Automation
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/activecampaign
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: lemlist-clickup
-  label: ClickUp
-  partner: clickup
-  partner_name: ClickUp
-  category: Project Management
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/clickup
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: lemlist-zendesk-sell
-  label: Zendesk Sell
-  partner: zendesk-sell
-  partner_name: Zendesk Sell
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/zendesk-sell
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: lemlist-giphy
-  label: Giphy
-  partner: giphy
-  partner_name: Giphy
-  category: Images & Design
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/giphy
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: lemlist-instantly
-  label: Instantly
-  partner: instantly-ai
-  partner_name: Instantly
-  category: Email
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/instantly
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: lemlist-nethunt-crm
-  label: NetHunt CRM
-  partner_name: NetHunt CRM
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/nethunt-crm
-  source: edge
-  status: pending-partner-spec
-  arazzo: null
-- slug: lemlist-mailchimp
-  label: Mailchimp
-  partner: mailchimp
-  partner_name: Mailchimp
-  category: Marketing Automation
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/mailchimp
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: lemlist-seamless
-  label: Seamless
-  partner: seamless-ai
-  partner_name: Seamless
-  category: AI Sales Tools
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/seamless
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: lemlist-sellsy
-  label: Sellsy
-  partner_name: Sellsy
-  category: Sales & CRM
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/sellsy
-  source: edge
-  status: pending-partner-spec
-  arazzo: null
-- slug: lemlist-act
-  label: Act!
-  partner: act
-  partner_name: Act!
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/act-premium
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: lemlist-odoo-crm
-  label: Odoo CRM
-  partner: odoo
-  partner_name: Odoo CRM
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/odoo
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: lemlist-linkedin
-  label: LinkedIn
-  partner: linkedin
-  partner_name: LinkedIn
-  category: Microsoft
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/linkedin
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: lemlist-microsoft-outlook
-  label: Microsoft Outlook
-  partner: microsoft-outlook
-  partner_name: Microsoft Outlook
-  category: Calendar
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/lemlist/integrations/microsoft-outlook
-  source: edge
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: lemlist-a2a-protocol-own-agent-card
@@ -587,4 +337,287 @@
     sources: true
     builder: Pipedream repo (component)
   status: not-a-workflow
+  arazzo: null
+- slug: lemlist-monday-com
+  label: monday.com
+  partner: monday-com
+  partner_name: monday.com
+  category: Project Management
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/monday
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: lemlist-attio
+  label: Attio
+  partner: attio
+  partner_name: Attio
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/attio
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: lemlist-close
+  label: Close
+  partner: close
+  partner_name: Close
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/close
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: lemlist-typeform
+  label: Typeform
+  partner: typeform
+  partner_name: Typeform
+  category: Forms & Surveys
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/typeform
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: lemlist-affinity
+  label: Affinity
+  partner: affinity
+  partner_name: Affinity
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/affinity
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: lemlist-phantombuster
+  label: PhantomBuster
+  partner_name: PhantomBuster
+  category: Marketing Automation
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/phantombuster
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-partner-spec
+  arazzo: null
+- slug: lemlist-apollo
+  label: Apollo
+  partner: apollo-io
+  partner_name: Apollo
+  category: Sales & CRM
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/apollo
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: lemlist-calendly
+  label: Calendly
+  partner: calendly
+  partner_name: Calendly
+  category: Scheduling & Booking
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/calendly
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: lemlist-gmail
+  label: Gmail
+  partner: gmail
+  partner_name: Gmail
+  category: Email
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/gmail
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-partner-spec
+  arazzo: null
+- slug: lemlist-activecampaign
+  label: ActiveCampaign
+  partner: activecampaign
+  partner_name: ActiveCampaign
+  category: Marketing Automation
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/activecampaign
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: lemlist-clickup
+  label: ClickUp
+  partner: clickup
+  partner_name: ClickUp
+  category: Project Management
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/clickup
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: lemlist-zendesk-sell
+  label: Zendesk Sell
+  partner: zendesk-sell
+  partner_name: Zendesk Sell
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/zendesk-sell
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: lemlist-giphy
+  label: Giphy
+  partner: giphy
+  partner_name: Giphy
+  category: Images & Design
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/giphy
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: lemlist-instantly
+  label: Instantly
+  partner: instantly-ai
+  partner_name: Instantly
+  category: Email
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/instantly
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: lemlist-nethunt-crm
+  label: NetHunt CRM
+  partner_name: NetHunt CRM
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/nethunt-crm
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-partner-spec
+  arazzo: null
+- slug: lemlist-mailchimp
+  label: Mailchimp
+  partner: mailchimp
+  partner_name: Mailchimp
+  category: Marketing Automation
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/mailchimp
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: lemlist-seamless
+  label: Seamless
+  partner: seamless-ai
+  partner_name: Seamless
+  category: AI Sales Tools
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/seamless
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: lemlist-sellsy
+  label: Sellsy
+  partner_name: Sellsy
+  category: Sales & CRM
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/sellsy
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-partner-spec
+  arazzo: null
+- slug: lemlist-act
+  label: Act!
+  partner: act
+  partner_name: Act!
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/act-premium
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: lemlist-odoo-crm
+  label: Odoo CRM
+  partner: odoo
+  partner_name: Odoo CRM
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/odoo
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: lemlist-linkedin
+  label: LinkedIn
+  partner: linkedin-ads
+  partner_name: LinkedIn
+  category: Microsoft
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/linkedin
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: lemlist-microsoft-outlook
+  label: Microsoft Outlook
+  partner: microsoft-outlook
+  partner_name: Microsoft Outlook
+  category: Calendar
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/lemlist/integrations/microsoft-outlook
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
   arazzo: null
