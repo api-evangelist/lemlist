@@ -27,6 +27,7 @@ checked:
 - https://developer.salesforce.com/docs/atlas.en-us.packagingGuide.meta/packagingGuide/security_review_overview.htm
 - https://slack.com/marketplace
 - salesforce/integrations/salesforce-integration-edges.yml
+- pipedrive/integrations/pipedrive-integration-edges.yml
 summary: null
 marketplace_apps:
 - marketplace: zapier
@@ -769,6 +770,23 @@ edges:
   detected: '2026-10-21'
   detected_by: mirror-platform-listings.py
   category: salesProductivity
+- partner_name: Pipedrive (own)
+  partner: pipedrive
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.pipedrive.com/en/marketplace/app/lemlist/38e611cc51ab6b1c
+  mirror_of: pipedrive/integrations/pipedrive-integration-edges.yml
+  apps:
+  - lemlist
+  listing_count: 1
+  detected: '2026-10-22'
+  detected_by: mirror-platform-listings.py
+  category: Attract new leads
 templates:
 - title: Send channel messages in Slack for new lemlist activities
   url: https://zapier.com/apps/lemlist/integrations/slack/340519/send-channel-messages-in-slack-for-new-lemlist-activities
