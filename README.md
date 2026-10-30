@@ -1,4 +1,4 @@
-# lemlist (lemlist)
+# lemlist
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,61 +64,206 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-lemlist is a cold email outreach and sales engagement platform that helps sales teams build prospect lists, personalize multichannel campaigns across email and LinkedIn, and automate follow-ups to book more meetings. It includes a built-in B2B lead database, AI-generated personalization, and warm-up tools to keep deliverability healthy. The lemlist API enables developers to integrate lemlist with other tools and automate outreach workflows using API key authentication.
+lemlist is a sales engagement and cold outreach platform from lempire that helps sales teams build prospect lists, personalize multichannel campaigns across email, LinkedIn, phone, SMS and WhatsApp, and automate follow-ups to book more meetings. It includes a 650M+ record B2B lead database, credit-metered email and phone enrichment, Signal Agents that watch for buying triggers, a unified reply inbox, and lemwarm deliverability warm-up. The developer surface is unusually agent-forward for its category - a 143-operation REST API documented with a published OpenAPI, a hosted remote MCP server at app.lemlist.com/mcp with OAuth 2.1 and dynamic client registration, an official OpenAPI-generated CLI on npm, an llms.txt index, a published Agent Skill, and a 76-event webhook catalog.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/lemlist/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/lemlist/refs/heads/main/apis.yml)
+**Areas:** Email Outreach · Sales Engagement · Cold Email · Sales Automation · LinkedIn Outreach · Lead Generation · Data Enrichment · Deliverability · CRM · Multichannel Messaging · Webhook · MCP
 
-## Scope
+## lemlist on APIs.io
 
-- **Type:** Index
+Everything profiled for lemlist is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/lemlist/](https://apis.io/providers/lemlist/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (22)
 
-- Email Outreach
-- Sales Engagement
-- Cold Email
-- Sales Automation
-- LinkedIn Outreach
-- Lead Generation
+- [lemlist MCP Server](https://apis.io/apis/lemlist/mcp-server/) — lemlist's hosted remote Model Context Protocol server. An MCP client POSTs to https://app.lemlist.com/mcp and authenticates with OAuth 2.1 (authorization…
+- [lemlist Campaigns API](https://apis.io/apis/lemlist/lemlist-campaigns-api/) — Campaign CRUD and lifecycle - create, update, duplicate, start, pause, validation statutes, stats, reports and asynchronous exports.
+- [lemlist Sequences API](https://apis.io/apis/lemlist/lemlist-sequences-api/) — Campaign sequences, their steps, and A/B test variants on email steps.
+- [lemlist Leads API](https://apis.io/apis/lemlist/lemlist-leads-api/) — Leads inside campaigns - create with optional enrichment, update, pause, resume, mark interested, custom variables, CRM import and unsubscribe.
+- [lemlist People Database API](https://apis.io/apis/lemlist/lemlist-people-database-api/) — Search the lemlist B2B people and company database, list its filters, and manage saved personas.
+- [lemlist Enrich API](https://apis.io/apis/lemlist/lemlist-enrich-api/) — Asynchronous enrichment - find and verify emails, phone numbers and LinkedIn data, single or in bulk, then poll for the result. Credit-metered.
+- [lemlist Inbox API](https://apis.io/apis/lemlist/lemlist-inbox-api/) — The unified reply inbox - conversations, messages, drafts, labels and sending on email, LinkedIn and WhatsApp.
+- [lemlist Contacts API](https://apis.io/apis/lemlist/lemlist-contacts-api/) — CRM-side contacts, contact lists, list membership and exports.
+- [lemlist Companies API](https://apis.io/apis/lemlist/lemlist-companies-api/) — CRM-side companies and company notes.
+- [lemlist Signal Agents API](https://apis.io/apis/lemlist/lemlist-signal-agents-api/) — Signal Agents (watch lists) - create and configure watches, list the available signal types and filters, read detected signals, and push external signals.
+- [lemlist Webhooks API](https://apis.io/apis/lemlist/lemlist-webhooks-api/) — Webhook subscription management - list, create with an optional shared secret, and delete. 76 event types are documented.
+- [lemlist Unsubscribes API](https://apis.io/apis/lemlist/lemlist-unsubscribes-api/) — Suppression management - unsubscribe and re-subscribe contacts and variables, list and export the suppression set, and the legacy email/domain surface.
+- [lemlist Schedules API](https://apis.io/apis/lemlist/lemlist-schedules-api/) — Sending schedules - CRUD and association with campaigns.
+- [lemlist Tasks API](https://apis.io/apis/lemlist/lemlist-tasks-api/) — Manual tasks - list, create, update and ignore.
+- [lemlist Activities API](https://apis.io/apis/lemlist/lemlist-activities-api/) — The activity history feed, and deletion of call recordings and transcripts.
+- [lemlist Team API](https://apis.io/apis/lemlist/lemlist-team-api/) — Team-level endpoints - team information, senders, remaining credits and CRM users.
+- [lemlist Users API](https://apis.io/apis/lemlist/lemlist-users-api/) — User endpoints - user detail and the connected channels available to the authenticated user.
+- [lemlist Email Accounts API](https://apis.io/apis/lemlist/lemlist-email-accounts-api/) — Connect, test and disconnect custom SMTP/IMAP sending accounts.
+- [lemlist Lemwarm API](https://apis.io/apis/lemlist/lemlist-lemwarm-api/) — lemwarm mailbox warm-up - start, pause, and read or update warm-up settings per mailbox.
+- [lemlist Deliverability Alerts API](https://apis.io/apis/lemlist/lemlist-deliverability-alerts-api/) — Threshold alerts on deliverability metrics - create, read, update and delete.
+- [lemlist Fields API](https://apis.io/apis/lemlist/lemlist-fields-api/) — The custom field definitions available on leads, contacts and companies.
+- [lemlist Stats API](https://apis.io/apis/lemlist/lemlist-stats-api/) — The Stats API from lemlist — 2 operation(s) for stats.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2026-05-11
-- **Modified:** 2026-05-11
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### AsyncAPI (1)
 
-### lemlist REST API
+Event-driven and webhook contracts.
 
-REST API for managing campaigns, leads, sequences, teams, and outreach activities in lemlist. Authentication is via API key passed using HTTP Basic auth. The API supports integrating lemlist with CRMs and other tools and automating multichannel outreach workflows.
+- [Lemlist Webhooks](https://apis.io/asyncapis/lemlist/lemlist-webhooks/)
 
-- **Human URL:** [https://developer.lemlist.com](https://developer.lemlist.com)
-- **Base URL:** `https://api.lemlist.com/api`
+#### GraphQL (1)
 
-#### Tags
+GraphQL schemas.
 
-- Email Outreach
-- Sales Engagement
-- Cold Email
-- Sales Automation
+- [Moved to /providers/lemlist/](https://apis.io/graphqls/lemlist/lemlist-graphql/)
 
-#### Properties
+#### MCP servers (1)
 
-- [Documentation](https://developer.lemlist.com)
-- [Getting Started](https://developer.lemlist.com/api-reference/overview)
-- [Postman Collection](collections/lemlist.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/lemlist.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Model Context Protocol servers that expose the API to agents.
 
-## Common Properties
+- [lemlist](https://apis.io/servers/lemlist/lemlist/)
 
-- [LinkedIn](https://www.linkedin.com/company/lemlist)
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Lemlist Agentic Access](https://apis.io/agentic-access/lemlist/lemlist-agentic-access/)
+
+#### Examples (1)
+
+Example requests and responses.
+
+- [Lemlist Examples](https://apis.io/examples/lemlist/lemlist-examples/)
+
+#### Collections (4)
+
+Postman and Open Collection request collections.
+
+- [lemlist API](https://apis.io/collections/lemlist/open-lemlist/)
+- [lemlist Campaigns API](https://apis.io/collections/lemlist/open-lemlist-campaigns-api/)
+- [lemlist Campaigns Team API](https://apis.io/collections/lemlist/open-lemlist-team-api/)
+- [lemlist Campaigns Users API](https://apis.io/collections/lemlist/open-lemlist-users-api/)
+
+#### Overlays (22)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Lemlist Activities Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-activities-api-phrasing-overlay/)
+- [Lemlist Api Overlay](https://apis.io/overlays/lemlist/lemlist-api-overlay/)
+- [Lemlist Campaigns Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-campaigns-api-phrasing-overlay/)
+- [Lemlist Companies Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-companies-api-phrasing-overlay/)
+- [Lemlist Contacts Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-contacts-api-phrasing-overlay/)
+- [Lemlist Deliverability Alerts Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-deliverability-alerts-api-phrasing-overlay/)
+- [Lemlist Email Accounts Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-email-accounts-api-phrasing-overlay/)
+- [Lemlist Enrich Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-enrich-api-phrasing-overlay/)
+- [Lemlist Fields Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-fields-api-phrasing-overlay/)
+- [Lemlist Inbox Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-inbox-api-phrasing-overlay/)
+- [Lemlist Leads Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-leads-api-phrasing-overlay/)
+- [Lemlist Lemwarm Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-lemwarm-api-phrasing-overlay/)
+- [Lemlist People Database Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-people-database-api-phrasing-overlay/)
+- [Lemlist Schedules Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-schedules-api-phrasing-overlay/)
+- [Lemlist Sequences Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-sequences-api-phrasing-overlay/)
+- [Lemlist Signal Agents Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-signal-agents-api-phrasing-overlay/)
+- [Lemlist Stats Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-stats-api-phrasing-overlay/)
+- [Lemlist Tasks Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-tasks-api-phrasing-overlay/)
+- [Lemlist Team Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-team-api-phrasing-overlay/)
+- [Lemlist Unsubscribes Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-unsubscribes-api-phrasing-overlay/)
+- [Lemlist Users Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-users-api-phrasing-overlay/)
+- [Lemlist Webhooks Api Phrasing Overlay](https://apis.io/overlays/lemlist/lemlist-webhooks-api-phrasing-overlay/)
+
+#### Security (4)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Lemlist Authentication](https://apis.io/security/lemlist/lemlist-authentication/)
+- [Lemlist Domain Security](https://apis.io/security/lemlist/lemlist-domain-security/)
+- [Lemlist Trust Center](https://apis.io/security/lemlist/lemlist-trust-center/)
+- [Lemlist Vulnerability Disclosure](https://apis.io/security/lemlist/lemlist-vulnerability-disclosure/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Lemlist Scopes](https://apis.io/scopes/lemlist/lemlist-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Lemlist Plans Pricing](https://apis.io/plans/lemlist/lemlist-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Lemlist Rate Limits](https://apis.io/rate-limits/lemlist/lemlist-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Website](https://www.lemlist.com)
 - [Documentation](https://developer.lemlist.com)
+- [Getting started](https://developer.lemlist.com/api-reference/getting-started/overview)
+- [API reference](https://developer.lemlist.com/api-reference/getting-started/overview)
 - [Pricing](https://www.lemlist.com/pricing)
-- [Sign Up](https://app.lemlist.com/signup)
-- [L L Ms Txt](https://api.lemlist.com/llms.txt)
+- [Sign up](https://app.lemlist.com/create-account)
+- [Support](https://help.lemlist.com)
+- [Blog](https://www.lemlist.com/blog)
+- [Security](https://hackerone.com/lemlist)
+- [Compliance](https://trust.lemlist.com/)
+- [Terms of service](https://www.lemlist.com/legal/terms)
+- [Privacy policy](https://www.lemlist.com/legal/privacy-policy)
+- [GitHub](https://github.com/l3mpire)
+- [Status](https://status.lemlist.com)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 72.8** — exemplar · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 55.9 |
+| Contract governance | 18.2 |
+| Operational transparency | 57.9 |
+| Developer ergonomics | 78.6 |
+| Access clarity | 85.5 |
+
+**Agent readiness 65.0** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | verified |
+| Event Surface Described | yes |
+| Agent Skills | yes |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | partial |
+| Operation Distinctiveness | mostly |
+
+**Regulatory alignment 45.1** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/lemlist/](https://apis.io/providers/lemlist/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for lemlist: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/lemlist/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
